@@ -4,18 +4,16 @@ import { View, Image } from 'react-native';
 import common from '../../styles/common';
 import welcome from '../../styles/containers/welcome';
 
-class Welcome extends React.Component {
-	render(){
-    return (
-      <View style={common.container}>
-        <Image
-        	source={require('../../images/logo_radar.png')}
-        	style={welcome.image}
-        	resizeMode="contain"
-        />
-      </View>
-    );
-   }
-}
+import logo from '../../images/logo_radar.png';
+
+const Welcome = () => (
+	<View style={common.container}>
+		<Image
+			source={logo}
+			style={welcome.image}
+			resizeMode="contain"
+		/>
+	</View>
+);
 
 export default Welcome;
