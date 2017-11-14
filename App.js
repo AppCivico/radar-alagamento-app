@@ -1,6 +1,6 @@
 import { StackNavigator } from 'react-navigation';
 
-import Welcome from './src/scripts/containers/Welcome';
+import Welcome from './src/containers/Welcome';
 
 const App = StackNavigator(
 	{
