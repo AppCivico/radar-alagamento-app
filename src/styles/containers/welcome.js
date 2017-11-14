@@ -11,6 +11,7 @@ const welcome = StyleSheet.create({
 		width: '80%',
 		height: 'auto',
 		alignSelf: 'center',
+		resizeMode: 'contain',
 	},
 	background: {
 		flex: 1,
