@@ -1,7 +1,4 @@
-import React, { Component } from 'react';
-import {
-	StyleSheet
-} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 const welcome = StyleSheet.create({
 	image: {
