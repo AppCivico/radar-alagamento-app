@@ -1,10 +1,23 @@
 import { StyleSheet } from 'react-native';
 
 const welcome = StyleSheet.create({
-	image: {
+	container: {
+		flex: 1,
+		justifyContent: 'space-between',
+		paddingTop: 15,
+	},
+	logo: {
+		flex: 2,
+		width: '80%',
+		height: 'auto',
 		alignSelf: 'center',
-		height: 150,
-		width: 150,
+	},
+	background: {
+		flex: 1,
+		resizeMode: 'contain',
+		width: '100%',
+		height: 'auto',
+		alignSelf: 'flex-end',
 	},
 });
 
