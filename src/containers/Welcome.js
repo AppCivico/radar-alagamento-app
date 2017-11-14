@@ -11,12 +11,10 @@ const Welcome = () => (
 		<Image
 			source={logo}
 			style={welcome.logo}
-			resizeMode="contain"
 		/>
 		<Image
 			source={background}
 			style={welcome.background}
-			resizeMode="contain"
 		/>
 	</View>
 );
