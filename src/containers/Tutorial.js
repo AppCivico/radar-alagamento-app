@@ -7,6 +7,8 @@ import tutorial from '../styles/containers/tutorial';
 import imgTutorial1 from '../assets/images/img_tutorial_1.png';
 import imgTutorial2 from '../assets/images/img_tutorial_2.png';
 import imgTutorial3 from '../assets/images/img_tutorial_3.png';
+import bgTutorial2 from '../assets/images/bg_tutorial_2.png';
+import bgTutorial3 from '../assets/images/bg_tutorial_3.png';
 
 class Tutorial extends React.Component {
 	constructor(props) {
@@ -29,11 +31,13 @@ class Tutorial extends React.Component {
 					image: imgTutorial2,
 					title: 'Seus distritos',
 					text: 'Escolha um ou mais distritos (bairros) ou toda zona para seguir.',
+					background: bgTutorial2,
 				},
 				{
 					image: imgTutorial3,
 					title: 'Alertas',
 					text: 'Faça o breve cadastro e acompanhe alertas sobre seu(s) distrito(s).',
+					background: bgTutorial3,
 				},
 			],
 		};
@@ -113,15 +117,16 @@ class Tutorial extends React.Component {
 
 	renderContent(child, i) {
 		const { width, height } = this.state;
-		const style = Platform.OS === 'ios' && tutorial.view;
+		const style = tutorial.view;
 		return (
 			<View style={[style, { width, height }]} key={`r_${i}`}>
 				<Image source={child.image} style={tutorial.image} />
-				<Text h1 style={tutorial.text}>
-					{child.title}
+				<Text style={tutorial.text}>
+					<Text style={{ fontWeight: 'bold' }}>{child.title}</Text>
 					{'\n'}
-					{child.text}
+					<Text style={{ marginTop: 20 }}>{child.text}</Text>
 				</Text>
+				<Image source={child.background} style={tutorial.background} />
 			</View>
 		);
 	}
