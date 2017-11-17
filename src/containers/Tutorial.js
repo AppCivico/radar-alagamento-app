@@ -1,19 +1,12 @@
 /* eslint-disable react/prop-types, react/sort-comp */
 import React from 'react';
-import { View, StyleSheet, ScrollView, ViewPagerAndroid, Platform, Text } from 'react-native';
+import { View, ScrollView, ViewPagerAndroid, Platform, Image } from 'react-native';
 
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-	},
-	scrollview: {
-		flex: 1,
-		backgroundColor: 'transparent',
-	},
-	card: {
-		backgroundColor: 'transparent',
-	},
-});
+import tutorial from '../styles/containers/tutorial';
+import welcome from '../styles/containers/welcome';
+
+import logo from '../assets/images/logo_radar.png';
+import background from '../assets/images/elements_bg.png';
 
 class Tutorial extends React.Component {
 	constructor(props) {
@@ -24,8 +17,21 @@ class Tutorial extends React.Component {
 			selectedIndex: 0,
 			initialSelectedIndex: 0,
 			scrollingTo: null,
-			count: 10,
-			children: ['mah oe', 'maeh o2e2', 'mah oe3'],
+			count: 3,
+			children: [
+				{
+					logo,
+					background,
+				},
+				{
+					logo: background,
+					background: logo,
+				},
+				{
+					logo,
+					background,
+				},
+			],
 		};
 		this.handleHorizontalScroll = this.handleHorizontalScroll.bind(this);
 		this.adjustCardSize = this.adjustCardSize.bind(this);
@@ -46,7 +52,7 @@ class Tutorial extends React.Component {
 					x: this.state.width * this.state.initialSelectedIndex,
 					y: 0,
 				}}
-				style={styles.scrollview}
+				style={tutorial.scrollview}
 				horizontal
 				pagingEnabled
 				scrollsToTop={false}
@@ -59,7 +65,7 @@ class Tutorial extends React.Component {
 				showsVerticalScrollIndicator={false}
 				onLayout={this.adjustCardSize}
 			>
-				{this.renderContent()}
+				{this.state.children.map((child, i) => this.renderContent(child, i))}
 			</ScrollView>
 		);
 	}
@@ -70,9 +76,9 @@ class Tutorial extends React.Component {
 				ref="scrollview" // eslint-disable-line react/no-string-refs
 				initialPage={this.state.initialSelectedIndex}
 				onPageSelected={this.handleHorizontalScroll}
-				style={styles.container}
+				style={tutorial.container}
 			>
-				{this.renderContent()}
+				{this.state.children.map((child, i) => this.renderContent(child, i))}
 			</ViewPagerAndroid>
 		);
 	}
@@ -101,14 +107,15 @@ class Tutorial extends React.Component {
 		}
 	}
 
-	renderContent() {
+	renderContent(child, i) {
 		const { width, height } = this.state;
-		const style = Platform.OS === 'ios' && styles.card;
-		return React.Children.map(this.state.children, (child, i) => (
+		const style = Platform.OS === 'ios' && tutorial.card;
+		return (
 			<View style={[style, { width, height }]} key={`r_${i}`}>
-				<Text>wrgwrg</Text>
+				<Image source={child.logo} style={welcome.logo} />
+				<Image source={child.background} style={welcome.background} />
 			</View>
-		));
+		);
 	}
 
 	handleHorizontalScroll(e) {
