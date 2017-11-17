@@ -25,7 +25,7 @@
     "eject": "react-native-scripts eject",
     "ios": "react-native-scripts ios",
     "lint": "eslint --ext .js src --output-file test-reports/eslint.xml",
-    "start": "react-native-scripts start",
+    "start": "react-native-scripts start & react-devtools",
     "test": "node node_modules/jest/bin/jest.js --watch"
   },
   "jest": {
