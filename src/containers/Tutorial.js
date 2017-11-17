@@ -122,7 +122,7 @@ class Tutorial extends React.Component {
 			<View style={[style, { width, height }]} key={`r_${i}`}>
 				<Image source={child.image} style={tutorial.image} />
 				<Text style={tutorial.text}>
-					<Text style={{ fontWeight: 'bold' }}>{child.title}</Text>
+					<Text style={{ fontFamily: 'robotoBold' }}>{child.title}</Text>
 					{'\n'}
 					<Text style={{ marginTop: 20 }}>{child.text}</Text>
 				</Text>

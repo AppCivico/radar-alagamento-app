@@ -27,6 +27,7 @@ const tutorial = StyleSheet.create({
 		paddingRight: 15,
 		color: '#5d5d5d',
 		backgroundColor: 'transparent',
+		fontFamily: 'roboto',
 	},
 	background: {
 		position: 'absolute',
