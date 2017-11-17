@@ -2,18 +2,33 @@
 import React from 'react';
 import { View, StyleSheet, ScrollView, ViewPagerAndroid, Platform, Text } from 'react-native';
 
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+	},
+	scrollview: {
+		flex: 1,
+		backgroundColor: 'transparent',
+	},
+	card: {
+		backgroundColor: 'transparent',
+	},
+});
+
 class Tutorial extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			width: 0,
 			height: 0,
-			selectedIndex: this.props.selectedIndex,
-			initialSelectedIndex: this.props.selectedIndex,
+			selectedIndex: 0,
+			initialSelectedIndex: 0,
 			scrollingTo: null,
+			count: 10,
+			children: ['mah oe', 'maeh o2e2', 'mah oe3'],
 		};
-		(this).handleHorizontalScroll = this.handleHorizontalScroll.bind(this);
-		(this).adjustCardSize = this.adjustCardSize.bind(this);
+		this.handleHorizontalScroll = this.handleHorizontalScroll.bind(this);
+		this.adjustCardSize = this.adjustCardSize.bind(this);
 	}
 
 	render() {
@@ -26,15 +41,14 @@ class Tutorial extends React.Component {
 	renderIOS() {
 		return (
 			<ScrollView
-				ref="scrollview"
+				ref="scrollview" // eslint-disable-line react/no-string-refs
 				contentOffset={{
 					x: this.state.width * this.state.initialSelectedIndex,
 					y: 0,
 				}}
-				style={[styles.scrollview, this.props.style]}
+				style={styles.scrollview}
 				horizontal
 				pagingEnabled
-				bounces={!!this.props.bounces}
 				scrollsToTop={false}
 				onScroll={this.handleHorizontalScroll}
 				scrollEventThrottle={100}
@@ -53,7 +67,7 @@ class Tutorial extends React.Component {
 	renderAndroid() {
 		return (
 			<ViewPagerAndroid
-				ref="scrollview"
+				ref="scrollview" // eslint-disable-line react/no-string-refs
 				initialPage={this.state.initialSelectedIndex}
 				onPageSelected={this.handleHorizontalScroll}
 				style={styles.container}
@@ -73,12 +87,14 @@ class Tutorial extends React.Component {
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.selectedIndex !== this.state.selectedIndex) {
 			if (Platform.OS === 'ios') {
+				// eslint-disable-next-line react/no-string-refs
 				this.refs.scrollview.scrollTo({
 					x: nextProps.selectedIndex * this.state.width,
 					animated: true,
 				});
 				this.setState({ scrollingTo: nextProps.selectedIndex });
 			} else {
+				// eslint-disable-next-line react/no-string-refs
 				this.refs.scrollview.setPage(nextProps.selectedIndex);
 				this.setState({ selectedIndex: nextProps.selectedIndex });
 			}
@@ -88,9 +104,9 @@ class Tutorial extends React.Component {
 	renderContent() {
 		const { width, height } = this.state;
 		const style = Platform.OS === 'ios' && styles.card;
-		return React.Children.map(this.props.children, (child, i) => (
+		return React.Children.map(this.state.children, (child, i) => (
 			<View style={[style, { width, height }]} key={`r_${i}`}>
-				<Text>Mah oe</Text>
+				<Text>wrgwrg</Text>
 			</View>
 		));
 	}
@@ -100,7 +116,7 @@ class Tutorial extends React.Component {
 		if (selectedIndex === undefined) {
 			selectedIndex = Math.round(e.nativeEvent.contentOffset.x / this.state.width);
 		}
-		if (selectedIndex < 0 || selectedIndex >= this.props.count) {
+		if (selectedIndex < 0 || selectedIndex >= this.state.count) {
 			return;
 		}
 		if (this.state.scrollingTo !== null && this.state.scrollingTo !== selectedIndex) {
@@ -109,22 +125,10 @@ class Tutorial extends React.Component {
 		if (this.props.selectedIndex !== selectedIndex || this.state.scrollingTo !== null) {
 			this.setState({ selectedIndex, scrollingTo: null });
 			const { onSelectedIndexChange } = this.props;
+			// eslint-disable-next-line no-unused-expressions
 			onSelectedIndexChange && onSelectedIndexChange(selectedIndex);
 		}
 	}
 }
-
-var styles = StyleSheet.create({
-	container: {
-		flex: 1,
-	},
-	scrollview: {
-		flex: 1,
-		backgroundColor: 'transparent',
-	},
-	card: {
-		backgroundColor: 'transparent',
-	},
-});
 
 export default Tutorial;
