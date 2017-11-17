@@ -1,12 +1,12 @@
 /* eslint-disable react/prop-types, react/sort-comp */
 import React from 'react';
-import { View, ScrollView, ViewPagerAndroid, Platform, Image } from 'react-native';
+import { View, ScrollView, ViewPagerAndroid, Platform, Image, Text } from 'react-native';
 
 import tutorial from '../styles/containers/tutorial';
-import welcome from '../styles/containers/welcome';
 
-import logo from '../assets/images/logo_radar.png';
-import background from '../assets/images/elements_bg.png';
+import imgTutorial1 from '../assets/images/img_tutorial_1.png';
+import imgTutorial2 from '../assets/images/img_tutorial_2.png';
+import imgTutorial3 from '../assets/images/img_tutorial_3.png';
 
 class Tutorial extends React.Component {
 	constructor(props) {
@@ -20,16 +20,20 @@ class Tutorial extends React.Component {
 			count: 3,
 			children: [
 				{
-					logo,
-					background,
+					image: imgTutorial1,
+					title: 'Tempo real!!!',
+					text:
+						'Avance para ver os 2 passos simples para receber alertas do seu distrito ou zona de São Paulo. ',
 				},
 				{
-					logo: background,
-					background: logo,
+					image: imgTutorial2,
+					title: 'Seus distritos',
+					text: 'Escolha um ou mais distritos (bairros) ou toda zona para seguir.',
 				},
 				{
-					logo,
-					background,
+					image: imgTutorial3,
+					title: 'Alertas',
+					text: 'Faça o breve cadastro e acompanhe alertas sobre seu(s) distrito(s).',
 				},
 			],
 		};
@@ -52,7 +56,7 @@ class Tutorial extends React.Component {
 					x: this.state.width * this.state.initialSelectedIndex,
 					y: 0,
 				}}
-				style={tutorial.scrollview}
+				style={tutorial.container}
 				horizontal
 				pagingEnabled
 				scrollsToTop={false}
@@ -109,11 +113,15 @@ class Tutorial extends React.Component {
 
 	renderContent(child, i) {
 		const { width, height } = this.state;
-		const style = Platform.OS === 'ios' && tutorial.card;
+		const style = Platform.OS === 'ios' && tutorial.view;
 		return (
 			<View style={[style, { width, height }]} key={`r_${i}`}>
-				<Image source={child.logo} style={welcome.logo} />
-				<Image source={child.background} style={welcome.background} />
+				<Image source={child.image} style={tutorial.image} />
+				<Text h1 style={tutorial.text}>
+					{child.title}
+					{'\n'}
+					{child.text}
+				</Text>
 			</View>
 		);
 	}
