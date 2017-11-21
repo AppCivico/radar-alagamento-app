@@ -138,12 +138,13 @@ class Tutorial extends React.Component {
 	}
 
 	skipTutorial() {
-		this.props.navigation.navigate('Welcome');
+		this.props.navigation.navigate('Districts');
 	}
 
 	nextTutorial() {
 		let { selectedIndex } = this.state;
 		if (selectedIndex < 0 || selectedIndex === this.state.count) {
+			this.props.navigation.navigate('Districts');
 			return;
 		}
 
