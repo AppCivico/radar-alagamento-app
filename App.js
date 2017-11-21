@@ -2,9 +2,9 @@ import React from 'react';
 import { StackNavigator } from 'react-navigation';
 import { AppLoading, Font } from 'expo';
 
-import Roboto from './src/assets/fonts/Raleway-Regular.ttf';
-import RobotoMedium from './src/assets/fonts/Raleway-Medium.ttf';
-import RobotoBold from './src/assets/fonts/Raleway-Bold.ttf';
+import Raleway from './src/assets/fonts/Raleway-Regular.ttf';
+import RalewayMedium from './src/assets/fonts/Raleway-Medium.ttf';
+import RalewayBold from './src/assets/fonts/Raleway-Bold.ttf';
 
 import Welcome from './src/containers/Welcome';
 import Tutorial from './src/containers/Tutorial';
@@ -15,7 +15,7 @@ const FirstLaunchNavigation = StackNavigator(
 		Tutorial: { screen: Tutorial },
 	},
 	{
-		initialRouteName: 'Tutorial',
+		initialRouteName: 'Welcome',
 		headerMode: 'none',
 	},
 );
@@ -34,9 +34,9 @@ class App extends React.Component {
 
 	loadAssetsAsync = async () => {
 		await Font.loadAsync({
-			roboto: Roboto,
-			robotoMedium: RobotoMedium,
-			robotoBold: RobotoBold,
+			raleway: Raleway,
+			ralewayMedium: RalewayMedium,
+			ralewayBold: RalewayBold,
 		});
 		this.setState({ loaded: true });
 	};
