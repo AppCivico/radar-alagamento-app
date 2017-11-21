@@ -1,6 +1,6 @@
-/* eslint-disable react/prop-types, react/sort-comp */
+/* eslint-disable react/prop-types, react/sort-comp, class-methods-use-this */
 import React from 'react';
-import { View, ScrollView, ViewPagerAndroid, Platform, Image, Text } from 'react-native';
+import { View, ScrollView, ViewPagerAndroid, Platform, Image, Text, TouchableHighlight } from 'react-native';
 
 import tutorial from '../styles/containers/tutorial';
 
@@ -19,21 +19,24 @@ class Tutorial extends React.Component {
 			selectedIndex: 0,
 			initialSelectedIndex: 0,
 			scrollingTo: null,
-			count: 3,
+			count: 2,
 			children: [
 				{
+					id: 1,
 					image: imgTutorial1,
-					title: 'Tempo real!!!',
+					title: 'Tempo real!',
 					text:
 						'Avance para ver os 2 passos simples para receber alertas do seu distrito ou zona de São Paulo. ',
 				},
 				{
+					id: 2,
 					image: imgTutorial2,
 					title: 'Seus distritos',
 					text: 'Escolha um ou mais distritos (bairros) ou toda zona para seguir.',
 					background: bgTutorial2,
 				},
 				{
+					id: 3,
 					image: imgTutorial3,
 					title: 'Alertas',
 					text: 'Faça o breve cadastro e acompanhe alertas sobre seu(s) distrito(s).',
@@ -43,6 +46,8 @@ class Tutorial extends React.Component {
 		};
 		this.handleHorizontalScroll = this.handleHorizontalScroll.bind(this);
 		this.adjustCardSize = this.adjustCardSize.bind(this);
+		this.nextTutorial = this.nextTutorial.bind(this);
+		this.skipTutorial = this.skipTutorial.bind(this);
 	}
 
 	render() {
@@ -54,40 +59,74 @@ class Tutorial extends React.Component {
 
 	renderIOS() {
 		return (
-			<ScrollView
-				ref="scrollview" // eslint-disable-line react/no-string-refs
-				contentOffset={{
-					x: this.state.width * this.state.initialSelectedIndex,
-					y: 0,
-				}}
-				style={tutorial.container}
-				horizontal
-				pagingEnabled
-				scrollsToTop={false}
-				onScroll={this.handleHorizontalScroll}
-				scrollEventThrottle={100}
-				removeClippedSubviews
-				automaticallyAdjustContentInsets={false}
-				directionalLockEnabled
-				showsHorizontalScrollIndicator={false}
-				showsVerticalScrollIndicator={false}
-				onLayout={this.adjustCardSize}
-			>
-				{this.state.children.map((child, i) => this.renderContent(child, i))}
-			</ScrollView>
+			<View style={tutorial.container}>
+				<ScrollView
+					ref="scrollview" // eslint-disable-line react/no-string-refs
+					contentOffset={{
+						x: this.state.width * this.state.initialSelectedIndex,
+						y: 0,
+					}}
+					style={tutorial.container}
+					horizontal
+					pagingEnabled
+					scrollsToTop={false}
+					onScroll={this.handleHorizontalScroll}
+					scrollEventThrottle={100}
+					removeClippedSubviews
+					automaticallyAdjustContentInsets={false}
+					directionalLockEnabled
+					showsHorizontalScrollIndicator={false}
+					showsVerticalScrollIndicator={false}
+					onLayout={this.adjustCardSize}
+				>
+					{this.state.children.map((child, i) => this.renderContent(child, i))}
+				</ScrollView>
+				<View style={tutorial.footer}>
+					<View style={tutorial.button}>
+						<TouchableHighlight onPress={this.skipTutorial}>
+							<Text style={tutorial.skip}>PULAR</Text>
+						</TouchableHighlight>
+					</View>
+					<View style={tutorial.bullets}>
+						{this.state.children.map((child, i) => this.renderBullets(child, i))}
+					</View>
+					<View style={tutorial.button}>
+						<TouchableHighlight onPress={this.nextTutorial}>
+							<Text style={tutorial.skip}>NEXT</Text>
+						</TouchableHighlight>
+					</View>
+				</View>
+			</View>
 		);
 	}
 
 	renderAndroid() {
 		return (
-			<ViewPagerAndroid
-				ref="scrollview" // eslint-disable-line react/no-string-refs
-				initialPage={this.state.initialSelectedIndex}
-				onPageSelected={this.handleHorizontalScroll}
-				style={tutorial.container}
-			>
-				{this.state.children.map((child, i) => this.renderContent(child, i))}
-			</ViewPagerAndroid>
+			<View style={tutorial.container}>
+				<ViewPagerAndroid
+					ref="scrollview" // eslint-disable-line react/no-string-refs
+					initialPage={this.state.initialSelectedIndex}
+					onPageSelected={this.handleHorizontalScroll}
+					style={tutorial.container}
+				>
+					{this.state.children.map((child, i) => this.renderContent(child, i))}
+				</ViewPagerAndroid>
+				<View style={tutorial.footer}>
+					<View style={tutorial.button}>
+						<TouchableHighlight onPress={this.skipTutorial}>
+							<Text style={tutorial.skip}>PULAR</Text>
+						</TouchableHighlight>
+					</View>
+					<View style={tutorial.bullets}>
+						{this.state.children.map((child, i) => this.renderBullets(child, i))}
+					</View>
+					<View style={tutorial.button}>
+						<TouchableHighlight onPress={this.nextTutorial}>
+							<Text style={tutorial.skip}>NEXT</Text>
+						</TouchableHighlight>
+					</View>
+				</View>
+			</View>
 		);
 	}
 
@@ -96,6 +135,20 @@ class Tutorial extends React.Component {
 			width: e.nativeEvent.layout.width,
 			height: e.nativeEvent.layout.height,
 		});
+	}
+
+	skipTutorial() {
+		this.props.navigation.navigate('Welcome');
+	}
+
+	nextTutorial() {
+		let { selectedIndex } = this.state;
+		if (selectedIndex < 0 || selectedIndex === this.state.count) {
+			return;
+		}
+
+		selectedIndex += 1;
+		this.setState({ selectedIndex, scrollingTo: null });
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -122,12 +175,18 @@ class Tutorial extends React.Component {
 			<View style={[style, { width, height }]} key={`r_${i}`}>
 				<Image source={child.image} style={tutorial.image} />
 				<Text style={tutorial.text}>
-					<Text style={{ fontFamily: 'robotoBold' }}>{child.title}</Text>
+					<Text style={{ fontFamily: 'ralewayBold' }}>{child.title}</Text>
 					{'\n'}
 					<Text style={{ marginTop: 20 }}>{child.text}</Text>
 				</Text>
 				<Image source={child.background} style={tutorial.background} />
 			</View>
+		);
+	}
+
+	renderBullets(child, i) {
+		return (
+			<View key={`bullet-${child.id}`} style={[i === this.state.selectedIndex ? tutorial.selected : tutorial.notSelected, tutorial.bullet]} />
 		);
 	}
 
