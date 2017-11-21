@@ -1,5 +1,7 @@
 import { StyleSheet } from 'react-native';
 
+import variables from '../variables';
+
 const tutorial = StyleSheet.create({
 	container: {
 		flex: 1,
@@ -27,7 +29,7 @@ const tutorial = StyleSheet.create({
 		paddingRight: 15,
 		color: '#5d5d5d',
 		backgroundColor: 'transparent',
-		fontFamily: 'roboto',
+		fontFamily: 'raleway',
 	},
 	background: {
 		position: 'absolute',
@@ -37,6 +39,39 @@ const tutorial = StyleSheet.create({
 		width: '100%',
 		height: '100%',
 		resizeMode: 'contain',
+	},
+	footer: {
+		position: 'absolute',
+		left: 0,
+		bottom: 10,
+		width: '100%',
+		display: 'flex',
+		flexDirection: 'row',
+	},
+	button: {
+		flex: 2,
+	},
+	skip: {
+		textAlign: 'center',
+		fontFamily: 'raleway',
+	},
+	bullets: {
+		flex: 1,
+		display: 'flex',
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+	},
+	bullet: {
+		width: 15,
+		height: 15,
+		borderRadius: 15 / 2,
+		borderWidth: 1,
+	},
+	selected: {
+		borderColor: variables.blue,
+	},
+	notSelected: {
+		borderColor: variables.gray,
 	},
 });
 
