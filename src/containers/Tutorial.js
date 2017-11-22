@@ -19,7 +19,7 @@ class Tutorial extends React.Component {
 			selectedIndex: 0,
 			initialSelectedIndex: 0,
 			scrollingTo: null,
-			count: 2,
+			count: 3,
 			children: [
 				{
 					id: 1,
@@ -143,7 +143,7 @@ class Tutorial extends React.Component {
 
 	nextTutorial() {
 		let { selectedIndex } = this.state;
-		if (selectedIndex < 0 || selectedIndex === this.state.count) {
+		if (selectedIndex < 0 || selectedIndex === this.state.count - 1) {
 			this.props.navigation.navigate('Districts');
 			return;
 		}
