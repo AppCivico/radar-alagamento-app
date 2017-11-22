@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import variables from '../variables';
+import { colors } from '../variables';
 
 const tutorial = StyleSheet.create({
 	container: {
@@ -68,10 +68,10 @@ const tutorial = StyleSheet.create({
 		borderWidth: 1,
 	},
 	selected: {
-		borderColor: variables.blue,
+		borderColor: colors.blue,
 	},
 	notSelected: {
-		borderColor: variables.gray,
+		borderColor: colors.gray,
 	},
 });
 
