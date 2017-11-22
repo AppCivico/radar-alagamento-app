@@ -1,15 +1,38 @@
 /* eslint-disable react/prop-types, class-methods-use-this */
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
-import districts from '../styles/containers/districts';
+import Header from '../components/Header';
+import Drawer from '../components/Drawer';
 
+const style = StyleSheet.create({
+	container: {
+		flex: 1,
+	},
+});
 
 class Districts extends React.Component {
+	constructor() {
+		super();
+		this.state = {
+			menu: false,
+		};
+		this.toggleMenu = this.toggleMenu.bind(this);
+	}
+
+	toggleMenu() {
+		const menu = !this.state.menu;
+		this.setState({ menu });
+	}
+
 	render() {
 		return (
-			<View style={districts.container}>
-				<Text>Districts</Text>
+			<View style={style.container}>
+				<Header pageTitle="titulo" toggleMenu={this.toggleMenu} />
+				<View style={style.container}>
+					<Text>Districts</Text>
+				</View>
+				<Drawer userName="Fulana" menuState={this.state.menu} toggleMenu={this.toggleMenu} />
 			</View>
 		);
 	}
