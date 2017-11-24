@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, TouchableHighlight, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
 import { colors } from '../styles/variables';
 
@@ -41,9 +41,7 @@ class Header extends React.Component {
 			<View>
 				<View style={style.header}>
 					<View>
-						<TouchableHighlight onPress={this.toggleMenu}>
-							<Text>MENU</Text>
-						</TouchableHighlight>
+						<Text onPress={this.toggleMenu}>MENU</Text>
 					</View>
 					<View style={style.pageTitle}>
 						<Text style={style.title}>{this.props.pageTitle}</Text>
