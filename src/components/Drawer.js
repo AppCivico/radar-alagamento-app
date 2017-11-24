@@ -4,11 +4,6 @@ import { Animated, View, Text, StyleSheet } from 'react-native';
 
 import { colors } from '../styles/variables';
 
-const menu = [
-	'Tutorial',
-	'Welcome',
-];
-
 const style = StyleSheet.create({
 	container: {
 		position: 'absolute',
@@ -50,6 +45,10 @@ class Drawer extends React.Component {
 
 		this.state = {
 			animation: new Animated.Value(-500),
+			menu: [
+				'Tutorial',
+				'Welcome',
+			],
 		};
 
 		this.animateMenu = this.animateMenu.bind(this);
@@ -95,7 +94,7 @@ class Drawer extends React.Component {
 			>
 				<Text style={style.userName}>Olá, {this.props.userName}</Text>
 				<View style={style.navigator}>
-					{menu.map(item => this.renderMenuItem(item))}
+					{this.state.menu.map(item => this.renderMenuItem(item))}
 				</View>
 			</Animated.View>
 		);
