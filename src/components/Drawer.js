@@ -4,6 +4,11 @@ import { Animated, View, Text, StyleSheet } from 'react-native';
 
 import { colors } from '../styles/variables';
 
+const menu = [
+	'Tutorial',
+	'Welcome',
+];
+
 const style = StyleSheet.create({
 	container: {
 		position: 'absolute',
@@ -75,17 +80,22 @@ class Drawer extends React.Component {
 		this.animateMenu(route);
 	}
 
+	renderMenuItem(item) {
+		return (
+			<Text key={item} onPress={() => this.toggleMenu(item)} style={style.navigatorItem}>
+				{item}
+			</Text>
+		);
+	}
+
 	render() {
-		const oi = 'Tutorial';
 		return (
 			<Animated.View
 				style={[style.container, { transform: [{ translateX: this.state.animation }] }]}
 			>
 				<Text style={style.userName}>Olá, {this.props.userName}</Text>
 				<View style={style.navigator}>
-					<Text key={oi} onPress={() => this.toggleMenu(oi)} style={style.navigatorItem}>
-						Link 1
-					</Text>
+					{menu.map(item => this.renderMenuItem(item))}
 				</View>
 			</Animated.View>
 		);
