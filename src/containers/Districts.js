@@ -18,11 +18,16 @@ class Districts extends React.Component {
 			menu: false,
 		};
 		this.toggleMenu = this.toggleMenu.bind(this);
+		this.changeRoute = this.changeRoute.bind(this);
 	}
 
 	toggleMenu() {
 		const menu = !this.state.menu;
 		this.setState({ menu });
+	}
+
+	changeRoute(route) {
+		this.props.navigation.navigate(route);
 	}
 
 	render() {
@@ -32,7 +37,12 @@ class Districts extends React.Component {
 				<View style={style.container}>
 					<Text>Districts</Text>
 				</View>
-				<Drawer userName="Fulana" menuState={this.state.menu} toggleMenu={this.toggleMenu} />
+				<Drawer
+					userName="Fulana"
+					menuState={this.state.menu}
+					toggleMenu={this.toggleMenu}
+					changeRoute={this.changeRoute}
+				/>
 			</View>
 		);
 	}

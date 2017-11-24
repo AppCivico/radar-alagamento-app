@@ -57,28 +57,33 @@ class Drawer extends React.Component {
 		}
 	}
 
-	animateMenu() {
+	animateMenu(route) {
 		const newValue = this.props.menuState ? -500 : 0;
 
 		Animated.timing(this.state.animation, {
 			toValue: newValue,
 			duration: 500,
-		}).start();
+		}).start(() => {
+			if (!this.props.menuState) {
+				this.props.changeRoute(route);
+			}
+		});
 	}
 
-	toggleMenu() {
+	toggleMenu(route) {
 		this.props.toggleMenu();
-		this.animateMenu();
+		this.animateMenu(route);
 	}
 
 	render() {
+		const oi = 'Tutorial';
 		return (
 			<Animated.View
 				style={[style.container, { transform: [{ translateX: this.state.animation }] }]}
 			>
 				<Text style={style.userName}>Olá, {this.props.userName}</Text>
 				<View style={style.navigator}>
-					<Text onPress={this.toggleMenu} style={style.navigatorItem}>
+					<Text key={oi} onPress={() => this.toggleMenu(oi)} style={style.navigatorItem}>
 						Link 1
 					</Text>
 				</View>
@@ -90,6 +95,7 @@ class Drawer extends React.Component {
 Drawer.propTypes = {
 	userName: PropTypes.string.isRequired,
 	toggleMenu: PropTypes.func.isRequired,
+	changeRoute: PropTypes.func.isRequired,
 	menuState: PropTypes.bool.isRequired,
 };
 
