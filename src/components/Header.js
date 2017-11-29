@@ -17,17 +17,18 @@ const style = StyleSheet.create({
 		padding: 15,
 	},
 	hamburguer: {
-		width: 30,
-		height: 23,
+		width: 25,
+		height: 20,
 		resizeMode: 'contain',
 	},
 	pageTitle: {
-		paddingLeft: 15,
+		paddingLeft: 25,
 		paddingRight: 15,
 	},
 	title: {
 		color: '#fff',
 		fontFamily: 'raleway',
+		fontSize: 20,
 	},
 });
 
