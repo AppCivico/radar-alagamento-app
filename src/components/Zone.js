@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, StyleSheet, CheckBox } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
+import { CheckBox } from 'react-native-elements';
 
 import { colors } from '../styles/variables';
 
@@ -66,16 +67,10 @@ class Zone extends React.Component {
 		this.setState({ districts });
 	}
 
-	renderDistrict(item, i) {
+	renderDistrict(item) {
 		return (
 			<View style={style.district} key={item.id}>
-				<CheckBox
-					title={item.name}
-					onValueChange={() => this.selectDistrict(item, i)}
-					checked={this.state.districts[i].checked}
-					value={this.state.districts[i].checked}
-				/>
-				<Text>{item.name}</Text>
+				<CheckBox title={item.name} checked={this.state.checked} />
 			</View>
 		);
 	}
