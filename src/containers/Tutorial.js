@@ -1,6 +1,15 @@
 /* eslint-disable react/prop-types, react/sort-comp, class-methods-use-this */
 import React from 'react';
-import { View, ScrollView, ViewPagerAndroid, Platform, Image, Text, TouchableHighlight } from 'react-native';
+import {
+	View,
+	ScrollView,
+	ViewPagerAndroid,
+	Platform,
+	Image,
+	Text,
+	TouchableOpacity,
+	TouchableNativeFeedback,
+} from 'react-native';
 
 import tutorial from '../styles/containers/tutorial';
 
@@ -9,6 +18,7 @@ import imgTutorial2 from '../assets/images/img_tutorial_2.png';
 import imgTutorial3 from '../assets/images/img_tutorial_3.png';
 import bgTutorial2 from '../assets/images/bg_tutorial_2.png';
 import bgTutorial3 from '../assets/images/bg_tutorial_3.png';
+import next from '../assets/images/next.png';
 
 class Tutorial extends React.Component {
 	constructor(props) {
@@ -48,6 +58,7 @@ class Tutorial extends React.Component {
 		this.adjustCardSize = this.adjustCardSize.bind(this);
 		this.nextTutorial = this.nextTutorial.bind(this);
 		this.skipTutorial = this.skipTutorial.bind(this);
+		this.renderContent = this.renderContent.bind(this);
 	}
 
 	render() {
@@ -55,6 +66,26 @@ class Tutorial extends React.Component {
 			return this.renderIOS();
 		}
 		return this.renderAndroid();
+	}
+
+	renderButtons() {
+		return (
+			<View style={tutorial.footer}>
+				<View style={tutorial.button}>
+					<TouchableOpacity onPress={this.skipTutorial}>
+						<Text style={tutorial.skip}>PULAR</Text>
+					</TouchableOpacity>
+				</View>
+				<View style={tutorial.bullets}>
+					{this.state.children.map((child, i) => this.renderBullets(child, i))}
+				</View>
+				<View style={tutorial.button}>
+					<TouchableNativeFeedback onPress={e => this.handleHorizontalScroll(e)}>
+						<Image source={next} style={tutorial.hamburguer} />
+					</TouchableNativeFeedback>
+				</View>
+			</View>
+		);
 	}
 
 	renderIOS() {
@@ -81,21 +112,7 @@ class Tutorial extends React.Component {
 				>
 					{this.state.children.map((child, i) => this.renderContent(child, i))}
 				</ScrollView>
-				<View style={tutorial.footer}>
-					<View style={tutorial.button}>
-						<TouchableHighlight onPress={this.skipTutorial}>
-							<Text style={tutorial.skip}>PULAR</Text>
-						</TouchableHighlight>
-					</View>
-					<View style={tutorial.bullets}>
-						{this.state.children.map((child, i) => this.renderBullets(child, i))}
-					</View>
-					<View style={tutorial.button}>
-						<TouchableHighlight onPress={this.nextTutorial}>
-							<Text style={tutorial.skip}>NEXT</Text>
-						</TouchableHighlight>
-					</View>
-				</View>
+				{this.renderButtons()}
 			</View>
 		);
 	}
@@ -111,21 +128,7 @@ class Tutorial extends React.Component {
 				>
 					{this.state.children.map((child, i) => this.renderContent(child, i))}
 				</ViewPagerAndroid>
-				<View style={tutorial.footer}>
-					<View style={tutorial.button}>
-						<TouchableHighlight onPress={this.skipTutorial}>
-							<Text style={tutorial.skip}>PULAR</Text>
-						</TouchableHighlight>
-					</View>
-					<View style={tutorial.bullets}>
-						{this.state.children.map((child, i) => this.renderBullets(child, i))}
-					</View>
-					<View style={tutorial.button}>
-						<TouchableHighlight onPress={this.nextTutorial}>
-							<Text style={tutorial.skip}>NEXT</Text>
-						</TouchableHighlight>
-					</View>
-				</View>
+				{this.renderButtons()}
 			</View>
 		);
 	}
@@ -187,16 +190,25 @@ class Tutorial extends React.Component {
 
 	renderBullets(child, i) {
 		return (
-			<View key={`bullet-${child.id}`} style={[i === this.state.selectedIndex ? tutorial.selected : tutorial.notSelected, tutorial.bullet]} />
+			<View
+				key={`bullet-${child.id}`}
+				style={[
+					i === this.state.selectedIndex ? tutorial.selected : tutorial.notSelected,
+					tutorial.bullet,
+				]}
+			/>
 		);
 	}
 
 	handleHorizontalScroll(e) {
 		let selectedIndex = e.nativeEvent.position;
+
 		if (selectedIndex === undefined) {
-			selectedIndex = Math.round(e.nativeEvent.contentOffset.x / this.state.width);
+			selectedIndex = this.state.selectedIndex + 1;
 		}
+
 		if (selectedIndex < 0 || selectedIndex >= this.state.count) {
+			this.skipTutorial();
 			return;
 		}
 		if (this.state.scrollingTo !== null && this.state.scrollingTo !== selectedIndex) {

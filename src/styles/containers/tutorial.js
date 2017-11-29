@@ -50,10 +50,16 @@ const tutorial = StyleSheet.create({
 	},
 	button: {
 		flex: 2,
+		alignItems: 'center',
 	},
 	skip: {
 		textAlign: 'center',
 		fontFamily: 'raleway',
+	},
+	hamburguer: {
+		width: 30,
+		height: 23,
+		resizeMode: 'contain',
 	},
 	bullets: {
 		flex: 1,
