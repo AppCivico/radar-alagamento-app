@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
 import { colors } from '../styles/variables';
+import hamburguer from '../assets/images/options.png';
 
 const style = StyleSheet.create({
 	container: {
@@ -14,6 +15,11 @@ const style = StyleSheet.create({
 		flexDirection: 'row',
 		backgroundColor: colors.blue,
 		padding: 15,
+	},
+	hamburguer: {
+		width: 30,
+		height: 23,
+		resizeMode: 'contain',
 	},
 	pageTitle: {
 		paddingLeft: 15,
@@ -40,9 +46,9 @@ class Header extends React.Component {
 		return (
 			<View>
 				<View style={style.header}>
-					<View>
-						<Text onPress={this.toggleMenu}>MENU</Text>
-					</View>
+					<TouchableOpacity onPress={this.toggleMenu}>
+						<Image source={hamburguer} style={style.hamburguer} />
+					</TouchableOpacity>
 					<View style={style.pageTitle}>
 						<Text style={style.title}>{this.props.pageTitle}</Text>
 					</View>
