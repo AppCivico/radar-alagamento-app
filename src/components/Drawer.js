@@ -1,8 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Animated, View, Text, StyleSheet } from 'react-native';
+import { Animated, View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 
 import { colors } from '../styles/variables';
+
+// import menu icons
+import alerts from '../assets/images/icon-alertas.png';
+import districts from '../assets/images/icon-registros.png';
+import profile from '../assets/images/icon-perfil.png';
+import config from '../assets/images/icon-config.png';
 
 const style = StyleSheet.create({
 	container: {
@@ -21,21 +27,34 @@ const style = StyleSheet.create({
 	},
 	userName: {
 		fontFamily: 'ralewayBold',
+		fontSize: 18,
 		color: '#fff',
 		paddingLeft: 25,
 		paddingRight: 25,
 		paddingBottom: 25,
-		borderBottomColor: colors.blue2,
-		borderBottomWidth: 2,
 	},
 	navigator: {
-		paddingLeft: 25,
-		paddingRight: 25,
 		paddingTop: 25,
+		borderTopWidth: 1.5,
+		borderTopColor: colors.blue2,
 	},
 	navigatorItem: {
+		display: 'flex',
+		flexDirection: 'row',
+		marginBottom: 20,
+		paddingLeft: 25,
+		paddingRight: 25,
+	},
+	navigatorItemText: {
 		fontFamily: 'raleway',
 		color: '#fff',
+		marginTop: 2,
+	},
+	navigatorItemIcon: {
+		width: 30,
+		height: 23,
+		resizeMode: 'contain',
+		marginRight: 10,
 	},
 });
 
@@ -46,8 +65,31 @@ class Drawer extends React.Component {
 		this.state = {
 			animation: new Animated.Value(-500),
 			menu: [
-				'Tutorial',
-				'Welcome',
+				{
+					title: 'Teste o menu aqui',
+					icon: alerts,
+					path: 'Welcome',
+				},
+				{
+					title: 'Alertas',
+					icon: alerts,
+					path: 'alerts',
+				},
+				{
+					title: 'Meus distritos',
+					icon: districts,
+					path: 'districts',
+				},
+				{
+					title: 'Perfil',
+					icon: profile,
+					path: 'profile',
+				},
+				{
+					title: 'Configurações',
+					icon: config,
+					path: 'config',
+				},
 			],
 		};
 
@@ -81,9 +123,14 @@ class Drawer extends React.Component {
 
 	renderMenuItem(item) {
 		return (
-			<Text key={item} onPress={() => this.toggleMenu(item)} style={style.navigatorItem}>
-				{item}
-			</Text>
+			<TouchableOpacity
+				key={item.path}
+				style={style.navigatorItem}
+				onPress={() => this.toggleMenu(item.path)}
+			>
+				<Image source={item.icon} style={style.navigatorItemIcon} />
+				<Text style={style.navigatorItemText}>{item.title}</Text>
+			</TouchableOpacity>
 		);
 	}
 
