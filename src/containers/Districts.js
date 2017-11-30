@@ -23,6 +23,7 @@ class Districts extends React.Component {
 		};
 		this.toggleMenu = this.toggleMenu.bind(this);
 		this.changeRoute = this.changeRoute.bind(this);
+		this.updateSeletedDistricts = this.updateSeletedDistricts.bind(this);
 	}
 
 	componentWillMount() {
@@ -49,6 +50,15 @@ class Districts extends React.Component {
 		this.props.navigation.navigate(route);
 	}
 
+	updateSeletedDistricts(district, action) {
+		console.log(district.name, action);
+		if (!action) {
+			const selectedDistricts = [...this.state.selectedDistricts];
+			selectedDistricts.push(district);
+			this.setState({ selectedDistricts });
+		}
+	}
+
 	render() {
 		if (this.state.isLoaded) {
 			return (
@@ -57,7 +67,12 @@ class Districts extends React.Component {
 					<View style={style.container}>
 						<Text>{this.state.selectedDistricts.length} distritos selecionados</Text>
 						{this.state.zones.map(item => (
-							<Zone key={`zone-${item.id}`} name={item.name} districts={item.districts} />
+							<Zone
+								key={`zone-${item.id}`}
+								name={item.name}
+								districts={item.districts}
+								updateSeletedDistricts={this.updateSeletedDistricts}
+							/>
 						))}
 					</View>
 					<Drawer
@@ -69,7 +84,20 @@ class Districts extends React.Component {
 				</View>
 			);
 		}
-		return <Text>Loading</Text>;
+		return (
+			<View style={style.container}>
+				<Header pageTitle="Meus Distritos" toggleMenu={this.toggleMenu} />
+				<View style={style.container}>
+					<Text>Carregando</Text>
+				</View>
+				<Drawer
+					userName="Fulana"
+					menuState={this.state.menu}
+					toggleMenu={this.toggleMenu}
+					changeRoute={this.changeRoute}
+				/>
+			</View>
+		);
 	}
 }
 

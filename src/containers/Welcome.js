@@ -43,8 +43,8 @@ class Welcome extends React.Component {
 			if (value == null) {
 				AsyncStorage.setItem('alreadyLaunched', true);
 				this.changeRoute('Tutorial');
-			}	else {
-				this.changeRoute('Districts');
+			} else {
+				this.changeRoute('Tutorial');
 			}
 		} catch (error) {
 			// Error retrieving data
@@ -62,14 +62,8 @@ class Welcome extends React.Component {
 	render() {
 		return (
 			<View style={style.container}>
-				<Image
-					source={logo}
-					style={style.logo}
-				/>
-				<Image
-					source={background}
-					style={style.background}
-				/>
+				<Image source={logo} style={style.logo} />
+				<Image source={background} style={style.background} />
 			</View>
 		);
 	}

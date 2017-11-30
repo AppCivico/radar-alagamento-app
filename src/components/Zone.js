@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, StyleSheet } from 'react-native';
-import { CheckBox } from 'react-native-elements';
+import { View, Text, StyleSheet, Image, TouchableWithoutFeedback } from 'react-native';
 
 import { colors } from '../styles/variables';
+
+import checkbox from '../assets/images/checkbox.png';
+import checkboxOn from '../assets/images/checkbox-on.png';
 
 const style = StyleSheet.create({
 	container: {
@@ -25,6 +27,16 @@ const style = StyleSheet.create({
 		minWidth: '50%',
 		flexDirection: 'row',
 	},
+	checkbox: {
+		width: 30,
+		height: 30,
+		resizeMode: 'contain',
+		marginRight: 10,
+	},
+	districtName: {
+		marginTop: 2,
+		color: '#fff',
+	},
 });
 
 class Zone extends React.Component {
@@ -32,45 +44,45 @@ class Zone extends React.Component {
 		super();
 
 		this.state = {
-			selectedDistricts: [],
-			districts: [],
+			checked: [],
 		};
 
-		this.addDistrict = this.addDistrict.bind(this);
-		this.changeDistricts = this.changeDistricts.bind(this);
+		this.selectDistrict = this.selectDistrict.bind(this);
+		this.setChecks = this.setChecks.bind(this);
 	}
 
 	componentWillMount() {
-		this.changeDistricts();
+		this.setChecks();
 	}
 
-	changeDistricts() {
-		const districts = [...this.props.districts];
-		districts.map(item => (item.checked = false));
-		this.setState({ districts });
-	}
-
-	addDistrict(item) {
-		const selectedDistricts = [...this.state.selectedDistricts];
-		selectedDistricts.push(item);
-		this.setState({ selectedDistricts });
+	setChecks() {
+		const checked = this.props.districts.map(() => ({
+			state: false,
+			image: checkbox,
+		}));
+		this.setState({ checked });
 	}
 
 	selectDistrict(item, i) {
-		console.log(item.value);
-		console.log(this.state.districts[i].checked);
-		const district = this.state.districts[i];
-		const districts = [...this.state.districts];
-		district.checked = !this.state.districts[i].checked;
-		console.log(district);
-		districts[i] = district;
-		this.setState({ districts });
+		console.log(this.state.checked[i].state);
+
+		const checked = [...this.state.checked];
+		checked[i] = {
+			state: !checked[i].state,
+			image: checked[i].image === checkbox ? checkboxOn : checkbox,
+		};
+
+		this.props.updateSeletedDistricts(item, this.state.checked[i].state);
+		this.setState({ checked });
 	}
 
-	renderDistrict(item) {
+	renderDistrict(item, i) {
 		return (
 			<View style={style.district} key={item.id}>
-				<CheckBox title={item.name} checked={this.state.checked} />
+				<TouchableWithoutFeedback onPress={() => this.selectDistrict(item, i)}>
+					<Image source={this.state.checked[i].image} style={style.checkbox} />
+				</TouchableWithoutFeedback>
+				<Text style={style.districtName}>{item.name}</Text>
 			</View>
 		);
 	}
@@ -82,7 +94,7 @@ class Zone extends React.Component {
 					<Text>Zona {this.props.name}</Text>
 					<Text>{this.props.districts.length} distritos</Text>
 					<View style={style.districts}>
-						{this.state.districts.map((item, i) => this.renderDistrict(item, i))}
+						{this.props.districts.map((item, i) => this.renderDistrict(item, i))}
 					</View>
 				</View>
 			</View>
@@ -93,6 +105,7 @@ class Zone extends React.Component {
 Zone.propTypes = {
 	name: PropTypes.string.isRequired,
 	districts: PropTypes.arrayOf(PropTypes.object).isRequired,
+	updateSeletedDistricts: PropTypes.func.isRequired,
 };
 
 export default Zone;
