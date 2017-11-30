@@ -1,10 +1,15 @@
 import { createStore } from 'redux';
 
-// Actions
+// State
+const initialState = {
+	count: 0,
+};
+
+// Action
 const increaseAction = { type: 'increase' };
 
-// Reducers
-function counter(state = { count: 0 }, action) {
+// Reducer
+function reducer(state = initialState, action) {
 	const { count } = state;
 	switch (action.type) {
 	case 'increase':
@@ -14,8 +19,8 @@ function counter(state = { count: 0 }, action) {
 	}
 }
 
-// Stores
-const store = createStore(counter);
+// Store
+const store = createStore(reducer);
 
 // Map Redux state to component props
 function mapStateToProps(state) {
@@ -31,4 +36,4 @@ function mapDispatchToProps(dispatch) {
 	};
 }
 
-export { store, mapStateToProps, mapDispatchToProps };
+export { store, mapDispatchToProps, mapStateToProps };
