@@ -21,21 +21,23 @@ const style = StyleSheet.create({
 	districts: {
 		flex: 1,
 		flexDirection: 'row',
+		alignItems: 'center',
 		flexWrap: 'wrap',
+		marginBottom: 15,
 	},
 	district: {
 		minWidth: '50%',
 		flexDirection: 'row',
 	},
 	checkbox: {
-		width: 30,
-		height: 30,
+		width: 15,
+		height: 15,
 		resizeMode: 'contain',
 		marginRight: 10,
 	},
 	districtName: {
-		marginTop: 2,
 		color: '#fff',
+		fontSize: 14,
 	},
 });
 
@@ -70,7 +72,7 @@ class Zone extends React.Component {
 			image: checked[i].image === checkbox ? checkboxOn : checkbox,
 		};
 
-		this.props.updateSeletedDistricts(item, this.state.checked[i].state);
+		this.props.updateSeletedDistricts(item.id, this.state.checked[i].state);
 		this.setState({ checked });
 	}
 
@@ -80,7 +82,9 @@ class Zone extends React.Component {
 				<TouchableWithoutFeedback onPress={() => this.selectDistrict(item, i)}>
 					<Image source={this.state.checked[i].image} style={style.checkbox} />
 				</TouchableWithoutFeedback>
-				<Text style={style.districtName}>{item.name}</Text>
+				<Text style={style.districtName} onPress={() => this.selectDistrict(item, i)}>
+					{item.name}
+				</Text>
 			</View>
 		);
 	}
