@@ -12,15 +12,17 @@ import RalewayBold from './src/assets/fonts/Raleway-Bold.ttf';
 import Welcome from './src/containers/Welcome';
 import Tutorial from './src/containers/Tutorial';
 import Districts from './src/containers/Districts';
+import Notifications from './src/containers/Notifications';
 
 const FirstLaunchNavigation = StackNavigator(
 	{
 		Welcome: { screen: Welcome },
 		Tutorial: { screen: Tutorial },
 		Districts: { screen: Districts },
+		Notifications: { screen: Notifications },
 	},
 	{
-		initialRouteName: 'Welcome',
+		initialRouteName: 'Notifications',
 		headerMode: 'none',
 	},
 );
