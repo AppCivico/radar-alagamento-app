@@ -78,17 +78,17 @@ class Drawer extends React.Component {
 				{
 					title: 'Meus distritos',
 					icon: districts,
-					path: 'districts',
+					path: 'Districts',
 				},
 				{
 					title: 'Perfil',
 					icon: profile,
-					path: 'profile',
+					path: 'Profile',
 				},
 				{
 					title: 'Configurações',
 					icon: config,
-					path: 'config',
+					path: 'Config',
 				},
 			],
 		};
