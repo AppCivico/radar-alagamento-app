@@ -31,6 +31,13 @@ const tutorial = StyleSheet.create({
 		backgroundColor: 'transparent',
 		fontFamily: 'raleway',
 	},
+	textTitle: {
+		fontFamily: 'ralewayBold',
+		fontSize: 22,
+	},
+	textContent: {
+		fontSize: 18,
+	},
 	background: {
 		position: 'absolute',
 		top: 0,
