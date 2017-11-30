@@ -11,7 +11,7 @@ const style = StyleSheet.create({
 		backgroundColor: '#fff',
 	},
 	header: {
-		paddingTop: 28,
+		paddingTop: 30,
 		flexDirection: 'row',
 		backgroundColor: colors.blue,
 		padding: 15,
@@ -28,7 +28,8 @@ const style = StyleSheet.create({
 	title: {
 		color: '#fff',
 		fontFamily: 'raleway',
-		fontSize: 20,
+		fontSize: 22,
+		marginTop: 0.5,
 	},
 });
 
