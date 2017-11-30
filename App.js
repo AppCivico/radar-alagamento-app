@@ -1,6 +1,9 @@
 import React from 'react';
 import { StackNavigator } from 'react-navigation';
 import { AppLoading, Font } from 'expo';
+import { Provider } from 'react-redux';
+
+import { store } from './src/store';
 
 import Raleway from './src/assets/fonts/Raleway-Regular.ttf';
 import RalewayMedium from './src/assets/fonts/Raleway-Medium.ttf';
@@ -48,7 +51,11 @@ class App extends React.Component {
 			return <AppLoading />;
 		}
 
-		return <FirstLaunchNavigation />;
+		return (
+			<Provider store={store}>
+				<FirstLaunchNavigation />
+			</Provider>
+		);
 	}
 }
 
