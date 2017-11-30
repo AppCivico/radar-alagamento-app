@@ -29,7 +29,6 @@ const style = StyleSheet.create({
 		color: '#fff',
 		fontFamily: 'raleway',
 		fontSize: 22,
-		marginTop: 0.5,
 	},
 });
 
