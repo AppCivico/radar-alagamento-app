@@ -64,8 +64,6 @@ class Zone extends React.Component {
 	}
 
 	selectDistrict(item, i) {
-		console.log(this.state.checked[i].state);
-
 		const checked = [...this.state.checked];
 		checked[i] = {
 			state: !checked[i].state,
