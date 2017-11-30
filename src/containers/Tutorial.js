@@ -178,11 +178,12 @@ class Tutorial extends React.Component {
 		return (
 			<View style={[style, { width, height }]} key={`r_${i}`}>
 				<Image source={child.image} style={tutorial.image} />
-				<Text style={tutorial.text}>
-					<Text style={tutorial.textTitle}>{child.title}</Text>
-					{'\n'}
+				<View style={tutorial.text}>
+					<View style={{ marginBottom: 10 }}>
+						<Text style={tutorial.textTitle}>{child.title}</Text>
+					</View>
 					<Text style={tutorial.textContent}>{child.text}</Text>
-				</Text>
+				</View>
 				<Image source={child.background} style={tutorial.background} />
 			</View>
 		);
@@ -207,7 +208,7 @@ class Tutorial extends React.Component {
 			selectedIndex = this.state.selectedIndex + 1;
 		}
 
-		if (selectedIndex < 0 || selectedIndex >= this.state.count - 1) {
+		if (selectedIndex < 0 || selectedIndex >= this.state.count) {
 			this.skipTutorial();
 			return;
 		}
