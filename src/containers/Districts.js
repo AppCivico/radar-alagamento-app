@@ -38,7 +38,7 @@ class Districts extends React.Component {
 				const isLoaded = !this.state.isLoaded;
 				this.setState({ zones, isLoaded });
 			})
-			.catch(err => console.alert(err));
+			.catch(err => console.error(err));
 	}
 
 	toggleMenu() {
@@ -51,16 +51,13 @@ class Districts extends React.Component {
 	}
 
 	updateSeletedDistricts(district, action) {
-		console.log(district.name, action);
 		const selectedDistricts = [...this.state.selectedDistricts];
 
 		if (!action) {
 			selectedDistricts.push(district);
 		} else {
-			console.log(selectedDistricts);
 			const index = selectedDistricts.findIndex(item => item.id === district.id);
-			console.log('qual', index);
-			// selectedDistricts.splice(index, 1);
+			selectedDistricts.splice(index, 1);
 		}
 
 		this.setState({ selectedDistricts });
