@@ -73,7 +73,7 @@ class Drawer extends React.Component {
 				{
 					title: 'Alertas',
 					icon: alerts,
-					path: 'alerts',
+					path: 'Notifications',
 				},
 				{
 					title: 'Meus distritos',
