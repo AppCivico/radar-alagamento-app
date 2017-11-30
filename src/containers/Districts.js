@@ -1,14 +1,27 @@
 /* eslint-disable react/prop-types, class-methods-use-this, array-callback-return */
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { connect } from 'react-redux';
+import { View, Text, TouchableWithoutFeedback, Image, StyleSheet } from 'react-native';
+
+import { mapStateToProps, mapDispatchToProps } from '../store';
 
 import Header from '../components/Header';
 import Drawer from '../components/Drawer';
 import Zone from '../components/Zone';
 
+import done from '../assets/images/done.png';
+
 const style = StyleSheet.create({
 	container: {
 		flex: 1,
+	},
+	nextPageButton: {
+		position: 'absolute',
+		top: 30,
+		right: 10,
+		width: 30,
+		height: 30,
+		resizeMode: 'contain',
 	},
 });
 
@@ -24,6 +37,7 @@ class Districts extends React.Component {
 		this.toggleMenu = this.toggleMenu.bind(this);
 		this.changeRoute = this.changeRoute.bind(this);
 		this.updateSeletedDistricts = this.updateSeletedDistricts.bind(this);
+		this.editDistricts = this.editDistricts.bind(this);
 	}
 
 	componentWillMount() {
@@ -31,7 +45,7 @@ class Districts extends React.Component {
 	}
 
 	getDistricts() {
-		fetch('https://dtupa.eokoe.com/zone?api_key=f17a9b9d-221a-47c0-9628-07b3a0fd1a59')
+		fetch('https://dtupa.eokoe.com/zone')
 			.then(response => response.json())
 			.then((data) => {
 				const zones = data.results;
@@ -56,19 +70,28 @@ class Districts extends React.Component {
 		if (!action) {
 			selectedDistricts.push(district);
 		} else {
-			const index = selectedDistricts.findIndex(item => item.id === district.id);
+			const index = selectedDistricts.findIndex(item => item === district);
 			selectedDistricts.splice(index, 1);
 		}
 
 		this.setState({ selectedDistricts });
 	}
 
+	editDistricts() {
+		const user = {
+			districts: this.state.selectedDistricts,
+		};
+		this.props.navigation.navigate('Tutorial');
+	}
+
 	render() {
+		const { value, onIncreaseClick } = this.props;
 		if (this.state.isLoaded) {
 			return (
 				<View style={style.container}>
 					<Header pageTitle="Meus Distritos" toggleMenu={this.toggleMenu} />
 					<View style={style.container}>
+						<Text onPress={onIncreaseClick}>clicaaaa {value}</Text>
 						<Text>{this.state.selectedDistricts.length} distritos selecionados</Text>
 						{this.state.zones.map(item => (
 							<Zone
@@ -79,6 +102,9 @@ class Districts extends React.Component {
 							/>
 						))}
 					</View>
+					<TouchableWithoutFeedback onPress={() => this.editDistricts()}>
+						<Image source={done} style={style.nextPageButton} />
+					</TouchableWithoutFeedback>
 					<Drawer
 						userName="Fulana"
 						menuState={this.state.menu}
@@ -105,4 +131,4 @@ class Districts extends React.Component {
 	}
 }
 
-export default Districts;
+export default connect(mapStateToProps, mapDispatchToProps)(Districts);
