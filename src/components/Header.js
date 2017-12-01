@@ -20,6 +20,7 @@ const style = StyleSheet.create({
 		width: 25,
 		height: 20,
 		resizeMode: 'contain',
+		marginTop: 2,
 	},
 	pageTitle: {
 		paddingLeft: 25,
