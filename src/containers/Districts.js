@@ -91,7 +91,7 @@ class Districts extends React.Component {
 				<View style={style.container}>
 					<Header pageTitle="Meus Distritos" toggleMenu={this.toggleMenu} />
 					<View style={style.container}>
-						<Text onPress={onIncreaseClick}>clicaaaa {value}</Text>
+						<Text onPress={onIncreaseClick}>testando store do redux {value}</Text>
 						<Text>{this.state.selectedDistricts.length} distritos selecionados</Text>
 						{this.state.zones.map(item => (
 							<Zone
