@@ -13,6 +13,7 @@ import Welcome from './src/containers/Welcome';
 import Tutorial from './src/containers/Tutorial';
 import Districts from './src/containers/Districts';
 import Notifications from './src/containers/Notifications';
+import Profile from './src/containers/Profile';
 
 const FirstLaunchNavigation = StackNavigator(
 	{
@@ -20,9 +21,10 @@ const FirstLaunchNavigation = StackNavigator(
 		Tutorial: { screen: Tutorial },
 		Districts: { screen: Districts },
 		Notifications: { screen: Notifications },
+		Profile: { screen: Profile },
 	},
 	{
-		initialRouteName: 'Notifications',
+		initialRouteName: 'Profile',
 		headerMode: 'none',
 	},
 );
