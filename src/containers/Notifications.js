@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types, class-methods-use-this, array-callback-return */
 import React from 'react';
 import { connect } from 'react-redux';
-import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView, Alert } from 'react-native';
 
 import { mapStateToProps, mapDispatchToProps } from '../store';
 
@@ -142,7 +142,18 @@ class Notifications extends React.Component {
 				const isLoaded = true;
 				this.setState({ notifications, isLoaded });
 			})
-			.catch(err => console.error(err));
+			.catch(() => this.showError('Ocorreu um erro ao carregar os alertas, tente novamente!'));
+	}
+
+	showError(msg = 'Campo obrigatório') {
+		Alert.alert(
+			'Atenção',
+			msg,
+			[
+				{ text: 'OK' },
+			],
+			{ cancelable: false },
+		);
 	}
 
 	toggleMenu() {
@@ -177,8 +188,10 @@ class Notifications extends React.Component {
 	}
 
 	preRenderNotifications() {
-		if (this.state.notifications.length > 0) {
-			return this.renderAllNotifications();
+		if (this.state.notifications) {
+			if (this.state.notifications.length > 0) {
+				return this.renderAllNotifications();
+			}
 		}
 
 		const warning = {
