@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types, class-methods-use-this, array-callback-return */
 import React from 'react';
 import { connect } from 'react-redux';
-import { View, Text, TouchableWithoutFeedback, Image, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TouchableWithoutFeedback, Image, StyleSheet, ScrollView, Alert } from 'react-native';
 
 import { mapDispachToProps, mapStateToProps } from '../store';
 
@@ -19,7 +19,7 @@ const style = StyleSheet.create({
 	},
 	nextPageButton: {
 		position: 'absolute',
-		top: 30,
+		top: 35,
 		right: 10,
 		width: 30,
 		height: 30,
@@ -61,7 +61,18 @@ class Districts extends React.Component {
 				const isLoaded = !this.state.isLoaded;
 				this.setState({ zones, isLoaded });
 			})
-			.catch(err => console.error(err));
+			.catch(() => this.showError('Ocorreu um ao carregar os distritos, tente novamente'));
+	}
+
+	showError(msg = 'Campo obrigatório') {
+		Alert.alert(
+			'Atenção',
+			msg,
+			[
+				{ text: 'OK' },
+			],
+			{ cancelable: false },
+		);
 	}
 
 	toggleMenu() {
