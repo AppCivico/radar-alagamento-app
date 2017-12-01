@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { View, Text, TouchableWithoutFeedback, Image, StyleSheet } from 'react-native';
 
-import { mapStateToProps, mapDispatchToProps } from '../store';
+import { mapDispachToProps, mapStateToProps } from '../store';
 
 import Header from '../components/Header';
 import Drawer from '../components/Drawer';
@@ -85,13 +85,13 @@ class Districts extends React.Component {
 	}
 
 	render() {
-		const { value, onIncreaseClick } = this.props;
+		const { posts, increment } = this.props;
 		if (this.state.isLoaded) {
 			return (
 				<View style={style.container}>
 					<Header pageTitle="Meus Distritos" toggleMenu={this.toggleMenu} />
 					<View style={style.container}>
-						<Text onPress={onIncreaseClick}>testando store do redux {value}</Text>
+						<Text onPress={increment}>testando store do redux {posts[0].caption}</Text>
 						<Text>{this.state.selectedDistricts.length} distritos selecionados</Text>
 						{this.state.zones.map(item => (
 							<Zone
@@ -131,4 +131,4 @@ class Districts extends React.Component {
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Districts);
+export default connect(mapStateToProps, mapDispachToProps)(Districts);
