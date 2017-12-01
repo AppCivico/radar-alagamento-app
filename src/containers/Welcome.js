@@ -39,13 +39,17 @@ class Welcome extends React.Component {
 
 	componentDidMount() {
 		try {
-			const value = AsyncStorage.getItem('alreadyLaunched');
-			if (value == null) {
-				AsyncStorage.setItem('alreadyLaunched', true);
-				this.changeRoute('Tutorial');
-			} else {
-				this.changeRoute('Tutorial');
-			}
+			AsyncStorage.getItem('alreadyLaunched')
+				.then((res) => {
+					const value = res;
+					if (value == null) {
+						AsyncStorage.setItem('alreadyLaunched', 'yes')
+							.then(() => this.changeRoute('Tutorial'));
+					} else {
+						this.changeRoute('Districts');
+					}
+				})
+				.catch(() => {});
 		} catch (error) {
 			// Error retrieving data
 		}
