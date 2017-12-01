@@ -139,10 +139,10 @@ class Profile extends React.Component {
 
 	showError(msg = 'Campo obrigatório') {
 		Alert.alert(
-			'Erro de preenchimento',
+			'Atenção',
 			msg,
 			[
-				{ text: 'OK', onPress: () => console.log('OK Pressed') },
+				{ text: 'OK' },
 			],
 			{ cancelable: false },
 		);
@@ -179,8 +179,6 @@ class Profile extends React.Component {
 				.replace(/\W+/g, '')
 				.replace(/\D+/g, '');
 
-		console.log(cleanPhone);
-
 		return {
 			name: `${this.state.name.trim()} ${this.state.surname.trim()}`,
 			email: this.state.email.trim(),
@@ -197,7 +195,6 @@ class Profile extends React.Component {
 		const newUser = this.createUser();
 		if (newUser) {
 			user.user = newUser;
-			console.log(this.props.user);
 			axios({
 				method: 'POST',
 				url: 'https://dtupa.eokoe.com/signup',
@@ -205,14 +202,13 @@ class Profile extends React.Component {
 				data: this.props.user,
 			}).then(
 				(response) => {
-					console.log(response.api_key);
 					const apikey = response.api_key;
 					this.props.apikey = apikey;
 
 					this.changeRoute('Alerts');
 				},
-				(err) => {
-					console.error(err);
+				() => {
+					this.showError('Ops! Ocorreu um erro no seu cadastro, tente novamente!');
 				},
 			);
 		}
