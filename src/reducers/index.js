@@ -2,7 +2,6 @@ function user(state = [], action) {
 	switch (action.type) {
 	case 'UPDATE_USER':
 		state.user = action.user;
-		console.log(state.user);
 		break;
 	default:
 		return state;
