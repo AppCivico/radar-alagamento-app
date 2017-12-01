@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, StyleSheet, Image, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableWithoutFeedback, ScrollView } from 'react-native';
 
 import { colors } from '../styles/variables';
 
