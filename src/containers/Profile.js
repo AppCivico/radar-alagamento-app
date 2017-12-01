@@ -11,6 +11,7 @@ import {
 	Button,
 	StyleSheet,
 	Alert,
+	AsyncStorage,
 } from 'react-native';
 
 import { mapStateToProps, mapDispatchToProps } from '../store';
@@ -117,6 +118,20 @@ class Profile extends React.Component {
 		this.editProfile = this.editProfile.bind(this);
 	}
 
+	componentWillMount() {
+		try {
+			AsyncStorage.getItem('apikey')
+				.then((res) => {
+					if (res != null) {
+						this.setState({ register: false });
+					}
+				})
+				.catch(() => {});
+		} catch (error) {
+			// Error retrieving data
+		}
+	}
+
 	componentDidMount() {
 		registerForPushNotificationsAsync().then((res) => {
 			this.setState({ token: res });
@@ -202,10 +217,12 @@ class Profile extends React.Component {
 				data: this.props.user,
 			}).then(
 				(response) => {
-					const apikey = response.api_key;
+					const apikey = response.data.api_key;
 					this.props.apikey = apikey;
 
-					this.changeRoute('Alerts');
+					AsyncStorage.setItem('apikey', apikey).then(() => {
+						this.changeRoute('Notifications');
+					});
 				},
 				() => {
 					this.showError('Ops! Ocorreu um erro no seu cadastro, tente novamente!');
