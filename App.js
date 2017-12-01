@@ -41,19 +41,32 @@ const FirstLaunchNavigationTutorial = StackNavigator(
 	},
 );
 
+const FirstLaunchNavigationRegistered = StackNavigator(
+	{
+		Tutorial: { screen: Tutorial },
+		Districts: { screen: Districts },
+		Notifications: { screen: Notifications },
+		Profile: { screen: Profile },
+	},
+	{
+		initialRouteName: 'Notifications',
+		headerMode: 'none',
+	},
+);
+
 class App extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			loaded: false,
 			firstLaunch: true,
+			apikey: false,
 		};
 	}
 
 	componentWillMount() {
 		this.loadAssetsAsync();
 
-		const firstLaunch = true;
 		try {
 			AsyncStorage.getItem('alreadyLaunched')
 				.then((res) => {
@@ -61,7 +74,15 @@ class App extends React.Component {
 					if (value == null) {
 						AsyncStorage.setItem('alreadyLaunched', 'yes');
 					} else {
-						this.state.firstLaunch = false;
+						this.setState({ firstLaunch: false });
+					}
+				})
+				.catch(() => {});
+
+			AsyncStorage.getItem('apikey')
+				.then((res) => {
+					if (res != null) {
+						this.setState({ apikey: true });
 					}
 				})
 				.catch(() => {});
@@ -88,6 +109,14 @@ class App extends React.Component {
 			return (
 				<Provider store={store}>
 					<FirstLaunchNavigationTutorial />
+				</Provider>
+			);
+		}
+
+		if (this.state.apikey) {
+			return (
+				<Provider store={store}>
+					<FirstLaunchNavigationRegistered />
 				</Provider>
 			);
 		}
