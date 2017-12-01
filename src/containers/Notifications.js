@@ -115,7 +115,6 @@ class Notifications extends React.Component {
 			isLoaded: false,
 			menu: false,
 			notifications: [],
-			icons: [attention, alert, overflow, emergency],
 			colors: {
 				attention: '#f6dc35',
 				alert: '#f1a225',
@@ -182,7 +181,11 @@ class Notifications extends React.Component {
 			return this.renderAllNotifications();
 		}
 
-		return this.renderWarningScreen();
+		const warning = {
+			message: 'Tudo tranquilo, sem alertas nos distritos seguidos =)',
+			image: wink,
+		};
+		return this.renderWarningScreen(warning);
 	}
 
 	renderAllNotifications() {
@@ -193,14 +196,29 @@ class Notifications extends React.Component {
 		);
 	}
 
-	renderWarningScreen() {
+	renderWarningScreen(warning) {
 		return (
 			<View style={style.container}>
-				<Image source={wink} style={style.wink} />
-				<Text style={style.warning}>Tudo tranquilo, sem alertas nos distritos seguidos =)</Text>
+				<Image source={warning.image} style={style.wink} />
+				<Text style={style.warning}>{warning.message}</Text>
 				<Image source={background} style={style.background} />
 			</View>
 		);
+	}
+
+	renderImage(level) {
+		switch (level) {
+		case 'emergency':
+			return <Image source={emergency} style={style.cardIconImage} />;
+		case 'attention':
+			return <Image source={attention} style={style.cardIconImage} />;
+		case 'overflow':
+			return <Image source={overflow} style={style.cardIconImage} />;
+		case 'alert':
+			return <Image source={alert} style={style.cardIconImage} />;
+		default:
+			return <Image source={attention} style={style.cardIconImage} />;
+		}
 	}
 
 	renderNotification(item) {
@@ -210,8 +228,7 @@ class Notifications extends React.Component {
 				<Text style={style.date}>{this.formatDate(item.created_at)}</Text>
 				<View style={style.card}>
 					<View style={[style.cardIcon, { backgroundColor: color }]}>
-						{/* this.state.icons[item.level] */}
-						<Image source={attention} style={style.cardIconImage} />
+						{this.renderImage(item.level)}
 					</View>
 					<View style={style.cardText}>
 						<Text style={style.cardDescription}>{item.description}</Text>
