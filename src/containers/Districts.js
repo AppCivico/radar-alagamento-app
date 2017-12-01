@@ -49,7 +49,7 @@ class Districts extends React.Component {
 		this.editDistricts = this.editDistricts.bind(this);
 	}
 
-	componentWillMount() {
+	componentDidMount() {
 		this.getDistricts();
 	}
 
