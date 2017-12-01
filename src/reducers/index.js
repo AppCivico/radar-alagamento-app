@@ -1,12 +1,4 @@
-function comments(state = [], action) {
-	return state;
-}
-
-function posts(state = [], action) {
-	return state;
-}
-
-function users(state = [], action) {
+function user(state = [], action) {
 	switch (action.type) {
 	case 'UPDATE_USER':
 		state.user = action.user;
@@ -19,4 +11,17 @@ function users(state = [], action) {
 	return state;
 }
 
-export { posts, comments, users };
+function apikey(state = [], action) {
+	switch (action.type) {
+	case 'UPDATE_APIKEY':
+		state.apikey = action.apikey;
+		console.log(state.apikey);
+		break;
+	default:
+		return state;
+	}
+
+	return state;
+}
+
+export { user, apikey };
