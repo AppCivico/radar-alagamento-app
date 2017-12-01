@@ -99,11 +99,11 @@ class Drawer extends React.Component {
 	}
 
 	animateMenu(route) {
-		const newValue = this.props.menuState ? -500 : 0;
+		const newValue = this.props.menuState ? -250 : 0;
 
 		Animated.timing(this.state.animation, {
 			toValue: newValue,
-			duration: 500,
+			duration: 250,
 		}).start(() => {
 			if (!this.props.menuState) {
 				this.props.changeRoute(route);
