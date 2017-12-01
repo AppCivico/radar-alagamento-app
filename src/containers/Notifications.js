@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types, class-methods-use-this, array-callback-return */
 import React from 'react';
 import { connect } from 'react-redux';
-import { View, Text, Image, StyleSheet, ScrollView, Alert } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView, Alert, AsyncStorage } from 'react-native';
 
 import { mapStateToProps, mapDispatchToProps } from '../store';
 
@@ -122,6 +122,7 @@ class Notifications extends React.Component {
 				emergency: '#f54f4f',
 			},
 			activeMenu: true,
+			apikey: '',
 		};
 		this.toggleMenu = this.toggleMenu.bind(this);
 		this.changeRoute = this.changeRoute.bind(this);
@@ -130,12 +131,23 @@ class Notifications extends React.Component {
 	}
 
 	componentWillMount() {
-		this.getNotifications('user');
+		try {
+			AsyncStorage.getItem('apikey')
+				.then((res) => {
+					if (res != null) {
+						this.setState({ apikey: res });
+						this.getNotifications('user');
+					}
+				})
+				.catch(() => {});
+		} catch (error) {
+			// Error retrieving data
+		}
 	}
 
 	getNotifications(type) {
 		const url = type === 'city' ? 'all' : '';
-		fetch(`https://dtupa.eokoe.com/alert/${url}?api_key=7322f9c2-5855-42f0-9f31-667c60de76c8`)
+		fetch(`https://dtupa.eokoe.com/alert/${url}?api_key=${this.state.apikey}`)
 			.then(response => response.json())
 			.then((data) => {
 				const notifications = data.results;
