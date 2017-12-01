@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, StyleSheet, Image, TouchableWithoutFeedback, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
 
 import { colors } from '../styles/variables';
 
@@ -25,23 +25,25 @@ const style = StyleSheet.create({
 		padding: 30,
 	},
 	districts: {
+		padding: 20,
 		flexDirection: 'row',
 		flexWrap: 'wrap',
 		backgroundColor: colors.blue,
 	},
 	district: {
-		minWidth: '50%',
+		flex: 1,
 		flexDirection: 'row',
+		marginBottom: 10,
 	},
 	checkbox: {
-		width: 15,
-		height: 15,
+		width: 25,
+		height: 25,
 		resizeMode: 'contain',
 		marginRight: 10,
 	},
 	districtName: {
 		color: '#fff',
-		fontSize: 14,
+		fontSize: 16,
 	},
 	zoneIcon: {},
 	ZoneTitles: {},
@@ -104,9 +106,9 @@ class Zone extends React.Component {
 	renderDistrict(item, i) {
 		return (
 			<View style={style.district} key={item.id}>
-				<TouchableWithoutFeedback onPress={() => this.selectDistrict(item, i)}>
+				<TouchableOpacity onPress={() => this.selectDistrict(item, i)}>
 					<Image source={this.state.checked[i].image} style={style.checkbox} />
-				</TouchableWithoutFeedback>
+				</TouchableOpacity>
 				<Text style={style.districtName} onPress={() => this.selectDistrict(item, i)}>
 					{item.name}
 				</Text>
