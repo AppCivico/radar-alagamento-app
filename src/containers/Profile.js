@@ -10,6 +10,7 @@ import {
 	TouchableWithoutFeedback,
 	Button,
 	StyleSheet,
+	Alert,
 } from 'react-native';
 
 import { mapStateToProps, mapDispatchToProps } from '../store';
@@ -131,37 +132,90 @@ class Profile extends React.Component {
 		this.props.navigation.navigate(route);
 	}
 
+	validateEmail(email) {
+		const re = /\S+@\S+\.\S+/;
+		return re.test(email);
+	}
+
+	showError(msg = 'Campo obrigatório') {
+		Alert.alert(
+			'Erro de preenchimento',
+			msg,
+			[
+				{ text: 'OK', onPress: () => console.log('OK Pressed') },
+			],
+			{ cancelable: false },
+		);
+	}
+
 	createUser() {
+		if (this.state.name === '') {
+			this.showError();
+			return false;
+		}
+		if (this.state.surname === '') {
+			this.showError();
+			return false;
+		}
+		if (this.state.email === '') {
+			this.showError();
+			return false;
+		}
+		if (this.state.phone === '') {
+			this.showError();
+			return false;
+		}
+
+		const validEmail = this.validateEmail(this.state.email);
+		if (!validEmail) {
+			this.showError('E-mail inválido');
+			return false;
+		}
+
+		const { phone } = this.state;
+		const cleanPhone =
+			phone
+				.trim()
+				.replace(/\W+/g, '')
+				.replace(/\D+/g, '');
+
+		console.log(cleanPhone);
+
 		return {
-			name: `${this.state.name} ${this.state.surname}`,
-			email: this.state.email,
+			name: `${this.state.name.trim()} ${this.state.surname.trim()}`,
+			email: this.state.email.trim(),
 			password: '123segredo$$',
 			password_confirmation: '123segredo$$',
-			phone_number: this.state.phone,
+			phone_number: `+55${cleanPhone}`,
 		};
 	}
 
 	registerUser() {
 		const { user } = this.props;
-		user.token = this.state.token;
-		user.user = this.createUser();
+		user.token = { value: this.state.token };
 
-		/* axios({
-			method: 'POST',
-			url: 'https://dtupa.eokoe.com/signup',
-			headers: { 'Content-Type': 'application/json' },
-			data: this.props.user,
-		}).then(
-			(response) => {
-				console.log(response);
-				this.changeRoute('Alerts');
-			},
-			(err) => {
-				console.error(err);
-			},
-		); */
+		const newUser = this.createUser();
+		if (newUser) {
+			user.user = newUser;
+			console.log(this.props.user);
+			axios({
+				method: 'POST',
+				url: 'https://dtupa.eokoe.com/signup',
+				headers: { 'Content-Type': 'application/json' },
+				data: this.props.user,
+			}).then(
+				(response) => {
+					console.log(response.api_key);
+					const apikey = response.api_key;
+					this.props.apikey = apikey;
 
-		this.changeRoute('Notifications');
+					this.changeRoute('Alerts');
+				},
+				(err) => {
+					console.error(err);
+				},
+			);
+		}
 	}
 
 	editProfile() {
