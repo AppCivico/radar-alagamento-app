@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types, class-methods-use-this, array-callback-return */
 import React from 'react';
 import { connect } from 'react-redux';
+import axios from 'axios';
 import {
 	View,
 	Text,
@@ -12,6 +13,8 @@ import {
 } from 'react-native';
 
 import { mapStateToProps, mapDispatchToProps } from '../store';
+
+import registerForPushNotificationsAsync from '../registerForPushNotificationsAsync';
 
 import Header from '../components/Header';
 import Drawer from '../components/Drawer';
@@ -104,12 +107,19 @@ class Profile extends React.Component {
 			surname: 'Sobrenome',
 			email: 'E-mail',
 			phone: '(11) 9.9999-8888',
+			token: '',
 		};
 		this.toggleMenu = this.toggleMenu.bind(this);
 		this.changeRoute = this.changeRoute.bind(this);
 		this.createUser = this.createUser.bind(this);
 		this.registerUser = this.registerUser.bind(this);
 		this.editProfile = this.editProfile.bind(this);
+	}
+
+	componentDidMount() {
+		registerForPushNotificationsAsync().then((res) => {
+			this.setState({ token: res });
+		});
 	}
 
 	toggleMenu() {
@@ -132,13 +142,31 @@ class Profile extends React.Component {
 	}
 
 	registerUser() {
-		const user = this.createUser();
-		console.log(user);
+		const { user } = this.props;
+		user.token = this.state.token;
+		user.user = this.createUser();
+
+		/* axios({
+			method: 'POST',
+			url: 'https://dtupa.eokoe.com/signup',
+			headers: { 'Content-Type': 'application/json' },
+			data: this.props.user,
+		}).then(
+			(response) => {
+				console.log(response);
+				this.changeRoute('Alerts');
+			},
+			(err) => {
+				console.error(err);
+			},
+		); */
+
+		this.changeRoute('Notifications');
 	}
 
 	editProfile() {
-		const user = this.createUser();
-		console.log(user);
+		const { user } = this.props;
+		user.user = this.createUser();
 	}
 
 	render() {
@@ -207,7 +235,7 @@ class Profile extends React.Component {
 						</View>
 						{this.state.register && (
 							<Button
-								onPress={this.registerUser}
+								onPress={() => this.registerUser()}
 								title="Enviar"
 								color={colors.blueDark}
 								accessibilityLabel="Enviar"

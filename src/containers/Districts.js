@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types, class-methods-use-this, array-callback-return */
 import React from 'react';
 import { connect } from 'react-redux';
-import { View, Text, TouchableWithoutFeedback, Image, StyleSheet } from 'react-native';
+import { View, Text, TouchableWithoutFeedback, Image, StyleSheet, ScrollView } from 'react-native';
 
 import { mapDispachToProps, mapStateToProps } from '../store';
 
@@ -9,11 +9,13 @@ import Header from '../components/Header';
 import Drawer from '../components/Drawer';
 import Zone from '../components/Zone';
 
+import { colors } from '../styles/variables';
 import done from '../assets/images/done.png';
 
 const style = StyleSheet.create({
 	container: {
 		flex: 1,
+		backgroundColor: colors.blue,
 	},
 	nextPageButton: {
 		position: 'absolute',
@@ -22,6 +24,13 @@ const style = StyleSheet.create({
 		width: 30,
 		height: 30,
 		resizeMode: 'contain',
+	},
+	selectedDistricts: {
+		color: '#fff',
+		fontFamily: 'raleway',
+		fontSize: 16,
+		textAlign: 'left',
+		padding: 20,
 	},
 });
 
@@ -78,29 +87,32 @@ class Districts extends React.Component {
 	}
 
 	editDistricts() {
-		const user = {
-			districts: this.state.selectedDistricts,
-		};
-		this.props.navigation.navigate('Tutorial');
+		const { user } = this.props;
+		user.districts = this.state.selectedDistricts;
+		this.props.updateUser(user);
+		this.props.navigation.navigate('Profile');
 	}
 
 	render() {
-		const { posts, increment } = this.props;
 		if (this.state.isLoaded) {
 			return (
 				<View style={style.container}>
 					<Header pageTitle="Meus Distritos" toggleMenu={this.toggleMenu} />
 					<View style={style.container}>
-						<Text onPress={increment}>testando store do redux {posts[0].caption}</Text>
-						<Text>{this.state.selectedDistricts.length} distritos selecionados</Text>
-						{this.state.zones.map(item => (
-							<Zone
-								key={`zone-${item.id}`}
-								name={item.name}
-								districts={item.districts}
-								updateSeletedDistricts={this.updateSeletedDistricts}
-							/>
-						))}
+						<Text style={style.selectedDistricts}>
+							{this.state.selectedDistricts.length} distritos selecionados
+						</Text>
+						<ScrollView style={style.container}>
+							{this.state.zones.map(item => (
+								<Zone
+									key={`zone-${item.id}`}
+									name={item.name}
+									id={item.id}
+									districts={item.districts}
+									updateSeletedDistricts={this.updateSeletedDistricts}
+								/>
+							))}
+						</ScrollView>
 					</View>
 					<TouchableWithoutFeedback onPress={() => this.editDistricts()}>
 						<Image source={done} style={style.nextPageButton} />

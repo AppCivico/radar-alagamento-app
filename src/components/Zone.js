@@ -6,6 +6,11 @@ import { colors } from '../styles/variables';
 
 import checkbox from '../assets/images/checkbox.png';
 import checkboxOn from '../assets/images/checkbox-on.png';
+import zonaCental from '../assets/images/zona-central.png';
+import zonaSul from '../assets/images/zona-sul.png';
+import zonaOeste from '../assets/images/zona-oeste.png';
+import zonaLeste from '../assets/images/zona-leste.png';
+import zonaNorte from '../assets/images/zona-norte.png';
 
 const style = StyleSheet.create({
 	container: {
@@ -13,17 +18,16 @@ const style = StyleSheet.create({
 		backgroundColor: '#fff',
 	},
 	zone: {
-		flex: 1,
 		backgroundColor: colors.blue,
-		borderColor: 'black',
-		borderWidth: 2,
+		borderBottomColor: colors.blue2,
+		borderBottomWidth: 2,
+		flexDirection: 'row',
+		padding: 30,
 	},
 	districts: {
-		flex: 1,
 		flexDirection: 'row',
-		alignItems: 'center',
 		flexWrap: 'wrap',
-		marginBottom: 15,
+		backgroundColor: colors.blue,
 	},
 	district: {
 		minWidth: '50%',
@@ -39,6 +43,26 @@ const style = StyleSheet.create({
 		color: '#fff',
 		fontSize: 14,
 	},
+	zoneIcon: {},
+	ZoneTitles: {},
+	zoneMap: {
+		width: 60,
+		height: 60,
+		resizeMode: 'contain',
+		marginRight: 10,
+	},
+	zoneName: {
+		color: '#fff',
+		fontFamily: 'raleway',
+		fontSize: 18,
+		textAlign: 'left',
+	},
+	zoneDistricts: {
+		color: '#fff',
+		fontFamily: 'raleway',
+		fontSize: 14,
+		textAlign: 'left',
+	},
 });
 
 class Zone extends React.Component {
@@ -47,6 +71,7 @@ class Zone extends React.Component {
 
 		this.state = {
 			checked: [],
+			colors: ['#0f718d', '#10a1ba', '#48ced8', '#93dcdf', '#004e70'],
 		};
 
 		this.selectDistrict = this.selectDistrict.bind(this);
@@ -89,16 +114,39 @@ class Zone extends React.Component {
 		);
 	}
 
+	renderImage(zona) {
+		switch (zona) {
+		case 'Central':
+			return <Image source={zonaCental} style={style.zoneMap} />;
+		case 'Sul':
+			return <Image source={zonaSul} style={style.zoneMap} />;
+		case 'Oeste':
+			return <Image source={zonaOeste} style={style.zoneMap} />;
+		case 'Leste':
+			return <Image source={zonaLeste} style={style.zoneMap} />;
+		case 'Norte':
+			return <Image source={zonaNorte} style={style.zoneMap} />;
+		default:
+			return <Image source={zonaNorte} style={style.zoneMap} />;
+		}
+	}
+
 	render() {
 		return (
 			<View style={style.container}>
-				<View style={style.zone}>
-					<Text>Zona {this.props.name}</Text>
-					<Text>{this.props.districts.length} distritos</Text>
-					<View style={style.districts}>
-						{this.props.districts.map((item, i) => this.renderDistrict(item, i))}
+				<View style={[style.zone, { backgroundColor: this.state.colors[this.props.id - 1] }]}>
+					<View style={style.zoneIcon}>{this.renderImage(this.props.name)}</View>
+					<View style={style.zoneTitles}>
+						<Text style={style.zoneName}>Zona {this.props.name}</Text>
+						<Text style={style.zoneDistricts}>{this.props.districts.length} distritos</Text>
 					</View>
 				</View>
+				<ScrollView
+					style={[style.districts, { backgroundColor: this.state.colors[this.props.id - 1] }]}
+					alignItems="center"
+				>
+					{this.props.districts.map((item, i) => this.renderDistrict(item, i))}
+				</ScrollView>
 			</View>
 		);
 	}
@@ -106,6 +154,7 @@ class Zone extends React.Component {
 
 Zone.propTypes = {
 	name: PropTypes.string.isRequired,
+	id: PropTypes.string.isRequired,
 	districts: PropTypes.arrayOf(PropTypes.object).isRequired,
 	updateSeletedDistricts: PropTypes.func.isRequired,
 };

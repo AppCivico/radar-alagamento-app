@@ -52,7 +52,7 @@ class Welcome extends React.Component {
 
 		setTimeout(() => {
 			this.props.navigation.navigate(this.state.firstRoute);
-		}, 1000); // change to 3000 once in production
+		}, 2500); // change to 3000 once in production
 	}
 
 	changeRoute(route) {

@@ -66,11 +66,6 @@ class Drawer extends React.Component {
 			animation: new Animated.Value(-500),
 			menu: [
 				{
-					title: 'Teste o menu aqui',
-					icon: alerts,
-					path: 'Welcome',
-				},
-				{
 					title: 'Alertas',
 					icon: alerts,
 					path: 'Notifications',
@@ -85,11 +80,11 @@ class Drawer extends React.Component {
 					icon: profile,
 					path: 'Profile',
 				},
-				{
+				/* {
 					title: 'Configurações',
 					icon: config,
 					path: 'Config',
-				},
+				}, */
 			],
 		};
 

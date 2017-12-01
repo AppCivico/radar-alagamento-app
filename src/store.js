@@ -1,6 +1,6 @@
 import { createStore, bindActionCreators } from 'redux';
 import * as actionCreators from './actions/actionsCreator';
-import rootReducer from './reducers/index';
+import { posts, comments, users } from './reducers';
 
 // create an object for the default data
 const defaultState = {
@@ -31,14 +31,28 @@ const defaultState = {
 		},
 	],
 	comments: [],
+	user: {
+		token: {
+			value: '9',
+		},
+		districts: [],
+		user: {
+			name: '',
+			email: '',
+			password: '',
+			password_confirmation: '',
+			phone_number: '',
+		},
+	},
 };
 
-const store = createStore(rootReducer, defaultState);
+const store = createStore(users, defaultState);
 
 function mapStateToProps(state) {
 	return {
 		posts: state.posts,
 		comments: state.comments,
+		user: state.user,
 	};
 }
 

@@ -1,15 +1,22 @@
-import { combineReducers } from 'redux';
-
 function comments(state = [], action) {
-	console.log(state, action);
 	return state;
 }
 
 function posts(state = [], action) {
-	console.log(state, action);
 	return state;
 }
 
-const rootReducer = combineReducers({ posts, comments });
+function users(state = [], action) {
+	switch (action.type) {
+	case 'UPDATE_USER':
+		state.user = action.user;
+		console.log(state.user);
+		break;
+	default:
+		return state;
+	}
 
-export default rootReducer;
+	return state;
+}
+
+export { posts, comments, users };

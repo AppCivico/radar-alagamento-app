@@ -24,7 +24,7 @@ const FirstLaunchNavigation = StackNavigator(
 		Profile: { screen: Profile },
 	},
 	{
-		initialRouteName: 'Districts',
+		initialRouteName: 'Welcome',
 		headerMode: 'none',
 	},
 );
