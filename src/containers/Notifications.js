@@ -2,7 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { View, Text, Image, StyleSheet, ScrollView, Alert, AsyncStorage } from 'react-native';
-
+import { Notifications as PushNotifications } from 'expo';
 import { mapStateToProps, mapDispatchToProps } from '../store';
 
 import Header from '../components/Header';
@@ -123,6 +123,7 @@ class Notifications extends React.Component {
 			},
 			activeMenu: true,
 			apikey: '',
+			notificationMessage: {},
 		};
 		this.toggleMenu = this.toggleMenu.bind(this);
 		this.changeRoute = this.changeRoute.bind(this);
@@ -137,6 +138,8 @@ class Notifications extends React.Component {
 					if (res != null) {
 						this.setState({ apikey: res });
 						this.getNotifications('user');
+						this.notificationSubscription = PushNotifications.addListener(this.handleNotification);
+						console.log('tem push');
 					}
 				})
 				.catch(() => {});
@@ -157,15 +160,12 @@ class Notifications extends React.Component {
 			.catch(() => this.showError('Ocorreu um erro ao carregar os alertas, tente novamente!'));
 	}
 
+	handleNotification = (notificationMessage) => {
+		this.setState({ notificationMessage });
+	};
+
 	showError(msg = 'Campo obrigatório') {
-		Alert.alert(
-			'Atenção',
-			msg,
-			[
-				{ text: 'OK' },
-			],
-			{ cancelable: false },
-		);
+		Alert.alert('Atenção', msg, [{ text: 'OK' }], { cancelable: false });
 	}
 
 	toggleMenu() {
@@ -216,6 +216,9 @@ class Notifications extends React.Component {
 	renderAllNotifications() {
 		return (
 			<ScrollView style={style.containerNotifications}>
+				{this.state.notificationMessage.origin &&
+					this.renderNotification(this.state.notificationMessage.data)
+				}
 				{this.state.notifications.map(item => this.renderNotification(item))}
 			</ScrollView>
 		);
