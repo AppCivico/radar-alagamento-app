@@ -173,6 +173,11 @@ class Notifications extends React.Component {
 
 	getNotifications(type) {
 		const url = type === 'city' ? 'all' : '';
+		console.log('apikey no get notifications', this.state.apikey);
+		console.log(
+			'url do request',
+			`https://dtupa.eokoe.com/alert/${url}?api_key=${this.state.apikey}`,
+		);
 		fetch(`https://dtupa.eokoe.com/alert/${url}?api_key=${this.state.apikey}`)
 			.then(response => response.json())
 			.then((data) => {
