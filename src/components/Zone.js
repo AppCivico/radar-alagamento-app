@@ -74,9 +74,11 @@ class Zone extends React.Component {
 		this.state = {
 			checked: [],
 			colors: ['#0f718d', '#10a1ba', '#48ced8', '#93dcdf', '#004e70'],
+			allDistricts: false,
 		};
 
 		this.selectDistrict = this.selectDistrict.bind(this);
+		this.selectAllDistricts = this.selectAllDistricts.bind(this);
 		this.setChecks = this.setChecks.bind(this);
 	}
 
@@ -101,6 +103,29 @@ class Zone extends React.Component {
 
 		this.props.updateSeletedDistricts(item.id, this.state.checked[i].state);
 		this.setState({ checked });
+	}
+
+	selectAllDistricts() {
+		const allDistricts = !this.state.allDistricts;
+		const checked = [...this.state.checked];
+		let offSet = 10;
+
+		// eslint-disable-next-line array-callback-return
+		checked.map((item, i) => {
+			checked[i].state = allDistricts;
+			checked[i].image = allDistricts ? checkboxOn : checkbox;
+		});
+
+		this.setState({ allDistricts });
+		this.setState({ checked });
+
+		// eslint-disable-next-line array-callback-return
+		this.props.districts.map((item) => {
+			setTimeout(() => {
+				this.props.updateSeletedDistricts(item.id, !allDistricts);
+			}, offSet);
+			offSet += 10;
+		});
 	}
 
 	renderDistrict(item, i) {
@@ -147,6 +172,15 @@ class Zone extends React.Component {
 					style={[style.districts, { backgroundColor: this.state.colors[this.props.id - 1] }]}
 					alignItems="center"
 				>
+					<View style={style.district} key={0}>
+						<TouchableOpacity onPress={() => this.selectAllDistricts()}>
+							{!this.state.allDistricts && <Image source={checkbox} style={style.checkbox} />}
+							{this.state.allDistricts && <Image source={checkboxOn} style={style.checkbox} />}
+						</TouchableOpacity>
+						<Text style={style.districtName} onPress={() => this.selectAllDistricts()}>
+							Seguir todos os distritos
+						</Text>
+					</View>
 					{this.props.districts.map((item, i) => this.renderDistrict(item, i))}
 				</ScrollView>
 			</View>
