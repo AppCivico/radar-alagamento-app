@@ -139,7 +139,6 @@ class Notifications extends React.Component {
 						this.setState({ apikey: res });
 						this.getNotifications('user');
 						this.notificationSubscription = PushNotifications.addListener(this.handleNotification);
-						console.log('tem push');
 					}
 				})
 				.catch(() => {});
@@ -285,7 +284,6 @@ class Notifications extends React.Component {
 					</View>
 					{this.preRenderNotifications()}
 					<Drawer
-						userName="Fulana"
 						menuState={this.state.menu}
 						toggleMenu={this.toggleMenu}
 						changeRoute={this.changeRoute}
@@ -300,7 +298,6 @@ class Notifications extends React.Component {
 					<Text>Carregando</Text>
 				</View>
 				<Drawer
-					userName="Fulana"
 					menuState={this.state.menu}
 					toggleMenu={this.toggleMenu}
 					changeRoute={this.changeRoute}

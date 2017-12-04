@@ -136,7 +136,6 @@ class Districts extends React.Component {
 						<Image source={done} style={style.nextPageButton} />
 					</TouchableWithoutFeedback>
 					<Drawer
-						userName="Fulana"
 						menuState={this.state.menu}
 						toggleMenu={this.toggleMenu}
 						changeRoute={this.changeRoute}
@@ -153,7 +152,6 @@ class Districts extends React.Component {
 					</View>
 				</View>
 				<Drawer
-					userName="Fulana"
 					menuState={this.state.menu}
 					toggleMenu={this.toggleMenu}
 					changeRoute={this.changeRoute}
