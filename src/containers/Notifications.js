@@ -1,7 +1,16 @@
 /* eslint-disable react/prop-types, class-methods-use-this, array-callback-return */
 import React from 'react';
 import { connect } from 'react-redux';
-import { View, Text, Image, StyleSheet, ScrollView, Alert, AsyncStorage } from 'react-native';
+import {
+	View,
+	Text,
+	Image,
+	StyleSheet,
+	ScrollView,
+	Alert,
+	AsyncStorage,
+	Button,
+} from 'react-native';
 import { Notifications as PushNotifications } from 'expo';
 import { mapStateToProps, mapDispatchToProps } from '../store';
 
@@ -16,10 +25,12 @@ import overflow from '../assets/images/icon-overflow.png';
 import emergency from '../assets/images/icon-emergency.png';
 import background from '../assets/images/elements_bg.png';
 import wink from '../assets/images/wink.png';
+import confused from '../assets/images/confused.png';
 
 const style = StyleSheet.create({
 	container: {
 		flex: 1,
+		backgroundColor: colors.blue,
 	},
 	menu: {
 		backgroundColor: colors.blue,
@@ -106,6 +117,13 @@ const style = StyleSheet.create({
 		height: 'auto',
 		alignSelf: 'flex-end',
 	},
+	loading: {
+		color: '#fff',
+		alignSelf: 'center',
+		textAlign: 'center',
+		fontFamily: 'raleway',
+		fontSize: 18,
+	},
 });
 
 class Notifications extends React.Component {
@@ -124,6 +142,11 @@ class Notifications extends React.Component {
 			activeMenu: true,
 			apikey: '',
 			notificationMessage: {},
+			districts: [],
+			warning: {
+				message: 'Tudo tranquilo, sem alertas nos distritos seguidos =)',
+				image: wink,
+			},
 		};
 		this.toggleMenu = this.toggleMenu.bind(this);
 		this.changeRoute = this.changeRoute.bind(this);
@@ -156,7 +179,9 @@ class Notifications extends React.Component {
 				const isLoaded = true;
 				this.setState({ notifications, isLoaded });
 			})
-			.catch(() => this.showError('Ocorreu um erro ao carregar os alertas, tente novamente!'));
+			.catch(() => {
+				this.showError('Ocorreu um erro ao carregar os alertas, tente novamente!');
+			});
 	}
 
 	handleNotification = (notificationMessage) => {
@@ -205,30 +230,41 @@ class Notifications extends React.Component {
 			}
 		}
 
-		const warning = {
-			message: 'Tudo tranquilo, sem alertas nos distritos seguidos =)',
-			image: wink,
-		};
-		return this.renderWarningScreen(warning);
+		if (this.state.districts.length < 1) {
+			const warning = {
+				message: 'Você não está seguindo nenhum distrito =(',
+				image: wink,
+			};
+			this.setState({ warning });
+		}
+		return this.renderWarningScreen(this.state.warning);
 	}
 
 	renderAllNotifications() {
 		return (
 			<ScrollView style={style.containerNotifications}>
 				{this.state.notificationMessage.origin &&
-					this.renderNotification(this.state.notificationMessage.data)
-				}
+					this.renderNotification(this.state.notificationMessage.data)}
 				{this.state.notifications.map(item => this.renderNotification(item))}
+				<Button />
 			</ScrollView>
 		);
 	}
 
 	renderWarningScreen(warning) {
 		return (
-			<View style={style.container}>
+			<View style={[style.container, { backgroundColor: '#eeeeee' }]}>
 				<Image source={warning.image} style={style.wink} />
 				<Text style={style.warning}>{warning.message}</Text>
 				<Image source={background} style={style.background} />
+				{!this.state.warning.image === confused && (
+					<Button
+						onPress={this.changeRoute('Districts')}
+						title="Seguir distritos"
+						color={colors.blueDark}
+						accessibilityLabel="Seguir distritos"
+					/>
+				)}
 			</View>
 		);
 	}
@@ -293,9 +329,11 @@ class Notifications extends React.Component {
 		}
 		return (
 			<View style={style.container}>
-				<Header pageTitle="Meus Distritos" toggleMenu={this.toggleMenu} />
-				<View style={style.container}>
-					<Text>Carregando</Text>
+				<Header pageTitle="Alertas" toggleMenu={this.toggleMenu} />
+				<View style={[style.container, { alignItems: 'center', justifyContent: 'center' }]}>
+					<View>
+						<Text style={style.loading}>Carregando...</Text>
+					</View>
 				</View>
 				<Drawer
 					menuState={this.state.menu}
