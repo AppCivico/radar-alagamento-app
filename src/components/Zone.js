@@ -108,7 +108,7 @@ class Zone extends React.Component {
 	selectAllDistricts() {
 		const allDistricts = !this.state.allDistricts;
 		const checked = [...this.state.checked];
-		let offSet = 10;
+		let offSet = 1;
 
 		// eslint-disable-next-line array-callback-return
 		checked.map((item, i) => {
@@ -124,7 +124,7 @@ class Zone extends React.Component {
 			setTimeout(() => {
 				this.props.updateSeletedDistricts(item.id, !allDistricts);
 			}, offSet);
-			offSet += 10;
+			offSet += 1;
 		});
 	}
 
