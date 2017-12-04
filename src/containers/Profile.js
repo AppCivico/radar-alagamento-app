@@ -122,6 +122,7 @@ class Profile extends React.Component {
 		try {
 			AsyncStorage.getItem('apikey')
 				.then((res) => {
+					console.log('pegando apikey no profile');
 					if (res != null) {
 						this.setState({ register: false });
 					}

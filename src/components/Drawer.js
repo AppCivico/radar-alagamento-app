@@ -104,6 +104,7 @@ class Drawer extends React.Component {
 		try {
 			AsyncStorage.getItem('user')
 				.then((res) => {
+					console.log('pegando user no drawer');
 					if (res != null) {
 						const user = JSON.parse(res);
 						const userName = user.user.name.split(' ')[0];

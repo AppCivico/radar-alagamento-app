@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types, class-methods-use-this, array-callback-return */
 import React from 'react';
-import { connect } from 'react-redux';
 import {
 	View,
 	Text,
@@ -11,8 +10,7 @@ import {
 	AsyncStorage,
 	Button,
 } from 'react-native';
-import { Notifications as PushNotifications } from 'expo';
-import { mapStateToProps, mapDispatchToProps } from '../store';
+// import { Notifications as PushNotifications } from 'expo';
 
 import Header from '../components/Header';
 import Drawer from '../components/Drawer';
@@ -141,7 +139,7 @@ class Notifications extends React.Component {
 			},
 			activeMenu: true,
 			apikey: '',
-			notificationMessage: {},
+			// notificationMessage: {},
 			districts: [],
 			warning: {
 				message: 'Tudo tranquilo, sem alertas nos distritos seguidos =)',
@@ -158,10 +156,13 @@ class Notifications extends React.Component {
 		try {
 			AsyncStorage.getItem('apikey')
 				.then((res) => {
+					console.log('pegando apikey em notification');
+					console.log('apikey', res);
 					if (res != null) {
 						this.setState({ apikey: res });
 						this.getNotifications('user');
-						this.notificationSubscription = PushNotifications.addListener(this.handleNotification);
+						/* this.notificationSubscription =
+						PushNotifications.addListener(this.handleNotification); */
 					}
 				})
 				.catch(() => {});
@@ -176,6 +177,7 @@ class Notifications extends React.Component {
 			.then(response => response.json())
 			.then((data) => {
 				const notifications = data.results;
+				console.log('notificacoes', notifications);
 				const isLoaded = true;
 				this.setState({ notifications, isLoaded });
 			})
@@ -184,9 +186,9 @@ class Notifications extends React.Component {
 			});
 	}
 
-	handleNotification = (notificationMessage) => {
+	/* handleNotification = (notificationMessage) => {
 		this.setState({ notificationMessage });
-	};
+	}; */
 
 	showError(msg = 'Campo obrigatório') {
 		Alert.alert('Atenção', msg, [{ text: 'OK' }], { cancelable: false });
@@ -233,7 +235,7 @@ class Notifications extends React.Component {
 		if (this.state.districts.length < 1) {
 			const warning = {
 				message: 'Você não está seguindo nenhum distrito =(',
-				image: wink,
+				image: confused,
 			};
 			this.setState({ warning });
 		}
@@ -243,8 +245,8 @@ class Notifications extends React.Component {
 	renderAllNotifications() {
 		return (
 			<ScrollView style={style.containerNotifications}>
-				{this.state.notificationMessage.origin &&
-					this.renderNotification(this.state.notificationMessage.data)}
+				{/* this.state.notificationMessage.origin &&
+					this.renderNotification(this.state.notificationMessage.data) */}
 				{this.state.notifications.map(item => this.renderNotification(item))}
 				<Button />
 			</ScrollView>
@@ -257,14 +259,14 @@ class Notifications extends React.Component {
 				<Image source={warning.image} style={style.wink} />
 				<Text style={style.warning}>{warning.message}</Text>
 				<Image source={background} style={style.background} />
-				{!this.state.warning.image === confused && (
+				{/* !this.state.warning.image === confused && (
 					<Button
 						onPress={this.changeRoute('Districts')}
 						title="Seguir distritos"
 						color={colors.blueDark}
 						accessibilityLabel="Seguir distritos"
 					/>
-				)}
+				) */}
 			</View>
 		);
 	}
@@ -345,4 +347,4 @@ class Notifications extends React.Component {
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Notifications);
+export default Notifications;
