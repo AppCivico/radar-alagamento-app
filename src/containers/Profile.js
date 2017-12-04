@@ -136,6 +136,27 @@ class Profile extends React.Component {
 		registerForPushNotificationsAsync().then((res) => {
 			this.setState({ token: res });
 		});
+
+		// check if user exists
+		try {
+			AsyncStorage.getItem('user')
+				.then((res) => {
+					if (res != null) {
+						const user = JSON.parse(res);
+						const { name, email, phone_number } = user.user;
+						const surname = name.split(' ').slice(1).join(' ');
+						this.setState({
+							name: name.split(' ')[0],
+							surname,
+							email,
+							phone: phone_number.replace('+55', ''),
+						});
+					}
+				})
+				.catch(() => {});
+		} catch (error) {
+			// Error retrieving data
+		}
 	}
 
 	toggleMenu() {
