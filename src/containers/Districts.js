@@ -1,7 +1,15 @@
 /* eslint-disable react/prop-types, class-methods-use-this, array-callback-return */
 import React from 'react';
 import { connect } from 'react-redux';
-import { View, Text, TouchableWithoutFeedback, Image, StyleSheet, ScrollView, Alert } from 'react-native';
+import {
+	View,
+	Text,
+	TouchableWithoutFeedback,
+	Image,
+	StyleSheet,
+	ScrollView,
+	Alert,
+} from 'react-native';
 
 import { mapDispachToProps, mapStateToProps } from '../store';
 
@@ -72,14 +80,7 @@ class Districts extends React.Component {
 	}
 
 	showError(msg = 'Campo obrigatório') {
-		Alert.alert(
-			'Atenção',
-			msg,
-			[
-				{ text: 'OK' },
-			],
-			{ cancelable: false },
-		);
+		Alert.alert('Atenção', msg, [{ text: 'OK' }], { cancelable: false });
 	}
 
 	toggleMenu() {
@@ -105,10 +106,14 @@ class Districts extends React.Component {
 	}
 
 	editDistricts() {
-		const { user } = this.props;
-		user.districts = this.state.selectedDistricts;
-		this.props.updateUser(user);
-		this.props.navigation.navigate('Profile');
+		if (this.state.selectedDistricts.length < 1) {
+			this.showError('Ops! Selecione pelo menos um distrito.');
+		} else {
+			const { user } = this.props;
+			user.districts = this.state.selectedDistricts;
+			this.props.updateUser(user);
+			this.props.navigation.navigate('Profile');
+		}
 	}
 
 	render() {
