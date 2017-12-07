@@ -12,6 +12,7 @@ import {
 	StyleSheet,
 	Alert,
 	AsyncStorage,
+	KeyboardAvoidingView,
 } from 'react-native';
 
 import { mapStateToProps, mapDispatchToProps } from '../store';
@@ -108,6 +109,7 @@ class Profile extends React.Component {
 			surname: 'Sobrenome',
 			email: 'E-mail',
 			phone: '(11) 9.9999-8888',
+			newUser: true,
 		};
 		this.toggleMenu = this.toggleMenu.bind(this);
 		this.changeRoute = this.changeRoute.bind(this);
@@ -133,6 +135,7 @@ class Profile extends React.Component {
 							surname,
 							email,
 							phone: phone_number.replace('+55', ''),
+							newUser: false,
 						});
 					}
 				})
@@ -217,7 +220,6 @@ class Profile extends React.Component {
 					(response) => {
 						const apikey = response.data.api_key;
 						this.props.apikey = apikey;
-
 						AsyncStorage.setItem('apikey', apikey)
 							.then(() => {
 								AsyncStorage.setItem('user', JSON.stringify(this.props.user))
@@ -243,91 +245,99 @@ class Profile extends React.Component {
 
 	render() {
 		return (
-			<View style={style.container}>
-				{!this.state.name === 'Nome' && <Header pageTitle="Perfil" toggleMenu={this.toggleMenu} />}
+			<KeyboardAvoidingView
+				style={style.container}
+				keyboardVerticalOffset={0}
+				behavior="padding"
+				// eslint-disable-next-line
+				scrollEnabled={true}
+			>
 				<View style={style.container}>
-					<Image source={background} style={style.background} />
-					{this.state.name === 'Nome' && (
-						<View style={style.text}>
-							<Text style={style.textTitle}>Um breve cadastro para não perder seus alertas!</Text>
-						</View>
-					)}
-					<View style={style.form}>
-						<View style={style.formItem}>
-							<View style={style.formIcon}>
-								<Image source={iconProfile} style={style.icon} />
+					{!this.state.newUser && <Header pageTitle="Perfil" toggleMenu={this.toggleMenu} />}
+					<View style={style.container}>
+						<Image source={background} style={style.background} />
+						{this.state.newUser && (
+							<View style={style.text}>
+								<Text style={style.textTitle}>Um breve cadastro para não perder seus alertas!</Text>
 							</View>
-							<View style={style.formInput}>
-								<TextInput
-									style={style.input}
-									onChangeText={name => this.setState({ name })}
-									placeholder={this.state.name}
-									placeholderTextColor={colors.gray}
-								/>
-							</View>
-						</View>
-						<View style={style.formItem}>
-							<View style={style.formIcon}>
-								<Image source={iconProfile} style={style.icon} />
-							</View>
-							<View style={style.formInput}>
-								<TextInput
-									style={style.input}
-									onChangeText={surname => this.setState({ surname })}
-									placeholder={this.state.surname}
-									placeholderTextColor={colors.gray}
-								/>
-							</View>
-						</View>
-						<View style={style.formItem}>
-							<View style={style.formIcon}>
-								<Image source={iconEmail} style={style.icon} />
-							</View>
-							<View style={style.formInput}>
-								<TextInput
-									style={style.input}
-									onChangeText={email => this.setState({ email })}
-									placeholder={this.state.email}
-									placeholderTextColor={colors.gray}
-								/>
-							</View>
-						</View>
-						<View style={style.formItem}>
-							<View style={style.formIcon}>
-								<Image source={iconPhone} style={style.icon} />
-							</View>
-							<View style={style.formInput}>
-								<TextInput
-									style={style.input}
-									onChangeText={phone => this.setState({ phone })}
-									placeholder={this.state.phone}
-									placeholderTextColor={colors.gray}
-								/>
-							</View>
-						</View>
-						{this.state.name === 'Nome' && (
-							<Button
-								onPress={() => this.registerUser()}
-								title="Enviar"
-								color={colors.blueDark}
-								accessibilityLabel="Enviar"
-							/>
 						)}
+						<View style={style.form}>
+							<View style={style.formItem}>
+								<View style={style.formIcon}>
+									<Image source={iconProfile} style={style.icon} />
+								</View>
+								<View style={style.formInput}>
+									<TextInput
+										style={style.input}
+										onChangeText={name => this.setState({ name })}
+										placeholder={this.state.name}
+										placeholderTextColor={colors.gray}
+									/>
+								</View>
+							</View>
+							<View style={style.formItem}>
+								<View style={style.formIcon}>
+									<Image source={iconProfile} style={style.icon} />
+								</View>
+								<View style={style.formInput}>
+									<TextInput
+										style={style.input}
+										onChangeText={surname => this.setState({ surname })}
+										placeholder={this.state.surname}
+										placeholderTextColor={colors.gray}
+									/>
+								</View>
+							</View>
+							<View style={style.formItem}>
+								<View style={style.formIcon}>
+									<Image source={iconEmail} style={style.icon} />
+								</View>
+								<View style={style.formInput}>
+									<TextInput
+										style={style.input}
+										onChangeText={email => this.setState({ email })}
+										placeholder={this.state.email}
+										placeholderTextColor={colors.gray}
+									/>
+								</View>
+							</View>
+							<View style={style.formItem}>
+								<View style={style.formIcon}>
+									<Image source={iconPhone} style={style.icon} />
+								</View>
+								<View style={style.formInput}>
+									<TextInput
+										style={style.input}
+										onChangeText={phone => this.setState({ phone })}
+										placeholder={this.state.phone}
+										placeholderTextColor={colors.gray}
+									/>
+								</View>
+							</View>
+							{this.state.newUser && (
+								<Button
+									onPress={() => this.registerUser()}
+									title="Enviar"
+									color={colors.blueDark}
+									accessibilityLabel="Enviar"
+								/>
+							)}
+						</View>
 					</View>
+					{!this.state.newUser && (
+						<TouchableWithoutFeedback onPress={() => this.editProfile()}>
+							<Image source={edit} style={style.nextPageButton} />
+						</TouchableWithoutFeedback>
+					)}
+					{!this.state.newUser && (
+						<Drawer
+							menuState={this.state.menu}
+							toggleMenu={this.toggleMenu}
+							changeRoute={this.changeRoute}
+						/>
+					)}
 				</View>
-				{!this.state.name === 'Nome' && (
-					<TouchableWithoutFeedback onPress={() => this.editProfile()}>
-						<Image source={edit} style={style.nextPageButton} />
-					</TouchableWithoutFeedback>
-				)}
-				{!this.state.name === 'Nome' && (
-					<Drawer
-						menuState={this.state.menu}
-						toggleMenu={this.toggleMenu}
-						changeRoute={this.changeRoute}
-					/>
-				)}
-			</View>
+			</KeyboardAvoidingView>
 		);
 	}
 }
