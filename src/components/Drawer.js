@@ -101,6 +101,10 @@ class Drawer extends React.Component {
 		this.toggleMenu = this.toggleMenu.bind(this);
 	}
 
+	componentDidMount() {
+		this.getUsername();
+	}
+
 	componentWillUpdate(newProps) {
 		if (newProps.menuState) {
 			this.animateMenu();
