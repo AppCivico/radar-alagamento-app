@@ -76,8 +76,8 @@ class App extends React.Component {
 						AsyncStorage.setItem('alreadyLaunched', 'yes');
 					} else {
 						AsyncStorage.getItem('apikey')
-							.then(() => {
-								if (res != null) {
+							.then((res2) => {
+								if (res2 != null) {
 									this.setState({ apikey: true });
 								} else {
 									this.setState({ firstLaunch: false });
