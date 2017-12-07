@@ -53,6 +53,7 @@ const style = StyleSheet.create({
 		flex: 1,
 		paddingLeft: 30,
 		paddingRight: 30,
+		backgroundColor: '#eeeeee',
 	},
 	notification: {
 		marginTop: 30,
@@ -138,7 +139,7 @@ class Notifications extends React.Component {
 				emergency: '#f54f4f',
 			},
 			activeMenu: true,
-			apikey: '',
+			apikey: '830ff945-5447-49c7-8a67-26eed2da8c62',
 			// notificationMessage: {},
 			districts: [],
 			warning: {
@@ -158,7 +159,7 @@ class Notifications extends React.Component {
 				.then((res) => {
 					if (res != null) {
 						this.setState({ apikey: res });
-						// this.getNotifications('user');
+						this.getNotifications('user');
 						/* this.notificationSubscription =
 						PushNotifications.addListener(this.handleNotification); */
 					}
@@ -229,13 +230,13 @@ class Notifications extends React.Component {
 			}
 		}
 
-		if (this.state.districts.length < 1) {
+		/* if (this.state.districts.length < 1) {
 			const warning = {
 				message: 'Você não está seguindo nenhum distrito =(',
 				image: confused,
 			};
 			this.setState({ warning });
-		}
+		} */
 		return this.renderWarningScreen(this.state.warning);
 	}
 
