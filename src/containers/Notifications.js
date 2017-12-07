@@ -156,8 +156,6 @@ class Notifications extends React.Component {
 		try {
 			AsyncStorage.getItem('apikey')
 				.then((res) => {
-					console.log('pegando apikey em notification');
-					console.log('apikey', res);
 					if (res != null) {
 						this.setState({ apikey: res });
 						// this.getNotifications('user');
@@ -173,16 +171,10 @@ class Notifications extends React.Component {
 
 	getNotifications(type) {
 		const url = type === 'city' ? 'all' : '';
-		console.log('apikey no get notifications', this.state.apikey);
-		console.log(
-			'url do request',
-			`https://dtupa.eokoe.com/alert/${url}?api_key=${this.state.apikey}`,
-		);
 		fetch(`https://dtupa.eokoe.com/alert/${url}?api_key=${this.state.apikey}`)
 			.then(response => response.json())
 			.then((data) => {
 				const notifications = data.results;
-				console.log('notificacoes', notifications);
 				const isLoaded = true;
 				this.setState({ notifications, isLoaded });
 			})

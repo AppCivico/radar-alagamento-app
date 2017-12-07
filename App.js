@@ -72,13 +72,11 @@ class App extends React.Component {
 		try {
 			AsyncStorage.getItem('alreadyLaunched')
 				.then((res) => {
-					console.log('primeira vez', res);
 					if (res == null) {
 						AsyncStorage.setItem('alreadyLaunched', 'yes');
 					} else {
 						AsyncStorage.getItem('apikey')
-							.then((res2) => {
-								console.log('pegando apykey no app', res2);
+							.then(() => {
 								if (res != null) {
 									this.setState({ apikey: true });
 								} else {

@@ -242,7 +242,6 @@ class Profile extends React.Component {
 	}
 
 	render() {
-		console.log('nomi', this.state.name);
 		return (
 			<View style={style.container}>
 				{!this.state.name === 'Nome' && <Header pageTitle="Perfil" toggleMenu={this.toggleMenu} />}
