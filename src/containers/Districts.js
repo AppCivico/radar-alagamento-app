@@ -32,6 +32,13 @@ const style = StyleSheet.create({
 		textAlign: 'left',
 		padding: 20,
 	},
+	loading: {
+		color: '#fff',
+		alignSelf: 'center',
+		textAlign: 'center',
+		fontFamily: 'raleway',
+		fontSize: 18,
+	},
 });
 
 class Districts extends React.Component {
@@ -129,7 +136,6 @@ class Districts extends React.Component {
 						<Image source={done} style={style.nextPageButton} />
 					</TouchableWithoutFeedback>
 					<Drawer
-						userName="Fulana"
 						menuState={this.state.menu}
 						toggleMenu={this.toggleMenu}
 						changeRoute={this.changeRoute}
@@ -140,11 +146,12 @@ class Districts extends React.Component {
 		return (
 			<View style={style.container}>
 				<Header pageTitle="Meus Distritos" toggleMenu={this.toggleMenu} />
-				<View style={style.container}>
-					<Text>Carregando</Text>
+				<View style={[style.container, { alignItems: 'center', justifyContent: 'center' }]}>
+					<View>
+						<Text style={style.loading}>Carregando...</Text>
+					</View>
 				</View>
 				<Drawer
-					userName="Fulana"
 					menuState={this.state.menu}
 					toggleMenu={this.toggleMenu}
 					changeRoute={this.changeRoute}

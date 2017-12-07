@@ -1,9 +1,16 @@
 /* eslint-disable react/prop-types, class-methods-use-this, array-callback-return */
 import React from 'react';
-import { connect } from 'react-redux';
-import { View, Text, Image, StyleSheet, ScrollView, Alert, AsyncStorage } from 'react-native';
-
-import { mapStateToProps, mapDispatchToProps } from '../store';
+import {
+	View,
+	Text,
+	Image,
+	StyleSheet,
+	ScrollView,
+	Alert,
+	AsyncStorage,
+	Button,
+} from 'react-native';
+// import { Notifications as PushNotifications } from 'expo';
 
 import Header from '../components/Header';
 import Drawer from '../components/Drawer';
@@ -16,10 +23,12 @@ import overflow from '../assets/images/icon-overflow.png';
 import emergency from '../assets/images/icon-emergency.png';
 import background from '../assets/images/elements_bg.png';
 import wink from '../assets/images/wink.png';
+import confused from '../assets/images/confused.png';
 
 const style = StyleSheet.create({
 	container: {
 		flex: 1,
+		backgroundColor: colors.blue,
 	},
 	menu: {
 		backgroundColor: colors.blue,
@@ -106,6 +115,13 @@ const style = StyleSheet.create({
 		height: 'auto',
 		alignSelf: 'flex-end',
 	},
+	loading: {
+		color: '#fff',
+		alignSelf: 'center',
+		textAlign: 'center',
+		fontFamily: 'raleway',
+		fontSize: 18,
+	},
 });
 
 class Notifications extends React.Component {
@@ -123,6 +139,12 @@ class Notifications extends React.Component {
 			},
 			activeMenu: true,
 			apikey: '',
+			// notificationMessage: {},
+			districts: [],
+			warning: {
+				message: 'Tudo tranquilo, sem alertas nos distritos seguidos =)',
+				image: wink,
+			},
 		};
 		this.toggleMenu = this.toggleMenu.bind(this);
 		this.changeRoute = this.changeRoute.bind(this);
@@ -134,9 +156,13 @@ class Notifications extends React.Component {
 		try {
 			AsyncStorage.getItem('apikey')
 				.then((res) => {
+					console.log('pegando apikey em notification');
+					console.log('apikey', res);
 					if (res != null) {
 						this.setState({ apikey: res });
 						this.getNotifications('user');
+						/* this.notificationSubscription =
+						PushNotifications.addListener(this.handleNotification); */
 					}
 				})
 				.catch(() => {});
@@ -147,25 +173,30 @@ class Notifications extends React.Component {
 
 	getNotifications(type) {
 		const url = type === 'city' ? 'all' : '';
+		console.log('apikey no get notifications', this.state.apikey);
+		console.log(
+			'url do request',
+			`https://dtupa.eokoe.com/alert/${url}?api_key=${this.state.apikey}`,
+		);
 		fetch(`https://dtupa.eokoe.com/alert/${url}?api_key=${this.state.apikey}`)
 			.then(response => response.json())
 			.then((data) => {
 				const notifications = data.results;
+				console.log('notificacoes', notifications);
 				const isLoaded = true;
 				this.setState({ notifications, isLoaded });
 			})
-			.catch(() => this.showError('Ocorreu um erro ao carregar os alertas, tente novamente!'));
+			.catch(() => {
+				this.showError('Ocorreu um erro ao carregar os alertas, tente novamente!');
+			});
 	}
 
+	/* handleNotification = (notificationMessage) => {
+		this.setState({ notificationMessage });
+	}; */
+
 	showError(msg = 'Campo obrigatório') {
-		Alert.alert(
-			'Atenção',
-			msg,
-			[
-				{ text: 'OK' },
-			],
-			{ cancelable: false },
-		);
+		Alert.alert('Atenção', msg, [{ text: 'OK' }], { cancelable: false });
 	}
 
 	toggleMenu() {
@@ -206,27 +237,41 @@ class Notifications extends React.Component {
 			}
 		}
 
-		const warning = {
-			message: 'Tudo tranquilo, sem alertas nos distritos seguidos =)',
-			image: wink,
-		};
-		return this.renderWarningScreen(warning);
+		if (this.state.districts.length < 1) {
+			const warning = {
+				message: 'Você não está seguindo nenhum distrito =(',
+				image: confused,
+			};
+			this.setState({ warning });
+		}
+		return this.renderWarningScreen(this.state.warning);
 	}
 
 	renderAllNotifications() {
 		return (
 			<ScrollView style={style.containerNotifications}>
+				{/* this.state.notificationMessage.origin &&
+					this.renderNotification(this.state.notificationMessage.data) */}
 				{this.state.notifications.map(item => this.renderNotification(item))}
+				<Button />
 			</ScrollView>
 		);
 	}
 
 	renderWarningScreen(warning) {
 		return (
-			<View style={style.container}>
+			<View style={[style.container, { backgroundColor: '#eeeeee' }]}>
 				<Image source={warning.image} style={style.wink} />
 				<Text style={style.warning}>{warning.message}</Text>
 				<Image source={background} style={style.background} />
+				{/* !this.state.warning.image === confused && (
+					<Button
+						onPress={this.changeRoute('Districts')}
+						title="Seguir distritos"
+						color={colors.blueDark}
+						accessibilityLabel="Seguir distritos"
+					/>
+				) */}
 			</View>
 		);
 	}
@@ -282,7 +327,6 @@ class Notifications extends React.Component {
 					</View>
 					{this.preRenderNotifications()}
 					<Drawer
-						userName="Fulana"
 						menuState={this.state.menu}
 						toggleMenu={this.toggleMenu}
 						changeRoute={this.changeRoute}
@@ -292,12 +336,13 @@ class Notifications extends React.Component {
 		}
 		return (
 			<View style={style.container}>
-				<Header pageTitle="Meus Distritos" toggleMenu={this.toggleMenu} />
-				<View style={style.container}>
-					<Text>Carregando</Text>
+				<Header pageTitle="Alertas" toggleMenu={this.toggleMenu} />
+				<View style={[style.container, { alignItems: 'center', justifyContent: 'center' }]}>
+					<View>
+						<Text style={style.loading}>Carregando...</Text>
+					</View>
 				</View>
 				<Drawer
-					userName="Fulana"
 					menuState={this.state.menu}
 					toggleMenu={this.toggleMenu}
 					changeRoute={this.changeRoute}
@@ -307,4 +352,4 @@ class Notifications extends React.Component {
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Notifications);
+export default Notifications;

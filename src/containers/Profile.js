@@ -122,6 +122,7 @@ class Profile extends React.Component {
 		try {
 			AsyncStorage.getItem('apikey')
 				.then((res) => {
+					console.log('pegando apikey no profile');
 					if (res != null) {
 						this.setState({ register: false });
 					}
@@ -136,6 +137,27 @@ class Profile extends React.Component {
 		registerForPushNotificationsAsync().then((res) => {
 			this.setState({ token: res });
 		});
+
+		// check if user exists
+		try {
+			AsyncStorage.getItem('user')
+				.then((res) => {
+					if (res != null) {
+						const user = JSON.parse(res);
+						const { name, email, phone_number } = user.user;
+						const surname = name.split(' ').slice(1).join(' ');
+						this.setState({
+							name: name.split(' ')[0],
+							surname,
+							email,
+							phone: phone_number.replace('+55', ''),
+						});
+					}
+				})
+				.catch(() => {});
+		} catch (error) {
+			// Error retrieving data
+		}
 	}
 
 	toggleMenu() {
@@ -153,14 +175,7 @@ class Profile extends React.Component {
 	}
 
 	showError(msg = 'Campo obrigatório') {
-		Alert.alert(
-			'Atenção',
-			msg,
-			[
-				{ text: 'OK' },
-			],
-			{ cancelable: false },
-		);
+		Alert.alert('Atenção', msg, [{ text: 'OK' }], { cancelable: false });
 	}
 
 	createUser() {
@@ -188,11 +203,10 @@ class Profile extends React.Component {
 		}
 
 		const { phone } = this.state;
-		const cleanPhone =
-			phone
-				.trim()
-				.replace(/\W+/g, '')
-				.replace(/\D+/g, '');
+		const cleanPhone = phone
+			.trim()
+			.replace(/\W+/g, '')
+			.replace(/\D+/g, '');
 
 		return {
 			name: `${this.state.name.trim()} ${this.state.surname.trim()}`,
@@ -220,9 +234,15 @@ class Profile extends React.Component {
 					const apikey = response.data.api_key;
 					this.props.apikey = apikey;
 
-					AsyncStorage.setItem('apikey', apikey).then(() => {
-						this.changeRoute('Notifications');
-					});
+					AsyncStorage.setItem('apikey', apikey)
+						.then(() => {
+							AsyncStorage.setItem('user', JSON.stringify(this.props.user))
+								.then(() => {
+									this.changeRoute('Notifications');
+								})
+								.catch(() => {});
+						})
+						.catch(() => {});
 				},
 				() => {
 					this.showError('Ops! Ocorreu um erro no seu cadastro, tente novamente!');
@@ -317,7 +337,6 @@ class Profile extends React.Component {
 				)}
 				{!this.state.register && (
 					<Drawer
-						userName="Fulana"
 						menuState={this.state.menu}
 						toggleMenu={this.toggleMenu}
 						changeRoute={this.changeRoute}

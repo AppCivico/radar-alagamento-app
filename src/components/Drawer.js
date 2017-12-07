@@ -1,6 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Animated, View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+	Animated,
+	View,
+	Text,
+	Image,
+	TouchableOpacity,
+	AsyncStorage,
+	StyleSheet,
+} from 'react-native';
 
 import { colors } from '../styles/variables';
 
@@ -86,10 +94,27 @@ class Drawer extends React.Component {
 					path: 'Config',
 				}, */
 			],
+			userName: '',
 		};
 
 		this.animateMenu = this.animateMenu.bind(this);
 		this.toggleMenu = this.toggleMenu.bind(this);
+	}
+	componentDidMount() {
+		try {
+			AsyncStorage.getItem('user')
+				.then((res) => {
+					console.log('pegando user no drawer');
+					if (res != null) {
+						const user = JSON.parse(res);
+						const userName = user.user.name.split(' ')[0];
+						this.setState({ userName });
+					}
+				})
+				.catch(() => {});
+		} catch (error) {
+			// Error retrieving data
+		}
 	}
 
 	componentWillUpdate(newProps) {
@@ -134,7 +159,7 @@ class Drawer extends React.Component {
 			<Animated.View
 				style={[style.container, { transform: [{ translateX: this.state.animation }] }]}
 			>
-				<Text style={style.userName}>Olá, {this.props.userName}</Text>
+				<Text style={style.userName}>Olá, {this.state.userName}</Text>
 				<View style={style.navigator}>
 					{this.state.menu.map(item => this.renderMenuItem(item))}
 				</View>
@@ -144,7 +169,6 @@ class Drawer extends React.Component {
 }
 
 Drawer.propTypes = {
-	userName: PropTypes.string.isRequired,
 	toggleMenu: PropTypes.func.isRequired,
 	changeRoute: PropTypes.func.isRequired,
 	menuState: PropTypes.bool.isRequired,

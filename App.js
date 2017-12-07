@@ -70,6 +70,7 @@ class App extends React.Component {
 		try {
 			AsyncStorage.getItem('alreadyLaunched')
 				.then((res) => {
+					console.log('pegando alreaylaunched no app');
 					const value = res;
 					if (value == null) {
 						AsyncStorage.setItem('alreadyLaunched', 'yes');
@@ -81,6 +82,7 @@ class App extends React.Component {
 
 			AsyncStorage.getItem('apikey')
 				.then((res) => {
+					console.log('pegando apykey no app');
 					if (res != null) {
 						this.setState({ apikey: true });
 					}
