@@ -100,7 +100,14 @@ class Drawer extends React.Component {
 		this.animateMenu = this.animateMenu.bind(this);
 		this.toggleMenu = this.toggleMenu.bind(this);
 	}
-	componentDidMount() {
+
+	componentWillUpdate(newProps) {
+		if (newProps.menuState) {
+			this.animateMenu();
+		}
+	}
+
+	getUsername() {
 		try {
 			AsyncStorage.getItem('user')
 				.then((res) => {
@@ -114,12 +121,6 @@ class Drawer extends React.Component {
 				.catch(() => {});
 		} catch (error) {
 			// Error retrieving data
-		}
-	}
-
-	componentWillUpdate(newProps) {
-		if (newProps.menuState) {
-			this.animateMenu();
 		}
 	}
 

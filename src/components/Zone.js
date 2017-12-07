@@ -82,7 +82,7 @@ class Zone extends React.Component {
 		this.setChecks = this.setChecks.bind(this);
 	}
 
-	componentWillMount() {
+	componentDidMount() {
 		this.setChecks();
 	}
 
@@ -132,7 +132,9 @@ class Zone extends React.Component {
 		return (
 			<View style={style.district} key={item.id}>
 				<TouchableOpacity onPress={() => this.selectDistrict(item, i)}>
-					<Image source={this.state.checked[i].image} style={style.checkbox} />
+					{this.state.checked[i] &&
+						<Image source={this.state.checked[i].image} style={style.checkbox} />
+					}
 				</TouchableOpacity>
 				<Text style={style.districtName} onPress={() => this.selectDistrict(item, i)}>
 					{item.name}

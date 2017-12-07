@@ -67,24 +67,25 @@ class App extends React.Component {
 	componentDidMount() {
 		this.loadAssetsAsync();
 
+		console.log('test console');
+
 		try {
 			AsyncStorage.getItem('alreadyLaunched')
 				.then((res) => {
-					console.log('pegando alreaylaunched no app');
-					const value = res;
-					if (value == null) {
+					console.log('primeira vez', res);
+					if (res == null) {
 						AsyncStorage.setItem('alreadyLaunched', 'yes');
 					} else {
-						this.setState({ firstLaunch: false });
-					}
-				})
-				.catch(() => {});
-
-			AsyncStorage.getItem('apikey')
-				.then((res) => {
-					console.log('pegando apykey no app');
-					if (res != null) {
-						this.setState({ apikey: true });
+						AsyncStorage.getItem('apikey')
+							.then((res2) => {
+								console.log('pegando apykey no app', res2);
+								if (res != null) {
+									this.setState({ apikey: true });
+								} else {
+									this.setState({ firstLaunch: false });
+								}
+							})
+							.catch(() => {});
 					}
 				})
 				.catch(() => {});
@@ -107,10 +108,10 @@ class App extends React.Component {
 			return <AppLoading />;
 		}
 
-		if (this.state.firstLaunch) {
+		if (!this.state.firstLaunch) {
 			return (
 				<Provider store={store}>
-					<FirstLaunchNavigationTutorial />
+					<FirstLaunchNavigation />
 				</Provider>
 			);
 		}
@@ -125,7 +126,7 @@ class App extends React.Component {
 
 		return (
 			<Provider store={store}>
-				<FirstLaunchNavigation />
+				<FirstLaunchNavigationTutorial />
 			</Provider>
 		);
 	}

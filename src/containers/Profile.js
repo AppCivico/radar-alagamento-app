@@ -104,12 +104,10 @@ class Profile extends React.Component {
 		super();
 		this.state = {
 			menu: false,
-			register: true,
 			name: 'Nome',
 			surname: 'Sobrenome',
 			email: 'E-mail',
 			phone: '(11) 9.9999-8888',
-			token: '',
 		};
 		this.toggleMenu = this.toggleMenu.bind(this);
 		this.changeRoute = this.changeRoute.bind(this);
@@ -118,26 +116,7 @@ class Profile extends React.Component {
 		this.editProfile = this.editProfile.bind(this);
 	}
 
-	componentWillMount() {
-		try {
-			AsyncStorage.getItem('apikey')
-				.then((res) => {
-					console.log('pegando apikey no profile');
-					if (res != null) {
-						this.setState({ register: false });
-					}
-				})
-				.catch(() => {});
-		} catch (error) {
-			// Error retrieving data
-		}
-	}
-
 	componentDidMount() {
-		registerForPushNotificationsAsync().then((res) => {
-			this.setState({ token: res });
-		});
-
 		// check if user exists
 		try {
 			AsyncStorage.getItem('user')
@@ -145,7 +124,10 @@ class Profile extends React.Component {
 					if (res != null) {
 						const user = JSON.parse(res);
 						const { name, email, phone_number } = user.user;
-						const surname = name.split(' ').slice(1).join(' ');
+						const surname = name
+							.split(' ')
+							.slice(1)
+							.join(' ');
 						this.setState({
 							name: name.split(' ')[0],
 							surname,
@@ -219,36 +201,39 @@ class Profile extends React.Component {
 
 	registerUser() {
 		const { user } = this.props;
-		user.token = { value: this.state.token };
+		registerForPushNotificationsAsync().then((res) => {
+			user.token = { value: res };
 
-		const newUser = this.createUser();
-		if (newUser) {
-			user.user = newUser;
-			axios({
-				method: 'POST',
-				url: 'https://dtupa.eokoe.com/signup',
-				headers: { 'Content-Type': 'application/json' },
-				data: this.props.user,
-			}).then(
-				(response) => {
-					const apikey = response.data.api_key;
-					this.props.apikey = apikey;
+			const newUser = this.createUser();
 
-					AsyncStorage.setItem('apikey', apikey)
-						.then(() => {
-							AsyncStorage.setItem('user', JSON.stringify(this.props.user))
-								.then(() => {
-									this.changeRoute('Notifications');
-								})
-								.catch(() => {});
-						})
-						.catch(() => {});
-				},
-				() => {
-					this.showError('Ops! Ocorreu um erro no seu cadastro, tente novamente!');
-				},
-			);
-		}
+			if (newUser) {
+				user.user = newUser;
+				axios({
+					method: 'POST',
+					url: 'https://dtupa.eokoe.com/signup',
+					headers: { 'Content-Type': 'application/json' },
+					data: this.props.user,
+				}).then(
+					(response) => {
+						const apikey = response.data.api_key;
+						this.props.apikey = apikey;
+
+						AsyncStorage.setItem('apikey', apikey)
+							.then(() => {
+								AsyncStorage.setItem('user', JSON.stringify(this.props.user))
+									.then(() => {
+										this.changeRoute('Notifications');
+									})
+									.catch(() => {});
+							})
+							.catch(() => {});
+					},
+					() => {
+						this.showError('Ops! Ocorreu um erro no seu cadastro, tente novamente!');
+					},
+				);
+			}
+		});
 	}
 
 	editProfile() {
@@ -257,12 +242,13 @@ class Profile extends React.Component {
 	}
 
 	render() {
+		console.log('nomi', this.state.name);
 		return (
 			<View style={style.container}>
-				{!this.state.register && <Header pageTitle="Perfil" toggleMenu={this.toggleMenu} />}
+				{!this.state.name === 'Nome' && <Header pageTitle="Perfil" toggleMenu={this.toggleMenu} />}
 				<View style={style.container}>
 					<Image source={background} style={style.background} />
-					{this.state.register && (
+					{this.state.name === 'Nome' && (
 						<View style={style.text}>
 							<Text style={style.textTitle}>Um breve cadastro para não perder seus alertas!</Text>
 						</View>
@@ -320,7 +306,7 @@ class Profile extends React.Component {
 								/>
 							</View>
 						</View>
-						{this.state.register && (
+						{this.state.name === 'Nome' && (
 							<Button
 								onPress={() => this.registerUser()}
 								title="Enviar"
@@ -330,12 +316,12 @@ class Profile extends React.Component {
 						)}
 					</View>
 				</View>
-				{!this.state.register && (
+				{!this.state.name === 'Nome' && (
 					<TouchableWithoutFeedback onPress={() => this.editProfile()}>
 						<Image source={edit} style={style.nextPageButton} />
 					</TouchableWithoutFeedback>
 				)}
-				{!this.state.register && (
+				{!this.state.name === 'Nome' && (
 					<Drawer
 						menuState={this.state.menu}
 						toggleMenu={this.toggleMenu}

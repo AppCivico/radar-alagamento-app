@@ -128,7 +128,7 @@ class Notifications extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			isLoaded: false,
+			isLoaded: true,
 			menu: false,
 			notifications: [],
 			colors: {
@@ -152,7 +152,7 @@ class Notifications extends React.Component {
 		this.changeAlerts = this.changeAlerts.bind(this);
 	}
 
-	componentWillMount() {
+	componentDidMount() {
 		try {
 			AsyncStorage.getItem('apikey')
 				.then((res) => {
@@ -160,7 +160,7 @@ class Notifications extends React.Component {
 					console.log('apikey', res);
 					if (res != null) {
 						this.setState({ apikey: res });
-						this.getNotifications('user');
+						// this.getNotifications('user');
 						/* this.notificationSubscription =
 						PushNotifications.addListener(this.handleNotification); */
 					}
@@ -253,7 +253,6 @@ class Notifications extends React.Component {
 				{/* this.state.notificationMessage.origin &&
 					this.renderNotification(this.state.notificationMessage.data) */}
 				{this.state.notifications.map(item => this.renderNotification(item))}
-				<Button />
 			</ScrollView>
 		);
 	}
