@@ -80,9 +80,11 @@ class Tutorial extends React.Component {
 					{this.state.children.map((child, i) => this.renderBullets(child, i))}
 				</View>
 				<View style={tutorial.button}>
-					<TouchableNativeFeedback onPress={e => this.handleHorizontalScroll(e)}>
-						<Image source={next} style={tutorial.hamburguer} />
-					</TouchableNativeFeedback>
+					{/*
+						<TouchableNativeFeedback onPress={e => this.handleHorizontalScroll(e)}>
+							<Image source={next} style={tutorial.hamburguer} />
+						</TouchableNativeFeedback>
+					*/}
 				</View>
 			</View>
 		);
