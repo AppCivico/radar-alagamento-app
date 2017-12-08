@@ -10,7 +10,7 @@ import {
 	AsyncStorage,
 	Button,
 } from 'react-native';
-// import { Notifications as PushNotifications } from 'expo';
+import { Notifications as PushNotifications } from 'expo';
 
 import Header from '../components/Header';
 import Drawer from '../components/Drawer';
@@ -47,7 +47,7 @@ const style = StyleSheet.create({
 	menuText: {
 		color: '#fff',
 		fontFamily: 'raleway',
-		fontSize: 18,
+		fontSize: 16,
 	},
 	containerNotifications: {
 		flex: 1,
@@ -140,11 +140,10 @@ class Notifications extends React.Component {
 			},
 			activeMenu: true,
 			apikey: '830ff945-5447-49c7-8a67-26eed2da8c62',
-			// notificationMessage: {},
-			districts: [],
+			notificationMessage: {},
 			warning: {
-				message: 'Tudo tranquilo, sem alertas nos distritos seguidos =)',
-				image: wink,
+				message: 'Você não está seguindo nenhum distrito =(',
+				image: confused,
 			},
 		};
 		this.toggleMenu = this.toggleMenu.bind(this);
@@ -160,8 +159,7 @@ class Notifications extends React.Component {
 					if (res != null) {
 						this.setState({ apikey: res });
 						this.getNotifications('user');
-						/* this.notificationSubscription =
-						PushNotifications.addListener(this.handleNotification); */
+						this.notificationSubscription = PushNotifications.addListener(this.handleNotification);
 					}
 				})
 				.catch(() => {});
@@ -177,16 +175,23 @@ class Notifications extends React.Component {
 			.then((data) => {
 				const notifications = data.results;
 				const isLoaded = true;
-				this.setState({ notifications, isLoaded });
+				const warning = {};
+
+				if (notifications.length < 1) {
+					warning.message = 'Tudo tranquilo, sem alertas nos distritos seguidos =)';
+					warning.image = wink;
+				}
+
+				this.setState({ warning, notifications, isLoaded });
 			})
 			.catch(() => {
 				this.showError('Ocorreu um erro ao carregar os alertas, tente novamente!');
 			});
 	}
 
-	/* handleNotification = (notificationMessage) => {
+	handleNotification = (notificationMessage) => {
 		this.setState({ notificationMessage });
-	}; */
+	};
 
 	showError(msg = 'Campo obrigatório') {
 		Alert.alert('Atenção', msg, [{ text: 'OK' }], { cancelable: false });
@@ -230,21 +235,14 @@ class Notifications extends React.Component {
 			}
 		}
 
-		/* if (this.state.districts.length < 1) {
-			const warning = {
-				message: 'Você não está seguindo nenhum distrito =(',
-				image: confused,
-			};
-			this.setState({ warning });
-		} */
 		return this.renderWarningScreen(this.state.warning);
 	}
 
 	renderAllNotifications() {
 		return (
 			<ScrollView style={style.containerNotifications}>
-				{/* this.state.notificationMessage.origin &&
-					this.renderNotification(this.state.notificationMessage.data) */}
+				{this.state.notificationMessage.origin &&
+					this.renderNotification(this.state.notificationMessage.data)}
 				{this.state.notifications.map(item => this.renderNotification(item))}
 			</ScrollView>
 		);
@@ -256,14 +254,14 @@ class Notifications extends React.Component {
 				<Image source={warning.image} style={style.wink} />
 				<Text style={style.warning}>{warning.message}</Text>
 				<Image source={background} style={style.background} />
-				{/* !this.state.warning.image === confused && (
+				{this.state.warning.image === confused && (
 					<Button
-						onPress={this.changeRoute('Districts')}
+						onPress={() => this.changeRoute('Districts')}
 						title="Seguir distritos"
 						color={colors.blueDark}
 						accessibilityLabel="Seguir distritos"
 					/>
-				) */}
+				)}
 			</View>
 		);
 	}
