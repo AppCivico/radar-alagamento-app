@@ -92,8 +92,8 @@ const style = StyleSheet.create({
 	},
 	nextPageButton: {
 		position: 'absolute',
-		top: 30,
-		right: 10,
+		top: 43,
+		right: 20,
 		width: 20,
 		height: 20,
 		resizeMode: 'contain',
