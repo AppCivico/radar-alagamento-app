@@ -14,13 +14,10 @@ import { Notifications as PushNotifications } from 'expo';
 
 import Header from '../components/Header';
 import Drawer from '../components/Drawer';
+import Notification from '../components/Notification';
 
 import { colors } from '../styles/variables';
 
-import attention from '../assets/images/icon-attention.png';
-import alert from '../assets/images/icon-alert.png';
-import overflow from '../assets/images/icon-overflow.png';
-import emergency from '../assets/images/icon-emergency.png';
 import background from '../assets/images/elements_bg.png';
 import wink from '../assets/images/wink.png';
 import confused from '../assets/images/confused.png';
@@ -54,41 +51,6 @@ const style = StyleSheet.create({
 		paddingLeft: 30,
 		paddingRight: 30,
 		backgroundColor: '#eeeeee',
-	},
-	notification: {
-		marginTop: 30,
-	},
-	card: {
-		backgroundColor: '#fff',
-		display: 'flex',
-		flexDirection: 'row',
-		borderBottomWidth: 1,
-		borderBottomColor: colors.grayLight,
-		marginTop: 1,
-	},
-	cardIcon: {
-		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center',
-		padding: 5,
-	},
-	cardIconImage: {
-		width: 40,
-		height: 40,
-		resizeMode: 'contain',
-	},
-	cardText: {
-		flex: 5,
-		paddingTop: 25,
-		paddingLeft: 15,
-		paddingBottom: 25,
-		paddingRight: 15,
-		justifyContent: 'flex-start',
-	},
-	cardDescription: {
-		fontFamily: 'ralewayBold',
-		fontSize: 18,
-		color: colors.gray,
 	},
 	date: {
 		fontFamily: 'raleway',
@@ -132,12 +94,6 @@ class Notifications extends React.Component {
 			isLoaded: true,
 			menu: false,
 			notifications: [],
-			colors: {
-				attention: '#f6dc35',
-				alert: '#f1a225',
-				overflow: '#f6dc35',
-				emergency: '#f54f4f',
-			},
 			activeMenu: true,
 			apikey: '830ff945-5447-49c7-8a67-26eed2da8c62',
 			notificationMessage: {},
@@ -212,22 +168,6 @@ class Notifications extends React.Component {
 		this.getNotifications(type);
 	}
 
-	formatDate(date) {
-		if (date) {
-			const day = date
-				.split(' ')[0]
-				.split('-')
-				.reverse()
-				.join('.');
-
-			const hour = date.split(' ')[1].split(':');
-
-			return `${day} às ${hour[0]}h${hour[1]}`;
-		}
-
-		return date;
-	}
-
 	preRenderNotifications() {
 		if (this.state.notifications) {
 			if (this.state.notifications.length > 0) {
@@ -241,9 +181,13 @@ class Notifications extends React.Component {
 	renderAllNotifications() {
 		return (
 			<ScrollView style={style.containerNotifications}>
-				{this.state.notificationMessage.origin &&
-					this.renderNotification(this.state.notificationMessage.data)}
-				{this.state.notifications.map(item => this.renderNotification(item))}
+				{this.state.notificationMessage.origin && (
+					<Notification
+						key={this.state.notificationMessage.data.id}
+						item={this.state.notificationMessage.data}
+					/>
+				)}
+				{this.state.notifications.map(item => <Notification key={item.id} item={item} />)}
 			</ScrollView>
 		);
 	}
@@ -262,38 +206,6 @@ class Notifications extends React.Component {
 						accessibilityLabel="Seguir distritos"
 					/>
 				)}
-			</View>
-		);
-	}
-
-	renderImage(level) {
-		switch (level) {
-		case 'emergency':
-			return <Image source={emergency} style={style.cardIconImage} />;
-		case 'attention':
-			return <Image source={attention} style={style.cardIconImage} />;
-		case 'overflow':
-			return <Image source={overflow} style={style.cardIconImage} />;
-		case 'alert':
-			return <Image source={alert} style={style.cardIconImage} />;
-		default:
-			return <Image source={attention} style={style.cardIconImage} />;
-		}
-	}
-
-	renderNotification(item) {
-		const color = this.state.colors[item.level] ? this.state.colors[item.level] : '#f1a225';
-		return (
-			<View key={`notification-${item.id}`} style={style.notification}>
-				<Text style={style.date}>{this.formatDate(item.created_at)}</Text>
-				<View style={style.card}>
-					<View style={[style.cardIcon, { backgroundColor: color }]}>
-						{this.renderImage(item.level)}
-					</View>
-					<View style={style.cardText}>
-						<Text style={style.cardDescription}>{item.description}</Text>
-					</View>
-				</View>
 			</View>
 		);
 	}
