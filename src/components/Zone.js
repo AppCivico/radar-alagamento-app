@@ -1,6 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
+import {
+	View,
+	Text,
+	StyleSheet,
+	Image,
+	TouchableOpacity,
+	ScrollView,
+	TouchableWithoutFeedback,
+} from 'react-native';
 
 import { colors } from '../styles/variables';
 
@@ -17,18 +25,39 @@ const style = StyleSheet.create({
 		flex: 1,
 		backgroundColor: '#fff',
 	},
+	containerZone: {
+		flex: 1,
+		// ios
+		shadowOpacity: 0.5,
+		shadowRadius: 2,
+		shadowOffset: {
+			height: 2,
+			width: 0,
+		},
+		shadowColor: '#4c4c4c',
+	},
 	zone: {
+		position: 'relative',
 		backgroundColor: colors.blue,
-		borderBottomColor: colors.blue2,
-		borderBottomWidth: 2,
+		flex: 1,
+		paddingTop: 15,
+		paddingLeft: 30,
+		paddingRight: 30,
+	},
+	zoneHeader: {
 		flexDirection: 'row',
-		padding: 30,
+		flex: 1,
+		overflow: 'hidden',
+	},
+	zoneHeaderOpen: {
+		flexDirection: 'column',
+		alignItems: 'center',
 	},
 	districts: {
-		padding: 20,
-		flexDirection: 'row',
-		flexWrap: 'wrap',
-		backgroundColor: colors.blue,
+		width: '100%',
+		paddingBottom: 20,
+		paddingRight: 30,
+		paddingLeft: 30,
 	},
 	district: {
 		flex: 1,
@@ -36,8 +65,8 @@ const style = StyleSheet.create({
 		marginBottom: 10,
 	},
 	checkbox: {
-		width: 25,
-		height: 25,
+		width: 20,
+		height: 20,
 		resizeMode: 'contain',
 		marginRight: 10,
 	},
@@ -45,24 +74,28 @@ const style = StyleSheet.create({
 		color: '#fff',
 		fontSize: 16,
 	},
-	zoneIcon: {},
-	ZoneTitles: {},
 	zoneMap: {
+		width: 50,
+		height: 50,
+		resizeMode: 'contain',
+		marginRight: 20,
+	},
+	zoneMapOpen: {
 		width: 60,
 		height: 60,
-		resizeMode: 'contain',
-		marginRight: 10,
+		marginRight: 0,
 	},
 	zoneName: {
 		color: '#fff',
 		fontFamily: 'raleway',
-		fontSize: 18,
+		fontSize: 17,
 		textAlign: 'left',
+		marginTop: 7,
 	},
 	zoneDistricts: {
 		color: '#fff',
 		fontFamily: 'raleway',
-		fontSize: 14,
+		fontSize: 12,
 		textAlign: 'left',
 	},
 });
@@ -73,13 +106,15 @@ class Zone extends React.Component {
 
 		this.state = {
 			checked: [],
-			colors: ['#0f718d', '#10a1ba', '#48ced8', '#93dcdf', '#004e70'],
+			colors: ['#93dcdf', '#48ced8', '#10a1ba', '#0f718d', '#004e70'],
 			allDistricts: false,
+			toggle: false,
 		};
 
 		this.selectDistrict = this.selectDistrict.bind(this);
 		this.selectAllDistricts = this.selectAllDistricts.bind(this);
 		this.setChecks = this.setChecks.bind(this);
+		this.toggleDistricts = this.toggleDistricts.bind(this);
 	}
 
 	componentDidMount() {
@@ -128,13 +163,18 @@ class Zone extends React.Component {
 		});
 	}
 
+	toggleDistricts() {
+		const toggle = !this.state.toggle;
+		this.setState({ toggle });
+	}
+
 	renderDistrict(item, i) {
 		return (
 			<View style={style.district} key={item.id}>
 				<TouchableOpacity onPress={() => this.selectDistrict(item, i)}>
-					{this.state.checked[i] &&
+					{this.state.checked[i] && (
 						<Image source={this.state.checked[i].image} style={style.checkbox} />
-					}
+					)}
 				</TouchableOpacity>
 				<Text style={style.districtName} onPress={() => this.selectDistrict(item, i)}>
 					{item.name}
@@ -145,35 +185,69 @@ class Zone extends React.Component {
 
 	renderImage(zona) {
 		switch (zona) {
-		case 'Central':
-			return <Image source={zonaCental} style={style.zoneMap} />;
+		case 'Centro':
+			return <Image source={zonaCental} style={[style.zoneMap, this.state.toggle ? style.zoneMapOpen : '']} />;
 		case 'Sul':
-			return <Image source={zonaSul} style={style.zoneMap} />;
+			return <Image source={zonaSul} style={[style.zoneMap, this.state.toggle ? style.zoneMapOpen : '']} />;
 		case 'Oeste':
-			return <Image source={zonaOeste} style={style.zoneMap} />;
+			return <Image source={zonaOeste} style={[style.zoneMap, this.state.toggle ? style.zoneMapOpen : '']} />;
 		case 'Leste':
-			return <Image source={zonaLeste} style={style.zoneMap} />;
+			return <Image source={zonaLeste} style={[style.zoneMap, this.state.toggle ? style.zoneMapOpen : '']} />;
 		case 'Norte':
-			return <Image source={zonaNorte} style={style.zoneMap} />;
+			return <Image source={zonaNorte} style={[style.zoneMap, this.state.toggle ? style.zoneMapOpen : '']} />;
 		default:
-			return <Image source={zonaNorte} style={style.zoneMap} />;
+			return <Image source={zonaNorte} style={[style.zoneMap, this.state.toggle ? style.zoneMapOpen : '']} />;
 		}
 	}
 
 	render() {
+		const zIndex = parseFloat(this.props.id, 10) === 5 ? 0 : 5 - this.props.id;
 		return (
-			<View style={style.container}>
-				<View style={[style.zone, { backgroundColor: this.state.colors[this.props.id - 1] }]}>
-					<View style={style.zoneIcon}>{this.renderImage(this.props.name)}</View>
-					<View style={style.zoneTitles}>
-						<Text style={style.zoneName}>Zona {this.props.name}</Text>
-						<Text style={style.zoneDistricts}>{this.props.districts.length} distritos</Text>
+			<View
+				style={[
+					style.containerZone,
+					{
+						elevation: zIndex,
+						zIndex,
+						flex: this.state.toggle ? 4 : 1,
+					},
+				]}
+			>
+				<TouchableWithoutFeedback onPress={() => this.toggleDistricts()}>
+					<View
+						style={[
+							style.zone,
+							{
+								backgroundColor: this.state.colors[this.props.id - 1],
+							},
+						]}
+					>
+						<View style={[
+							style.zoneHeader,
+							this.state.toggle ? style.zoneHeaderOpen : '',
+						]}
+						>
+							<View>{this.renderImage(this.props.name)}</View>
+							<View>
+								<Text style={style.zoneName}>Zona {this.props.name}</Text>
+								{!this.state.toggle && (
+									<Text style={style.zoneDistricts}>{this.props.districts.length} distritos</Text>
+								)}
+							</View>
+						</View>
 					</View>
-				</View>
+				</TouchableWithoutFeedback>
 				<ScrollView
-					style={[style.districts, { backgroundColor: this.state.colors[this.props.id - 1] }]}
+					style={{ display: this.state.toggle ? 'flex' : 'none' }}
 					alignItems="center"
+					contentContainerStyle={[
+						style.districts,
+						{
+							backgroundColor: this.state.colors[this.props.id - 1],
+						},
+					]}
 				>
+					{this.props.districts.map((item, i) => this.renderDistrict(item, i))}
 					<View style={style.district} key={0}>
 						<TouchableOpacity onPress={() => this.selectAllDistricts()}>
 							{!this.state.allDistricts && <Image source={checkbox} style={style.checkbox} />}
@@ -183,7 +257,6 @@ class Zone extends React.Component {
 							Seguir todos os distritos
 						</Text>
 					</View>
-					{this.props.districts.map((item, i) => this.renderDistrict(item, i))}
 				</ScrollView>
 			</View>
 		);

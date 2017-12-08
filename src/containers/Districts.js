@@ -27,10 +27,10 @@ const style = StyleSheet.create({
 	},
 	nextPageButton: {
 		position: 'absolute',
-		top: 35,
-		right: 10,
-		width: 30,
-		height: 30,
+		top: 42,
+		right: 15,
+		width: 20,
+		height: 20,
 		resizeMode: 'contain',
 	},
 	selectedDistricts: {
@@ -38,7 +38,6 @@ const style = StyleSheet.create({
 		fontFamily: 'raleway',
 		fontSize: 16,
 		textAlign: 'left',
-		padding: 20,
 	},
 	loading: {
 		color: '#fff',
@@ -46,6 +45,17 @@ const style = StyleSheet.create({
 		textAlign: 'center',
 		fontFamily: 'raleway',
 		fontSize: 18,
+	},
+	shadow: {
+		shadowOpacity: 0.4,
+		shadowRadius: 1,
+		shadowOffset: {
+			height: 3,
+			width: 0,
+		},
+		shadowColor: '#4c4c4c',
+		zIndex: 6,
+		padding: 20,
 	},
 });
 
@@ -72,7 +82,7 @@ class Districts extends React.Component {
 		fetch('https://dtupa.eokoe.com/zone')
 			.then(response => response.json())
 			.then((data) => {
-				const zones = data.results;
+				const zones = data.results.sort((a, b) => a.id - b.id);
 				const isLoaded = !this.state.isLoaded;
 				this.setState({ zones, isLoaded });
 			})
@@ -122,20 +132,24 @@ class Districts extends React.Component {
 				<View style={style.container}>
 					<Header pageTitle="Meus Distritos" toggleMenu={this.toggleMenu} />
 					<View style={style.container}>
-						<Text style={style.selectedDistricts}>
-							{this.state.selectedDistricts.length} distritos selecionados
-						</Text>
-						<ScrollView style={style.container}>
-							{this.state.zones.map(item => (
-								<Zone
-									key={`zone-${item.id}`}
-									name={item.name}
-									id={item.id}
-									districts={item.districts}
-									updateSeletedDistricts={this.updateSeletedDistricts}
-								/>
-							))}
-						</ScrollView>
+						<View style={style.shadow}>
+							<Text style={style.selectedDistricts}>
+								{this.state.selectedDistricts.length} distrito(s) selecionado(s)
+							</Text>
+						</View>
+						<View style={style.container}>
+							<ScrollView contentContainerStyle={style.container}>
+								{this.state.zones.map(item => (
+									<Zone
+										key={`zone-${item.id}`}
+										name={item.name}
+										id={item.id}
+										districts={item.districts}
+										updateSeletedDistricts={this.updateSeletedDistricts}
+									/>
+								))}
+							</ScrollView>
+						</View>
 					</View>
 					<TouchableWithoutFeedback onPress={() => this.editDistricts()}>
 						<Image source={done} style={style.nextPageButton} />
