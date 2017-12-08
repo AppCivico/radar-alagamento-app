@@ -110,6 +110,7 @@ class Profile extends React.Component {
 			email: 'E-mail',
 			phone: '(11) 9.9999-8888',
 			newUser: true,
+			registering: false,
 		};
 		this.toggleMenu = this.toggleMenu.bind(this);
 		this.changeRoute = this.changeRoute.bind(this);
@@ -210,6 +211,10 @@ class Profile extends React.Component {
 			const newUser = this.createUser();
 
 			if (newUser) {
+				// disable button
+				let registering = !this.state.registering;
+				this.setState({ registering });
+
 				user.user = newUser;
 				axios({
 					method: 'POST',
@@ -232,6 +237,9 @@ class Profile extends React.Component {
 					},
 					() => {
 						this.showError('Ops! Ocorreu um erro no seu cadastro, tente novamente!');
+
+						registering = !this.state.registering;
+						this.setState({ registering });
 					},
 				);
 			}
@@ -320,6 +328,7 @@ class Profile extends React.Component {
 									title="Enviar"
 									color={colors.blueDark}
 									accessibilityLabel="Enviar"
+									disabled={this.state.registering}
 								/>
 							)}
 						</View>
