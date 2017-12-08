@@ -14,45 +14,29 @@ import Tutorial from './src/containers/Tutorial';
 import Districts from './src/containers/Districts';
 import Notifications from './src/containers/Notifications';
 import Profile from './src/containers/Profile';
+import Config from './src/containers/Config';
 
-const FirstLaunchNavigation = StackNavigator(
-	{
-		Tutorial: { screen: Tutorial },
-		Districts: { screen: Districts },
-		Notifications: { screen: Notifications },
-		Profile: { screen: Profile },
-	},
-	{
-		initialRouteName: 'Districts',
-		headerMode: 'none',
-	},
-);
+const nav = {
+	Tutorial: { screen: Tutorial },
+	Districts: { screen: Districts },
+	Notifications: { screen: Notifications },
+	Profile: { screen: Profile },
+	Config: { screen: Config },
+};
+const FirstLaunchNavigation = StackNavigator(nav, {
+	initialRouteName: 'Districts',
+	headerMode: 'none',
+});
 
-const FirstLaunchNavigationTutorial = StackNavigator(
-	{
-		Tutorial: { screen: Tutorial },
-		Districts: { screen: Districts },
-		Notifications: { screen: Notifications },
-		Profile: { screen: Profile },
-	},
-	{
-		initialRouteName: 'Tutorial',
-		headerMode: 'none',
-	},
-);
+const FirstLaunchNavigationTutorial = StackNavigator(nav, {
+	initialRouteName: 'Tutorial',
+	headerMode: 'none',
+});
 
-const FirstLaunchNavigationRegistered = StackNavigator(
-	{
-		Tutorial: { screen: Tutorial },
-		Districts: { screen: Districts },
-		Notifications: { screen: Notifications },
-		Profile: { screen: Profile },
-	},
-	{
-		initialRouteName: 'Notifications',
-		headerMode: 'none',
-	},
-);
+const FirstLaunchNavigationRegistered = StackNavigator(nav, {
+	initialRouteName: 'Notifications',
+	headerMode: 'none',
+});
 
 class App extends React.Component {
 	constructor(props) {

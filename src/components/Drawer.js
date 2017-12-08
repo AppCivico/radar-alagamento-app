@@ -88,11 +88,11 @@ class Drawer extends React.Component {
 					icon: profile,
 					path: 'Profile',
 				},
-				/* {
+				{
 					title: 'Configurações',
 					icon: config,
 					path: 'Config',
-				}, */
+				},
 			],
 			userName: '',
 		};
