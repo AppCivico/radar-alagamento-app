@@ -11,6 +11,7 @@ import {
 	Modal,
 	TextInput,
 	Button,
+	BackHandler,
 } from 'react-native';
 
 import Header from '../components/Header';
@@ -127,6 +128,17 @@ class Config extends React.Component {
 		};
 		this.toggleMenu = this.toggleMenu.bind(this);
 		this.changeRoute = this.changeRoute.bind(this);
+	}
+
+	componentDidMount() {
+		BackHandler.addEventListener('backPress', () => {
+			if (this.state.selected !== '') {
+				const pageTitle = 'Configurações';
+				const selected = '';
+				this.setState({ pageTitle, selected });
+				this.props.navigation.navigate('Config');
+			}
+		});
 	}
 
 	toggleMenu() {
