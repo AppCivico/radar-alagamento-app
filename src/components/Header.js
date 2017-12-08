@@ -29,7 +29,7 @@ const style = StyleSheet.create({
 	title: {
 		color: '#fff',
 		fontFamily: 'raleway',
-		fontSize: 22,
+		fontSize: 21,
 	},
 });
 
