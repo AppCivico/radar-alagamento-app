@@ -12,7 +12,9 @@ import {
 	StyleSheet,
 	Alert,
 	AsyncStorage,
-	KeyboardAvoidingView,
+	Dimensions,
+	ScrollView,
+	Keyboard,
 } from 'react-native';
 
 import { mapStateToProps, mapDispatchToProps } from '../store';
@@ -81,6 +83,7 @@ const style = StyleSheet.create({
 	input: {
 		height: 40,
 		paddingBottom: 15,
+		paddingLeft: 3,
 		fontSize: 18,
 		fontFamily: 'raleway',
 		color: colors.gray,
@@ -111,12 +114,19 @@ class Profile extends React.Component {
 			phone: '(11) 9.9999-8888',
 			newUser: true,
 			registering: false,
+			extra: false,
 		};
 		this.toggleMenu = this.toggleMenu.bind(this);
 		this.changeRoute = this.changeRoute.bind(this);
 		this.createUser = this.createUser.bind(this);
 		this.registerUser = this.registerUser.bind(this);
 		this.editProfile = this.editProfile.bind(this);
+		this.keyboardToggle = this.keyboardToggle.bind(this);
+	}
+
+	componentWillMount() {
+		this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardToggle);
+		this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardToggle);
 	}
 
 	componentDidMount() {
@@ -144,6 +154,16 @@ class Profile extends React.Component {
 		} catch (error) {
 			// Error retrieving data
 		}
+	}
+
+	componentWillUnmount() {
+		this.keyboardDidShowListener.remove();
+		this.keyboardDidHideListener.remove();
+	}
+
+	keyboardToggle() {
+		const extra = !this.state.extra;
+		this.setState({ extra });
 	}
 
 	toggleMenu() {
@@ -253,14 +273,8 @@ class Profile extends React.Component {
 
 	render() {
 		return (
-			<KeyboardAvoidingView
-				style={style.container}
-				keyboardVerticalOffset={0}
-				behavior="padding"
-				// eslint-disable-next-line
-				scrollEnabled={true}
-			>
-				<View style={style.container}>
+			<ScrollView style={style.container}>
+				<View style={{ height: Dimensions.get('window').height }}>
 					{!this.state.newUser && <Header pageTitle="Perfil" toggleMenu={this.toggleMenu} />}
 					<View style={style.container}>
 						<Image source={background} style={style.background} />
@@ -350,7 +364,8 @@ class Profile extends React.Component {
 						/>
 					)}
 				</View>
-			</KeyboardAvoidingView>
+				{this.state.extra && <View style={{ height: 250 }} />}
+			</ScrollView>
 		);
 	}
 }
