@@ -32,6 +32,7 @@ const style = StyleSheet.create({
 		shadowOpacity: 0.8,
 		shadowRadius: 2,
 		elevation: 1,
+		transform: [{ translateX: -350 }],
 	},
 	userName: {
 		fontFamily: 'ralewayBold',
@@ -71,7 +72,7 @@ class Drawer extends React.Component {
 		super();
 
 		this.state = {
-			animation: new Animated.Value(-500),
+			animation: new Animated.Value(-350),
 			menu: [
 				{
 					title: 'Alertas',
@@ -128,7 +129,7 @@ class Drawer extends React.Component {
 	}
 
 	animateMenu(route) {
-		const newValue = this.props.menuState ? -250 : 0;
+		const newValue = this.props.menuState ? -350 : 0;
 
 		Animated.timing(this.state.animation, {
 			toValue: newValue,
