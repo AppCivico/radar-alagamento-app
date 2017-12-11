@@ -37,7 +37,7 @@ const style = StyleSheet.create({
 		resizeMode: 'contain',
 	},
 	cardText: {
-		flex: 5,
+		flex: 4,
 		paddingTop: 25,
 		paddingLeft: 15,
 		paddingBottom: 25,
