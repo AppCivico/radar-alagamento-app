@@ -158,19 +158,17 @@ class Districts extends React.Component {
 								{this.state.selectedDistricts.length} distrito(s) selecionado(s)
 							</Text>
 						</View>
-						<View style={style.container}>
-							<ScrollView contentContainerStyle={style.container}>
-								{this.state.zones.map(item => (
-									<Zone
-										key={`zone-${item.id}`}
-										name={item.name}
-										id={item.id}
-										districts={item.districts}
-										updateSeletedDistricts={this.updateSeletedDistricts}
-									/>
-								))}
-							</ScrollView>
-						</View>
+						<ScrollView style={style.container}>
+							{this.state.zones.map(item => (
+								<Zone
+									key={`zone-${item.id}`}
+									name={item.name}
+									id={item.id}
+									districts={item.districts}
+									updateSeletedDistricts={this.updateSeletedDistricts}
+								/>
+							))}
+						</ScrollView>
 					</View>
 				)}
 				{!this.state.isLoaded && (

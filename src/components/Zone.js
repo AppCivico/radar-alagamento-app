@@ -35,12 +35,12 @@ const style = StyleSheet.create({
 			width: 0,
 		},
 		shadowColor: '#4c4c4c',
+		minHeight: 110,
 	},
 	zone: {
 		position: 'relative',
 		backgroundColor: colors.blue,
 		flex: 1,
-		paddingTop: 15,
 		paddingLeft: 30,
 		paddingRight: 30,
 	},
@@ -48,10 +48,12 @@ const style = StyleSheet.create({
 		flexDirection: 'row',
 		flex: 1,
 		overflow: 'hidden',
+		alignItems: 'center',
 	},
 	zoneHeaderOpen: {
 		flexDirection: 'column',
 		alignItems: 'center',
+		paddingTop: 15,
 	},
 	districts: {
 		width: '100%',
@@ -239,7 +241,7 @@ class Zone extends React.Component {
 					{
 						elevation: zIndex,
 						zIndex,
-						flex: this.state.toggle ? 4 : 1,
+						height: this.state.toggle ? 300 : 'auto',
 					},
 				]}
 			>
