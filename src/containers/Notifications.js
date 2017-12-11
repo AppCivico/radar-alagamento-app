@@ -211,10 +211,10 @@ class Notifications extends React.Component {
 	}
 
 	render() {
-		if (this.state.isLoaded) {
-			return (
-				<View style={style.container}>
-					<Header pageTitle="Alertas" toggleMenu={this.toggleMenu} />
+		return (
+			<View style={style.container}>
+				<Header pageTitle="Alertas" toggleMenu={this.toggleMenu} />
+				{this.state.isLoaded && (
 					<View style={style.menu}>
 						<View style={[style.menuItem, this.state.activeMenu ? style.activeMenu : '']}>
 							<Text onPress={() => this.changeAlerts('user')} style={style.menuText}>
@@ -227,23 +227,15 @@ class Notifications extends React.Component {
 							</Text>
 						</View>
 					</View>
-					{this.preRenderNotifications()}
-					<Drawer
-						menuState={this.state.menu}
-						toggleMenu={this.toggleMenu}
-						changeRoute={this.changeRoute}
-					/>
-				</View>
-			);
-		}
-		return (
-			<View style={style.container}>
-				<Header pageTitle="Alertas" toggleMenu={this.toggleMenu} />
-				<View style={[style.container, { alignItems: 'center', justifyContent: 'center' }]}>
-					<View>
-						<Text style={style.loading}>Carregando...</Text>
+				)}
+				{this.state.isLoaded && this.preRenderNotifications()}
+				{!this.state.isLoaded && (
+					<View style={[style.container, { alignItems: 'center', justifyContent: 'center' }]}>
+						<View>
+							<Text style={style.loading}>Carregando...</Text>
+						</View>
 					</View>
-				</View>
+				)}
 				<Drawer
 					menuState={this.state.menu}
 					toggleMenu={this.toggleMenu}

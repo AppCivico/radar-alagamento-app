@@ -127,10 +127,10 @@ class Districts extends React.Component {
 	}
 
 	render() {
-		if (this.state.isLoaded) {
-			return (
-				<View style={style.container}>
-					<Header pageTitle="Meus Distritos" toggleMenu={this.toggleMenu} />
+		return (
+			<View style={style.container}>
+				<Header pageTitle="Meus Distritos" toggleMenu={this.toggleMenu} />
+				{this.state.isLoaded && (
 					<View style={style.container}>
 						<View style={style.shadow}>
 							<Text style={style.selectedDistricts}>
@@ -151,25 +151,17 @@ class Districts extends React.Component {
 							</ScrollView>
 						</View>
 					</View>
-					<TouchableWithoutFeedback onPress={() => this.editDistricts()}>
-						<Image source={done} style={style.nextPageButton} />
-					</TouchableWithoutFeedback>
-					<Drawer
-						menuState={this.state.menu}
-						toggleMenu={this.toggleMenu}
-						changeRoute={this.changeRoute}
-					/>
-				</View>
-			);
-		}
-		return (
-			<View style={style.container}>
-				<Header pageTitle="Meus Distritos" toggleMenu={this.toggleMenu} />
-				<View style={[style.container, { alignItems: 'center', justifyContent: 'center' }]}>
-					<View>
-						<Text style={style.loading}>Carregando...</Text>
+				)}
+				{!this.state.isLoaded && (
+					<View style={[style.container, { alignItems: 'center', justifyContent: 'center' }]}>
+						<View>
+							<Text style={style.loading}>Carregando...</Text>
+						</View>
 					</View>
-				</View>
+				)}
+				<TouchableWithoutFeedback onPress={() => this.editDistricts()}>
+					<Image source={done} style={style.nextPageButton} />
+				</TouchableWithoutFeedback>
 				<Drawer
 					menuState={this.state.menu}
 					toggleMenu={this.toggleMenu}
