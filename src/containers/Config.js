@@ -131,14 +131,18 @@ class Config extends React.Component {
 	}
 
 	componentDidMount() {
-		BackHandler.addEventListener('backPress', () => {
+		this.changeGoBack = BackHandler.addEventListener('backPress', () => {
 			if (this.state.selected !== '') {
+				this.props.navigation.navigate('Config');
 				const pageTitle = 'Configurações';
 				const selected = '';
 				this.setState({ pageTitle, selected });
-				this.props.navigation.navigate('Config');
 			}
 		});
+	}
+
+	componentWillUnmount() {
+		this.changeGoBack.remove();
 	}
 
 	toggleMenu() {
