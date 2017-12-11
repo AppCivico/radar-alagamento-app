@@ -9,6 +9,7 @@ import {
 	StyleSheet,
 	ScrollView,
 	Alert,
+	AsyncStorage,
 } from 'react-native';
 
 import { mapDispachToProps, mapStateToProps } from '../store';
@@ -75,7 +76,24 @@ class Districts extends React.Component {
 	}
 
 	componentDidMount() {
-		this.getDistricts();
+		// check if zones are already loaded
+		try {
+			AsyncStorage.getItem('zones')
+				.then((res) => {
+					if (res != null) {
+						console.log('tem zones', res);
+						const zones = JSON.parse(res);
+						const isLoaded = !this.state.isLoaded;
+						this.setState({ zones, isLoaded });
+					} else {
+						console.log('num tem ainda');
+						this.getDistricts();
+					}
+				})
+				.catch(() => {});
+		} catch (error) {
+			// Error retrieving data
+		}
 	}
 
 	getDistricts() {
@@ -84,7 +102,13 @@ class Districts extends React.Component {
 			.then((data) => {
 				const zones = data.results.sort((a, b) => a.id - b.id);
 				const isLoaded = !this.state.isLoaded;
-				this.setState({ zones, isLoaded });
+
+				AsyncStorage.setItem('zones', JSON.stringify(zones))
+					.then(() => {
+						console.log('salvei districts');
+						this.setState({ zones, isLoaded });
+					})
+					.catch(() => {});
 			})
 			.catch(() => this.showError('Ocorreu um ao carregar os distritos, tente novamente'));
 	}
