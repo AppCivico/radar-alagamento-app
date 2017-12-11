@@ -8,7 +8,7 @@ import {
 	ScrollView,
 	Alert,
 	AsyncStorage,
-	Button,
+	TouchableOpacity,
 } from 'react-native';
 import { Notifications as PushNotifications } from 'expo';
 
@@ -84,6 +84,26 @@ const style = StyleSheet.create({
 		textAlign: 'center',
 		fontFamily: 'raleway',
 		fontSize: 18,
+	},
+	buttonWrapper: {
+		position: 'absolute',
+		width: '100%',
+		bottom: 20,
+		left: 0,
+		paddingLeft: 30,
+		paddingRight: 30,
+	},
+	button: {
+		backgroundColor: colors.blueDark,
+		borderRadius: 5,
+		padding: 5,
+		width: '100%',
+	},
+	buttonText: {
+		color: '#fff',
+		fontFamily: 'raleway',
+		fontSize: 16,
+		textAlign: 'center',
 	},
 });
 
@@ -202,12 +222,11 @@ class Notifications extends React.Component {
 				<Text style={style.warning}>{warning.message}</Text>
 				<Image source={background} style={style.background} />
 				{this.state.warning.image === confused && (
-					<Button
-						onPress={() => this.changeRoute('Districts')}
-						title="Seguir distritos"
-						color={colors.blueDark}
-						accessibilityLabel="Seguir distritos"
-					/>
+					<View style={style.buttonWrapper}>
+						<TouchableOpacity style={style.button} onPress={() => this.changeRoute('Districts')}>
+							<Text style={style.buttonText}>Seguir distritos</Text>
+						</TouchableOpacity>
+					</View>
 				)}
 			</View>
 		);
