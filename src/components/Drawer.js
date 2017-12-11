@@ -95,7 +95,7 @@ class Drawer extends React.Component {
 					path: 'Config',
 				},
 			],
-			userName: '',
+			userName: 'cidadão',
 		};
 
 		this.animateMenu = this.animateMenu.bind(this);
