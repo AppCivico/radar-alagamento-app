@@ -180,7 +180,10 @@ class Notifications extends React.Component {
 
 	renderAllNotifications() {
 		return (
-			<ScrollView style={style.containerNotifications}>
+			<ScrollView
+				style={style.containerNotifications}
+				contentContainerStyle={{ paddingBottom: 30 }}
+			>
 				{this.state.notificationMessage.origin && (
 					<Notification
 						key={this.state.notificationMessage.data.id}
