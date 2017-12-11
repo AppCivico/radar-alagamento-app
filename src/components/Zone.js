@@ -138,6 +138,11 @@ class Zone extends React.Component {
 			image: checked[i].image === checkbox ? checkboxOn : checkbox,
 		};
 
+		if (!checked[i].state) {
+			const allDistricts = !this.state.allDistricts;
+			this.setState({ allDistricts });
+		}
+
 		this.props.updateSeletedDistricts(item.id, this.state.checked[i].state);
 		this.setState({ checked });
 	}
@@ -153,8 +158,7 @@ class Zone extends React.Component {
 			checked[i].image = allDistricts ? checkboxOn : checkbox;
 		});
 
-		this.setState({ allDistricts });
-		this.setState({ checked });
+		this.setState({ allDistricts, checked });
 
 		// eslint-disable-next-line array-callback-return
 		this.props.districts.map((item) => {
