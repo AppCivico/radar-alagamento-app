@@ -51,8 +51,6 @@ class App extends React.Component {
 	componentDidMount() {
 		this.loadAssetsAsync();
 
-		console.log('test console');
-
 		try {
 			AsyncStorage.getItem('alreadyLaunched')
 				.then((res) => {
