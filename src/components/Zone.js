@@ -186,17 +186,47 @@ class Zone extends React.Component {
 	renderImage(zona) {
 		switch (zona) {
 		case 'Centro':
-			return <Image source={zonaCental} style={[style.zoneMap, this.state.toggle ? style.zoneMapOpen : '']} />;
+			return (
+				<Image
+					source={zonaCental}
+					style={[style.zoneMap, this.state.toggle ? style.zoneMapOpen : '']}
+				/>
+			);
 		case 'Sul':
-			return <Image source={zonaSul} style={[style.zoneMap, this.state.toggle ? style.zoneMapOpen : '']} />;
+			return (
+				<Image
+					source={zonaSul}
+					style={[style.zoneMap, this.state.toggle ? style.zoneMapOpen : '']}
+				/>
+			);
 		case 'Oeste':
-			return <Image source={zonaOeste} style={[style.zoneMap, this.state.toggle ? style.zoneMapOpen : '']} />;
+			return (
+				<Image
+					source={zonaOeste}
+					style={[style.zoneMap, this.state.toggle ? style.zoneMapOpen : '']}
+				/>
+			);
 		case 'Leste':
-			return <Image source={zonaLeste} style={[style.zoneMap, this.state.toggle ? style.zoneMapOpen : '']} />;
+			return (
+				<Image
+					source={zonaLeste}
+					style={[style.zoneMap, this.state.toggle ? style.zoneMapOpen : '']}
+				/>
+			);
 		case 'Norte':
-			return <Image source={zonaNorte} style={[style.zoneMap, this.state.toggle ? style.zoneMapOpen : '']} />;
+			return (
+				<Image
+					source={zonaNorte}
+					style={[style.zoneMap, this.state.toggle ? style.zoneMapOpen : '']}
+				/>
+			);
 		default:
-			return <Image source={zonaNorte} style={[style.zoneMap, this.state.toggle ? style.zoneMapOpen : '']} />;
+			return (
+				<Image
+					source={zonaNorte}
+					style={[style.zoneMap, this.state.toggle ? style.zoneMapOpen : '']}
+				/>
+			);
 		}
 	}
 
@@ -222,11 +252,7 @@ class Zone extends React.Component {
 							},
 						]}
 					>
-						<View style={[
-							style.zoneHeader,
-							this.state.toggle ? style.zoneHeaderOpen : '',
-						]}
-						>
+						<View style={[style.zoneHeader, this.state.toggle ? style.zoneHeaderOpen : '']}>
 							<View>{this.renderImage(this.props.name)}</View>
 							<View>
 								<Text style={style.zoneName}>Zona {this.props.name}</Text>
@@ -247,7 +273,18 @@ class Zone extends React.Component {
 						},
 					]}
 				>
-					{this.props.districts.map((item, i) => this.renderDistrict(item, i))}
+					{this.props.districts
+						.sort((a, b) => {
+							if (a.name > b.name) {
+								return 1;
+							}
+							if (a.name < b.name) {
+								return -1;
+							}
+							// a must be equal to b
+							return 0;
+						})
+						.map((item, i) => this.renderDistrict(item, i))}
 					<View style={style.district} key={0}>
 						<TouchableOpacity onPress={() => this.selectAllDistricts()}>
 							{!this.state.allDistricts && <Image source={checkbox} style={style.checkbox} />}
