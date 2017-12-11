@@ -280,6 +280,7 @@ class Profile extends React.Component {
 										onChangeText={name => this.setState({ name })}
 										placeholder={this.state.name}
 										placeholderTextColor={colors.gray}
+										keyboardType="default"
 									/>
 								</View>
 							</View>
@@ -293,6 +294,7 @@ class Profile extends React.Component {
 										onChangeText={surname => this.setState({ surname })}
 										placeholder={this.state.surname}
 										placeholderTextColor={colors.gray}
+										keyboardType="default"
 									/>
 								</View>
 							</View>
@@ -306,6 +308,7 @@ class Profile extends React.Component {
 										onChangeText={email => this.setState({ email })}
 										placeholder={this.state.email}
 										placeholderTextColor={colors.gray}
+										keyboardType="email-address"
 									/>
 								</View>
 							</View>
@@ -319,6 +322,7 @@ class Profile extends React.Component {
 										onChangeText={phone => this.setState({ phone })}
 										placeholder={this.state.phone}
 										placeholderTextColor={colors.gray}
+										keyboardType="phone-pad"
 									/>
 								</View>
 							</View>
