@@ -81,12 +81,10 @@ class Districts extends React.Component {
 			AsyncStorage.getItem('zones')
 				.then((res) => {
 					if (res != null) {
-						console.log('tem zones', res);
 						const zones = JSON.parse(res);
 						const isLoaded = !this.state.isLoaded;
 						this.setState({ zones, isLoaded });
 					} else {
-						console.log('num tem ainda');
 						this.getDistricts();
 					}
 				})
@@ -105,7 +103,6 @@ class Districts extends React.Component {
 
 				AsyncStorage.setItem('zones', JSON.stringify(zones))
 					.then(() => {
-						console.log('salvei districts');
 						this.setState({ zones, isLoaded });
 					})
 					.catch(() => {});
