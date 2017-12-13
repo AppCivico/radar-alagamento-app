@@ -279,9 +279,19 @@ class Profile extends React.Component {
 
 	editProfile() {
 		const newUser = this.createUser();
-		const { user } = this.state;
+		const user = {
+			push_token: this.state.token.value,
+			districts: this.state.districts,
+			name: `${newUser.name} ${newUser.name}`,
+			email: newUser.email,
+			password: '123segredo$$',
+			password_confirmation: '123segredo$$',
+			phone_number: newUser.phone_number,
+		};
 
-		if (newUser) {
+		console.log(user);
+
+		/* if (newUser) {
 			user.user = newUser;
 			axios({
 				method: 'PUT',
@@ -300,7 +310,7 @@ class Profile extends React.Component {
 					this.showError('Ops! Ocorreu um erro ao atualizar o seu cadastro, tente novamente!');
 				},
 			);
-		}
+		} */
 	}
 
 	scrollToEnd() {
