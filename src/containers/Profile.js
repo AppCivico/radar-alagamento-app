@@ -115,6 +115,7 @@ class Profile extends React.Component {
 			newUser: true,
 			registering: false,
 			extra: false,
+			user: {},
 		};
 		this.toggleMenu = this.toggleMenu.bind(this);
 		this.changeRoute = this.changeRoute.bind(this);
@@ -148,6 +149,7 @@ class Profile extends React.Component {
 							email,
 							phone: phone_number.replace('+55', ''),
 							newUser: false,
+							user,
 						});
 					}
 				})
@@ -276,8 +278,29 @@ class Profile extends React.Component {
 	}
 
 	editProfile() {
-		const { user } = this.props;
-		user.user = this.createUser();
+		const newUser = this.createUser();
+		const { user } = this.state;
+
+		if (newUser) {
+			user.user = newUser;
+			axios({
+				method: 'PUT',
+				url: 'https://dtupa.eokoe.com/me',
+				headers: { 'Content-Type': 'application/json' },
+				data: user,
+			}).then(
+				() => {
+					AsyncStorage.setItem('user', JSON.stringify(user))
+						.then(() => {
+							this.showError('Perfil atualizado!');
+						})
+						.catch(() => {});
+				},
+				() => {
+					this.showError('Ops! Ocorreu um erro ao atualizar o seu cadastro, tente novamente!');
+				},
+			);
+		}
 	}
 
 	scrollToEnd() {
