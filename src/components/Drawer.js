@@ -8,7 +8,9 @@ import {
 	TouchableOpacity,
 	AsyncStorage,
 	StyleSheet,
+	TouchableWithoutFeedback,
 } from 'react-native';
+import GestureRecognizer from 'react-native-swipe-gestures';
 
 import { colors } from '../styles/variables';
 
@@ -19,11 +21,21 @@ import profile from '../assets/images/icon-perfil.png';
 import config from '../assets/images/icon-config.png';
 
 const style = StyleSheet.create({
-	container: {
+	animated: {
 		position: 'absolute',
 		top: 0,
 		bottom: 0,
+		transform: [{ translateX: -350 }],
+		width: '100%',
+		height: '100%',
+	},
+	container: {
+		flex: 1,
+		height: '100%',
+	},
+	containerNav: {
 		width: '80%',
+		height: '100%',
 		paddingTop: 50,
 		paddingBottom: 50,
 		backgroundColor: colors.blue,
@@ -32,7 +44,13 @@ const style = StyleSheet.create({
 		shadowOpacity: 0.8,
 		shadowRadius: 2,
 		elevation: 1,
-		transform: [{ translateX: -350 }],
+	},
+	empty: {
+		width: '20%',
+		height: '100%',
+		position: 'absolute',
+		top: 0,
+		right: 0,
 	},
 	userName: {
 		fontFamily: 'ralewayBold',
@@ -112,6 +130,10 @@ class Drawer extends React.Component {
 		}
 	}
 
+	onSwipeLeft(gestureState) {
+		this.animateMenu();
+	}
+
 	getUsername() {
 		try {
 			AsyncStorage.getItem('user')
@@ -128,7 +150,7 @@ class Drawer extends React.Component {
 		}
 	}
 
-	animateMenu(route) {
+	animateMenu(route = '') {
 		const newValue = this.props.menuState ? -350 : 0;
 
 		Animated.timing(this.state.animation, {
@@ -162,12 +184,23 @@ class Drawer extends React.Component {
 	render() {
 		return (
 			<Animated.View
-				style={[style.container, { transform: [{ translateX: this.state.animation }] }]}
+				style={[style.animated, { transform: [{ translateX: this.state.animation }] }]}
 			>
-				<Text style={style.userName}>Olá, {this.state.userName}</Text>
-				<View style={style.navigator}>
-					{this.state.menu.map(item => this.renderMenuItem(item))}
-				</View>
+				<GestureRecognizer
+					onSwipeLeft={state => this.onSwipeLeft(state)}
+					config={config}
+					style={style.container}
+				>
+					<View style={style.containerNav}>
+						<Text style={style.userName}>Olá, {this.state.userName}</Text>
+						<View style={style.navigator}>
+							{this.state.menu.map(item => this.renderMenuItem(item))}
+						</View>
+					</View>
+					<TouchableWithoutFeedback onPress={() => this.animateMenu()}>
+						<View style={style.empty} />
+					</TouchableWithoutFeedback>
+				</GestureRecognizer>
 			</Animated.View>
 		);
 	}
