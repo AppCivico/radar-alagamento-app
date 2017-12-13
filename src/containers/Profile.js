@@ -121,12 +121,13 @@ class Profile extends React.Component {
 		this.createUser = this.createUser.bind(this);
 		this.registerUser = this.registerUser.bind(this);
 		this.editProfile = this.editProfile.bind(this);
-		this.keyboardToggle = this.keyboardToggle.bind(this);
+		this.keyboardShow = this.keyboardShow.bind(this);
+		this.keyboardHide = this.keyboardHide.bind(this);
 	}
 
 	componentWillMount() {
-		this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardToggle);
-		this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardToggle);
+		this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardShow);
+		this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardHide);
 	}
 
 	componentDidMount() {
@@ -161,8 +162,16 @@ class Profile extends React.Component {
 		this.keyboardDidHideListener.remove();
 	}
 
-	keyboardToggle() {
-		const extra = !this.state.extra;
+	keyboardShow() {
+		const extra = true;
+		this.setState({ extra });
+		setTimeout(() => {
+			this.scrollToEnd({ animated: false });
+		}, 2);
+	}
+
+	keyboardHide() {
+		const extra = false;
 		this.setState({ extra });
 	}
 
@@ -271,9 +280,17 @@ class Profile extends React.Component {
 		user.user = this.createUser();
 	}
 
+	scrollToEnd() {
+		this.scrollView.scrollToEnd();
+	}
+
 	render() {
 		return (
-			<ScrollView style={style.container}>
+			<ScrollView
+				style={style.container}
+				ref={(scrollView) => { this.scrollView = scrollView; }}
+				contentContainerStyle={{ flexGrow: 1 }}
+			>
 				<View style={{ height: Dimensions.get('window').height }}>
 					{!this.state.newUser && <Header pageTitle="Perfil" toggleMenu={this.toggleMenu} />}
 					<View style={style.container}>
