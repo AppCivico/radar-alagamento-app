@@ -15,7 +15,6 @@ import {
 } from 'react-native';
 
 import Header from '../components/Header';
-import Drawer from '../components/Drawer';
 
 import { colors } from '../styles/variables';
 
@@ -85,7 +84,6 @@ class Config extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			menu: false,
 			pageTitle: 'Configurações',
 			list: [
 				{
@@ -126,7 +124,7 @@ class Config extends React.Component {
 			reportInput: 'Descrever problema',
 			modalVisible: false,
 		};
-		this.toggleMenu = this.toggleMenu.bind(this);
+
 		this.changeRoute = this.changeRoute.bind(this);
 	}
 
@@ -143,11 +141,6 @@ class Config extends React.Component {
 
 	componentWillUnmount() {
 		this.changeGoBack.remove();
-	}
-
-	toggleMenu() {
-		const menu = !this.state.menu;
-		this.setState({ menu });
 	}
 
 	changeRoute(route) {
@@ -187,7 +180,7 @@ class Config extends React.Component {
 	render() {
 		return (
 			<View style={style.container}>
-				<Header pageTitle={this.state.pageTitle} toggleMenu={this.toggleMenu} />
+				<Header pageTitle={this.state.pageTitle} />
 				{this.state.selected === '' && (
 					<View style={style.container}>
 						<View style={{ flex: 2 }}>
@@ -288,11 +281,6 @@ class Config extends React.Component {
 					/>
 				</Modal>
 
-				<Drawer
-					menuState={this.state.menu}
-					toggleMenu={this.toggleMenu}
-					changeRoute={this.changeRoute}
-				/>
 			</View>
 		);
 	}

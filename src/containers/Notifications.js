@@ -13,7 +13,6 @@ import {
 import { Notifications as PushNotifications } from 'expo';
 
 import Header from '../components/Header';
-import Drawer from '../components/Drawer';
 import Notification from '../components/Notification';
 
 import { colors } from '../styles/variables';
@@ -112,7 +111,6 @@ class Notifications extends React.Component {
 		super();
 		this.state = {
 			isLoaded: true,
-			menu: false,
 			notifications: [],
 			activeMenu: true,
 			apikey: '830ff945-5447-49c7-8a67-26eed2da8c62',
@@ -122,7 +120,6 @@ class Notifications extends React.Component {
 				image: confused,
 			},
 		};
-		this.toggleMenu = this.toggleMenu.bind(this);
 		this.changeRoute = this.changeRoute.bind(this);
 		this.getNotifications = this.getNotifications.bind(this);
 		this.changeAlerts = this.changeAlerts.bind(this);
@@ -171,11 +168,6 @@ class Notifications extends React.Component {
 
 	showError(msg = 'Campo obrigatório') {
 		Alert.alert('Atenção', msg, [{ text: 'OK' }], { cancelable: false });
-	}
-
-	toggleMenu() {
-		const menu = !this.state.menu;
-		this.setState({ menu });
 	}
 
 	changeRoute(route) {
@@ -235,7 +227,7 @@ class Notifications extends React.Component {
 	render() {
 		return (
 			<View style={style.container}>
-				<Header pageTitle="Alertas" toggleMenu={this.toggleMenu} />
+				<Header pageTitle="Alertas" />
 				{this.state.isLoaded && (
 					<View style={style.menu}>
 						<View style={[style.menuItem, this.state.activeMenu ? style.activeMenu : '']}>
@@ -258,11 +250,6 @@ class Notifications extends React.Component {
 						</View>
 					</View>
 				)}
-				<Drawer
-					menuState={this.state.menu}
-					toggleMenu={this.toggleMenu}
-					changeRoute={this.changeRoute}
-				/>
 			</View>
 		);
 	}

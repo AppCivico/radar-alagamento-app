@@ -22,7 +22,6 @@ import { mapStateToProps, mapDispatchToProps } from '../store';
 import registerForPushNotificationsAsync from '../registerForPushNotificationsAsync';
 
 import Header from '../components/Header';
-import Drawer from '../components/Drawer';
 
 import { colors } from '../styles/variables';
 
@@ -107,7 +106,6 @@ class Profile extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			menu: false,
 			name: 'Nome',
 			surname: 'Sobrenome',
 			email: 'E-mail',
@@ -117,7 +115,6 @@ class Profile extends React.Component {
 			extra: false,
 			user: {},
 		};
-		this.toggleMenu = this.toggleMenu.bind(this);
 		this.changeRoute = this.changeRoute.bind(this);
 		this.createUser = this.createUser.bind(this);
 		this.registerUser = this.registerUser.bind(this);
@@ -325,7 +322,7 @@ class Profile extends React.Component {
 				contentContainerStyle={{ flexGrow: 1 }}
 			>
 				<View style={{ height: Dimensions.get('window').height }}>
-					{!this.state.newUser && <Header pageTitle="Perfil" toggleMenu={this.toggleMenu} />}
+					{!this.state.newUser && <Header pageTitle="Perfil" />}
 					<View style={style.container}>
 						<Image source={background} style={style.background} />
 						{this.state.newUser && (
@@ -405,13 +402,6 @@ class Profile extends React.Component {
 						<TouchableWithoutFeedback onPress={() => this.editProfile()}>
 							<Image source={edit} style={style.nextPageButton} />
 						</TouchableWithoutFeedback>
-					)}
-					{!this.state.newUser && (
-						<Drawer
-							menuState={this.state.menu}
-							toggleMenu={this.toggleMenu}
-							changeRoute={this.changeRoute}
-						/>
 					)}
 				</View>
 				{this.state.extra && <View style={{ height: 250 }} />}
