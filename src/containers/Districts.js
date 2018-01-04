@@ -19,8 +19,13 @@ import Zone from '../components/Zone';
 
 import { colors } from '../styles/variables';
 import done from '../assets/images/done.png';
+import menuIcon from '../assets/images/icon-registros.png';
 
 const style = StyleSheet.create({
+	tabIcon: {
+		width: 20,
+		height: 20,
+	},
 	container: {
 		flex: 1,
 		backgroundColor: colors.blue,
@@ -57,20 +62,16 @@ const style = StyleSheet.create({
 		zIndex: 6,
 		padding: 20,
 	},
-	icon: {
-		width: 26,
-		height: 26,
-	},
 });
 
 class Districts extends React.Component {
 	static navigationOptions = {
-		tabBarLabel: 'Home',
+		tabBarLabel: 'Distritos',
 		// Note: By default the icon is only shown on iOS. Search the showIcon option below.
 		tabBarIcon: ({ tintColor }) => (
 			<Image
-				source={done}
-				style={[style.icon, { tintColor }]}
+				source={menuIcon}
+				style={[style.tabIcon, { tintColor }]}
 			/>
 		),
 	};

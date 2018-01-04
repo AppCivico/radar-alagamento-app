@@ -20,8 +20,13 @@ import { colors } from '../styles/variables';
 import background from '../assets/images/elements_bg.png';
 import wink from '../assets/images/wink.png';
 import confused from '../assets/images/confused.png';
+import menuIcon from '../assets/images/icon-alertas.png';
 
 const style = StyleSheet.create({
+	tabIcon: {
+		width: 20,
+		height: 20,
+	},
 	container: {
 		flex: 1,
 		backgroundColor: colors.blue,
@@ -107,6 +112,17 @@ const style = StyleSheet.create({
 });
 
 class Notifications extends React.Component {
+	static navigationOptions = {
+		tabBarLabel: 'Alertas',
+		// Note: By default the icon is only shown on iOS. Search the showIcon option below.
+		tabBarIcon: ({ tintColor }) => (
+			<Image
+				source={menuIcon}
+				style={[style.tabIcon, { tintColor }]}
+			/>
+		),
+	};
+
 	constructor() {
 		super();
 		this.state = {

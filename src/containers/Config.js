@@ -21,8 +21,13 @@ import { colors } from '../styles/variables';
 import background from '../assets/images/elements_bg.png';
 import iconTermos from '../assets/images/ic-termosepoliticas.png';
 import iconHelp from '../assets/images/spam-ico-copy.png';
+import menuIcon from '../assets/images/icon-config.png';
 
 const style = StyleSheet.create({
+	tabIcon: {
+		width: 20,
+		height: 20,
+	},
 	container: {
 		flex: 1,
 	},
@@ -81,6 +86,17 @@ const style = StyleSheet.create({
 });
 
 class Config extends React.Component {
+	static navigationOptions = {
+		tabBarLabel: 'Configurações',
+		// Note: By default the icon is only shown on iOS. Search the showIcon option below.
+		tabBarIcon: ({ tintColor }) => (
+			<Image
+				source={menuIcon}
+				style={[style.tabIcon, { tintColor }]}
+			/>
+		),
+	};
+
 	constructor() {
 		super();
 		this.state = {

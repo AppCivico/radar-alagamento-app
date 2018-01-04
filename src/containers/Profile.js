@@ -30,8 +30,13 @@ import iconProfile from '../assets/images/person.png';
 import iconEmail from '../assets/images/email.png';
 import iconPhone from '../assets/images/call.png';
 import edit from '../assets/images/edit.png';
+import menuIcon from '../assets/images/icon-perfil.png';
 
 const style = StyleSheet.create({
+	tabIcon: {
+		width: 20,
+		height: 20,
+	},
 	container: {
 		flex: 1,
 	},
@@ -103,6 +108,17 @@ const style = StyleSheet.create({
 });
 
 class Profile extends React.Component {
+	static navigationOptions = {
+		tabBarLabel: 'Perfil',
+		// Note: By default the icon is only shown on iOS. Search the showIcon option below.
+		tabBarIcon: ({ tintColor }) => (
+			<Image
+				source={menuIcon}
+				style={[style.tabIcon, { tintColor }]}
+			/>
+		),
+	};
+
 	constructor() {
 		super();
 		this.state = {
