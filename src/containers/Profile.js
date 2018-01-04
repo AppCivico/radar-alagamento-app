@@ -280,7 +280,7 @@ class Profile extends React.Component {
 	editProfile() {
 		const newUser = this.createUser();
 		const user = {
-			push_token: this.state.token.value,
+			push_token: this.state.token,
 			districts: this.state.districts,
 			name: `${newUser.name} ${newUser.name}`,
 			email: newUser.email,
