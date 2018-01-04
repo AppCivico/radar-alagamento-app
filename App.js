@@ -2,7 +2,7 @@ import React from 'react';
 import { StackNavigator, TabNavigator } from 'react-navigation';
 import { AppLoading, Font } from 'expo';
 import { Provider } from 'react-redux';
-import { AsyncStorage, StyleSheet } from 'react-native';
+import { AsyncStorage, StyleSheet, Platform } from 'react-native';
 
 import { store } from './src/store';
 
@@ -24,6 +24,10 @@ const style = StyleSheet.create({
 		fontSize: 11,
 	},
 	tabStyle: {
+		backgroundColor: '#ffffff',
+	},
+	indicator: {
+		backgroundColor: colors.blue,
 	},
 });
 
@@ -34,18 +38,33 @@ const nav = {
 	Config: { screen: Config },
 };
 
+const tabBarOptions = Platform.OS === 'ios' ?
+	{
+		activeTintColor: colors.blue,
+		inactiveTintColor: colors.gray,
+		labelStyle: style.tabLabel,
+		tabStyle: style.tabStyle,
+		// iOS tabBarOptions
+		showLabel: true,
+	} : {
+		activeTintColor: colors.blue,
+		inactiveTintColor: colors.gray,
+		labelStyle: style.tabLabel,
+		style: style.tabStyle,
+		indicatorStyle: style.indicator,
+		// Android tabBarOptions
+		showIcon: true,
+		showLabel: true,
+		upperCaseLabel: false,
+	};
+
 const FirstLaunchNavigation = TabNavigator(
 	nav,
 	{
 		initialRouteName: 'Districts',
 		tabBarPosition: 'bottom',
 		animationEnabled: true,
-		tabBarOptions: {
-			activeTintColor: colors.blue,
-			inactiveTintColor: colors.gray,
-			labelStyle: style.tabLabel,
-			tabStyle: style.tabStyle,
-		},
+		tabBarOptions,
 		showIcon: true,
 	},
 );
