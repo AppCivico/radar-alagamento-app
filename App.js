@@ -2,7 +2,7 @@ import React from 'react';
 import { StackNavigator, TabNavigator } from 'react-navigation';
 import { AppLoading, Font } from 'expo';
 import { Provider } from 'react-redux';
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage, StyleSheet } from 'react-native';
 
 import { store } from './src/store';
 
@@ -16,34 +16,63 @@ import Notifications from './src/containers/Notifications';
 import Profile from './src/containers/Profile';
 import Config from './src/containers/Config';
 
+import { colors } from './src/styles/variables';
+
+const style = StyleSheet.create({
+	tabLabel: {
+		fontFamily: 'ralewayMedium',
+		fontSize: 11,
+	},
+	tabStyle: {
+	},
+});
+
 const nav = {
-	Districts: { screen: Districts },
-	Notifications: { screen: Notifications },
 	Profile: { screen: Profile },
+	Notifications: { screen: Notifications },
+	Districts: { screen: Districts },
 	Config: { screen: Config },
 };
 
 const FirstLaunchNavigation = TabNavigator(
 	nav,
 	{
+		initialRouteName: 'Districts',
 		tabBarPosition: 'bottom',
 		animationEnabled: true,
 		tabBarOptions: {
-			activeTintColor: '#e91e63',
+			activeTintColor: colors.blue,
+			inactiveTintColor: colors.gray,
+			labelStyle: style.tabLabel,
+			tabStyle: style.tabStyle,
 		},
 		showIcon: true,
 	},
 );
 
-const FirstLaunchNavigationTutorial = StackNavigator(nav, {
+const FirstLaunchNavigationTutorial = StackNavigator({
+	Tutorial: { screen: Tutorial },
+	Districts: { screen: Districts },
+}, {
 	initialRouteName: 'Tutorial',
 	headerMode: 'none',
 });
 
-const FirstLaunchNavigationRegistered = StackNavigator(nav, {
-	initialRouteName: 'Notifications',
-	headerMode: 'none',
-});
+const FirstLaunchNavigationRegistered = TabNavigator(
+	nav,
+	{
+		initialRouteName: 'Notifications',
+		tabBarPosition: 'bottom',
+		animationEnabled: true,
+		tabBarOptions: {
+			activeTintColor: colors.blue,
+			inactiveTintColor: colors.gray,
+			labelStyle: style.tabLabel,
+			tabStyle: style.tabStyle,
+		},
+		showIcon: true,
+	},
+);
 
 class App extends React.Component {
 	constructor(props) {
