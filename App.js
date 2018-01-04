@@ -1,5 +1,5 @@
 import React from 'react';
-import { StackNavigator } from 'react-navigation';
+import { StackNavigator, TabNavigator } from 'react-navigation';
 import { AppLoading, Font } from 'expo';
 import { Provider } from 'react-redux';
 import { AsyncStorage } from 'react-native';
@@ -17,16 +17,23 @@ import Profile from './src/containers/Profile';
 import Config from './src/containers/Config';
 
 const nav = {
-	Tutorial: { screen: Tutorial },
 	Districts: { screen: Districts },
 	Notifications: { screen: Notifications },
 	Profile: { screen: Profile },
 	Config: { screen: Config },
 };
-const FirstLaunchNavigation = StackNavigator(nav, {
-	initialRouteName: 'Districts',
-	headerMode: 'none',
-});
+
+const FirstLaunchNavigation = TabNavigator(
+	nav,
+	{
+		tabBarPosition: 'bottom',
+		animationEnabled: true,
+		tabBarOptions: {
+			activeTintColor: '#e91e63',
+		},
+		showIcon: true,
+	},
+);
 
 const FirstLaunchNavigationTutorial = StackNavigator(nav, {
 	initialRouteName: 'Tutorial',
