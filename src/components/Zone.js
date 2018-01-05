@@ -54,27 +54,29 @@ const style = StyleSheet.create({
 		flexDirection: 'column',
 		alignItems: 'center',
 		paddingTop: 15,
+		paddingBottom: 15,
 	},
 	districts: {
-		width: '100%',
+		flex: 1,
 		paddingBottom: 20,
 		paddingRight: 30,
 		paddingLeft: 30,
 	},
 	district: {
 		flex: 1,
+		marginBottom: 15,
 		flexDirection: 'row',
-		marginBottom: 10,
 	},
 	checkbox: {
-		width: 20,
-		height: 20,
+		width: 30,
+		height: 30,
 		resizeMode: 'contain',
-		marginRight: 10,
+		marginRight: 15,
 	},
 	districtName: {
 		color: '#fff',
-		fontSize: 16,
+		fontSize: 20,
+		marginTop: 2,
 	},
 	zoneMap: {
 		width: 50,
@@ -245,7 +247,6 @@ class Zone extends React.Component {
 					{
 						elevation: zIndex,
 						zIndex,
-						height: this.state.toggle ? 300 : 'auto',
 					},
 				]}
 			>
@@ -269,38 +270,38 @@ class Zone extends React.Component {
 						</View>
 					</View>
 				</TouchableWithoutFeedback>
-				<ScrollView
-					style={{ display: this.state.toggle ? 'flex' : 'none' }}
-					alignItems="center"
-					contentContainerStyle={[
-						style.districts,
-						{
-							backgroundColor: this.state.colors[this.props.id - 1],
-						},
-					]}
-				>
-					{this.props.districts
-						.sort((a, b) => {
-							if (a.name > b.name) {
-								return 1;
-							}
-							if (a.name < b.name) {
-								return -1;
-							}
-							// a must be equal to b
-							return 0;
-						})
-						.map((item, i) => this.renderDistrict(item, i))}
-					<View style={style.district} key={0}>
-						<TouchableOpacity onPress={() => this.selectAllDistricts()}>
-							{!this.state.allDistricts && <Image source={checkbox} style={style.checkbox} />}
-							{this.state.allDistricts && <Image source={checkboxOn} style={style.checkbox} />}
-						</TouchableOpacity>
-						<Text style={style.districtName} onPress={() => this.selectAllDistricts()}>
-							Seguir todos os distritos
-						</Text>
+				{this.state.toggle &&
+					<View
+						style={[
+							style.districts,
+							{
+								backgroundColor: this.state.colors[this.props.id - 1],
+							},
+						]}
+					>
+						{this.props.districts
+							.sort((a, b) => {
+								if (a.name > b.name) {
+									return 1;
+								}
+								if (a.name < b.name) {
+									return -1;
+								}
+								// a must be equal to b
+								return 0;
+							})
+							.map((item, i) => this.renderDistrict(item, i))}
+						<View style={style.district} key={0}>
+							<TouchableOpacity onPress={() => this.selectAllDistricts()}>
+								{!this.state.allDistricts && <Image source={checkbox} style={style.checkbox} />}
+								{this.state.allDistricts && <Image source={checkboxOn} style={style.checkbox} />}
+							</TouchableOpacity>
+							<Text style={style.districtName} onPress={() => this.selectAllDistricts()}>
+								Seguir todos os distritos
+							</Text>
+						</View>
 					</View>
-				</ScrollView>
+				}
 			</View>
 		);
 	}
