@@ -250,7 +250,7 @@ class Profile extends React.Component {
 	registerUser() {
 		const { user } = this.props;
 		registerForPushNotificationsAsync().then((res) => {
-			user.token = res;
+			user.token = { value: res };
 
 			const newUser = this.createUser();
 
