@@ -22,7 +22,7 @@ const style = StyleSheet.create({
 		marginTop: 2,
 	},
 	pageTitle: {
-		paddingLeft: 25,
+		paddingLeft: 5,
 		paddingRight: 15,
 	},
 	title: {
