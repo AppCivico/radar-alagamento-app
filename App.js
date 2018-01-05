@@ -58,7 +58,7 @@ const tabBarOptions = Platform.OS === 'ios' ?
 		upperCaseLabel: false,
 	};
 
-const FirstLaunchNavigation = TabNavigator(
+const Navigation = TabNavigator(
 	nav,
 	{
 		initialRouteName: 'Districts',
@@ -69,15 +69,18 @@ const FirstLaunchNavigation = TabNavigator(
 	},
 );
 
-const FirstLaunchNavigationTutorial = StackNavigator({
-	Tutorial: { screen: Tutorial },
-	Districts: { screen: Districts },
-}, {
-	initialRouteName: 'Tutorial',
-	headerMode: 'none',
-});
+const TutorialScreen = StackNavigator(
+	{
+		Tutorial: { screen: Tutorial },
+		Tab: { screen: Navigation },
+	},
+	{
+		initialRouteName: 'Tutorial',
+		headerMode: 'none',
+	},
+);
 
-const FirstLaunchNavigationRegistered = TabNavigator(
+const NavigationRegistered = TabNavigator(
 	nav,
 	{
 		initialRouteName: 'Notifications',
@@ -104,8 +107,6 @@ class App extends React.Component {
 	}
 
 	componentDidMount() {
-		this.loadAssetsAsync();
-
 		try {
 			AsyncStorage.getItem('alreadyLaunched')
 				.then((res) => {
@@ -122,6 +123,7 @@ class App extends React.Component {
 							})
 							.catch(() => {});
 					}
+					this.loadAssetsAsync();
 				})
 				.catch(() => {});
 		} catch (error) {
@@ -146,7 +148,7 @@ class App extends React.Component {
 		if (!this.state.firstLaunch) {
 			return (
 				<Provider store={store}>
-					<FirstLaunchNavigation />
+					<Navigation />
 				</Provider>
 			);
 		}
@@ -154,14 +156,14 @@ class App extends React.Component {
 		if (this.state.apikey) {
 			return (
 				<Provider store={store}>
-					<FirstLaunchNavigationRegistered />
+					<NavigationRegistered />
 				</Provider>
 			);
 		}
 
 		return (
 			<Provider store={store}>
-				<FirstLaunchNavigationTutorial />
+				<TutorialScreen />
 			</Provider>
 		);
 	}
