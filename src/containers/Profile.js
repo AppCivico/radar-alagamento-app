@@ -247,7 +247,14 @@ class Profile extends React.Component {
 		};
 	}
 
+	toggleButton() {
+		const registering = !this.state.registering;
+		this.setState({ registering });
+	}
+
 	registerUser() {
+		this.toggleButton();
+
 		const { user } = this.props;
 		registerForPushNotificationsAsync().then((res) => {
 			user.token = { value: res };
@@ -255,11 +262,8 @@ class Profile extends React.Component {
 			const newUser = this.createUser();
 
 			if (newUser) {
-				// disable button
-				let registering = !this.state.registering;
-				this.setState({ registering });
-
 				user.user = newUser;
+				// console.log(this.props.user);
 				axios({
 					method: 'POST',
 					url: 'https://dtupa.eokoe.com/signup',
@@ -279,14 +283,15 @@ class Profile extends React.Component {
 							})
 							.catch(() => {});
 					},
-					() => {
+					(err) => {
 						this.showError('Ops! Ocorreu um erro no seu cadastro, tente novamente!');
-
-						registering = !this.state.registering;
-						this.setState({ registering });
+						// console.log(err.message);
+						this.toggleButton();
 					},
 				);
 			}
+		}).catch(() => {
+			this.toggleButton();
 		});
 	}
 
@@ -302,7 +307,7 @@ class Profile extends React.Component {
 			phone_number: newUser.phone_number,
 		};
 
-		console.log(user);
+		// console.log(user);
 
 		/* if (newUser) {
 			user.user = newUser;
@@ -420,7 +425,7 @@ class Profile extends React.Component {
 						</TouchableWithoutFeedback>
 					)}
 				</View>
-				{this.state.extra && <View style={{ height: 250 }} />}
+				{this.state.extra && <View style={{ height: 200 }} />}
 			</ScrollView>
 		);
 	}
