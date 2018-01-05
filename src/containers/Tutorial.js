@@ -21,6 +21,10 @@ import bgTutorial3 from '../assets/images/bg_tutorial_3.png';
 import next from '../assets/images/next.png';
 
 class Tutorial extends React.Component {
+	static navigationOptions = {
+		tabBarVisible: false,
+	};
+
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -143,13 +147,13 @@ class Tutorial extends React.Component {
 	}
 
 	skipTutorial() {
-		this.props.navigation.navigate('Districts');
+		this.props.navigation.navigate('Tab');
 	}
 
 	nextTutorial() {
 		let { selectedIndex } = this.state;
 		if (selectedIndex < 0 || selectedIndex === this.state.count - 1) {
-			this.props.navigation.navigate('Districts');
+			this.props.navigation.navigate('Tab');
 			return;
 		}
 
