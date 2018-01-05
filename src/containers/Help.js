@@ -5,6 +5,7 @@ import {
 	Text,
 	Image,
 	TouchableOpacity,
+	TouchableWithoutFeedback,
 	StyleSheet,
 	ScrollView,
 	Alert,
@@ -18,10 +19,8 @@ import Header from '../components/Header';
 
 import { colors } from '../styles/variables';
 
-import background from '../assets/images/elements_bg.png';
-import iconTermos from '../assets/images/ic-termosepoliticas.png';
-import iconHelp from '../assets/images/spam-ico-copy.png';
-import menuIcon from '../assets/images/icon-config.png';
+import menuIcon from '../assets/images/spam-ico-copy.png';
+import backIcon from '../assets/images/back-icon.png';
 
 const style = StyleSheet.create({
 	tabIcon: {
@@ -30,13 +29,6 @@ const style = StyleSheet.create({
 	},
 	container: {
 		flex: 1,
-	},
-	background: {
-		flex: 1,
-		resizeMode: 'contain',
-		width: '100%',
-		height: 'auto',
-		alignSelf: 'flex-end',
 	},
 	item: {
 		display: 'flex',
@@ -83,11 +75,19 @@ const style = StyleSheet.create({
 		borderWidth: 1,
 		borderColor: '#fff',
 	},
+	backIcon: {
+		position: 'absolute',
+		top: 43,
+		right: 20,
+		width: 20,
+		height: 20,
+		resizeMode: 'contain',
+	},
 });
 
-class Config extends React.Component {
+class Help extends React.Component {
 	static navigationOptions = {
-		tabBarLabel: 'Configurações',
+		tabBarLabel: 'Ajuda',
 		// Note: By default the icon is only shown on iOS. Search the showIcon option below.
 		tabBarIcon: ({ tintColor }) => (
 			<Image
@@ -100,25 +100,8 @@ class Config extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			pageTitle: 'Configurações',
+			pageTitle: 'Ajuda',
 			list: [
-				{
-					type: 'terms',
-					title: 'Termos de Serviço',
-					icon: iconTermos,
-				},
-				{
-					type: 'politic',
-					title: 'Política de Privacidade',
-					icon: iconTermos,
-				},
-				{
-					type: 'help',
-					title: 'Ajuda',
-					icon: iconHelp,
-				},
-			],
-			listHelp: [
 				{
 					type: 'faq',
 					title: 'Perguntas Frequentes',
@@ -135,6 +118,14 @@ class Config extends React.Component {
 					type: 'about',
 					title: 'Sobre',
 				},
+				{
+					type: 'terms',
+					title: 'Termos de Serviço',
+				},
+				{
+					type: 'politic',
+					title: 'Política de Privacidade',
+				},
 			],
 			selected: '',
 			reportInput: 'Descrever problema',
@@ -147,10 +138,8 @@ class Config extends React.Component {
 	componentDidMount() {
 		this.changeGoBack = BackHandler.addEventListener('backPress', () => {
 			if (this.state.selected !== '') {
-				this.props.navigation.navigate('Config');
-				const pageTitle = 'Configurações';
-				const selected = '';
-				this.setState({ pageTitle, selected });
+				this.props.navigation.navigate('Help');
+				this.goBack();
 			}
 		});
 	}
@@ -182,6 +171,12 @@ class Config extends React.Component {
 		this.setState({ modalVisible });
 	}
 
+	goBack() {
+		const pageTitle = 'Ajuda';
+		const selected = '';
+		this.setState({ pageTitle, selected });
+	}
+
 	renderListItem(item) {
 		return (
 			<TouchableOpacity key={item.type} onPress={() => this.changeContent(item)}>
@@ -197,12 +192,16 @@ class Config extends React.Component {
 		return (
 			<View style={style.container}>
 				<Header pageTitle={this.state.pageTitle} />
+				{this.state.selected !== '' && (
+					<TouchableWithoutFeedback onPress={() => this.goBack()}>
+						<Image source={backIcon} style={style.backIcon} />
+					</TouchableWithoutFeedback>
+				)}
 				{this.state.selected === '' && (
 					<View style={style.container}>
-						<View style={{ flex: 2 }}>
+						<ScrollView>
 							{this.state.list.map(item => this.renderListItem(item))}
-						</View>
-						<Image source={background} style={style.background} />
+						</ScrollView>
 					</View>
 				)}
 				{this.state.selected === 'terms' && (
@@ -251,12 +250,6 @@ class Config extends React.Component {
 					</ScrollView>
 				)}
 
-				{this.state.selected === 'help' && (
-					<View style={{ flex: 2 }}>
-						{this.state.listHelp.map(item => this.renderListItem(item))}
-					</View>
-				)}
-
 				{this.state.selected === 'faq' && (
 					<ScrollView style={style.textArea}>
 						<Text style={style.text}>Soon</Text>
@@ -302,4 +295,4 @@ class Config extends React.Component {
 	}
 }
 
-export default Config;
+export default Help;
