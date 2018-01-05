@@ -65,9 +65,13 @@ const style = StyleSheet.create({
 		textAlign: 'justify',
 		color: colors.gray,
 	},
-	modal: {
+	modalWrapper: {
+		flex: 1,
+		backgroundColor: 'rgba(0, 0, 0, 0.5)',
 		justifyContent: 'center',
 		alignItems: 'center',
+	},
+	modal: {
 		backgroundColor: '#fff',
 		height: 300,
 		width: '90%',
@@ -267,27 +271,34 @@ class Help extends React.Component {
 					onRequestClose={() => {
 						console.log('Modal has been closed.');
 					}}
-					style={style.modal}
+					presentationStyle="overFullScreen"
+					animationType="fade"
+					animated
+					transparent
 				>
-					<Text>Reportar problema</Text>
-					<TextInput
-						style={style.input}
-						onChangeText={reportInput => this.setState({ reportInput })}
-						placeholder={this.state.reportInput}
-						placeholderTextColor={colors.gray}
-					/>
-					<Button
-						onPress={() => this.toggleModal()}
-						title="CANCELAR"
-						color={colors.blueDark}
-						accessibilityLabel="CANCELAR"
-					/>
-					<Button
-						onPress={() => this.toggleModal()}
-						title="Cancelar"
-						color={colors.blueDark}
-						accessibilityLabel="OK"
-					/>
+					<View style={style.modalWrapper}>
+						<View	style={style.modal}>
+							<Text>Reportar problema</Text>
+							<TextInput
+								style={style.input}
+								onChangeText={reportInput => this.setState({ reportInput })}
+								placeholder={this.state.reportInput}
+								placeholderTextColor={colors.gray}
+							/>
+							<Button
+								onPress={() => this.toggleModal()}
+								title="CANCELAR"
+								color={colors.blueDark}
+								accessibilityLabel="CANCELAR"
+							/>
+							<Button
+								onPress={() => this.toggleModal()}
+								title="Cancelar"
+								color={colors.blueDark}
+								accessibilityLabel="OK"
+							/>
+						</View>
+					</View>
 				</Modal>
 
 			</View>
