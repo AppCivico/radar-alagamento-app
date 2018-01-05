@@ -14,7 +14,7 @@ import Tutorial from './src/containers/Tutorial';
 import Districts from './src/containers/Districts';
 import Notifications from './src/containers/Notifications';
 import Profile from './src/containers/Profile';
-import Config from './src/containers/Config';
+import Help from './src/containers/Help';
 
 import { colors } from './src/styles/variables';
 
@@ -35,7 +35,7 @@ const nav = {
 	Profile: { screen: Profile },
 	Notifications: { screen: Notifications },
 	Districts: { screen: Districts },
-	Config: { screen: Config },
+	Help: { screen: Help },
 };
 
 const tabBarOptions = Platform.OS === 'ios' ?
