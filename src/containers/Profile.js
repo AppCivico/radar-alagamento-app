@@ -130,6 +130,7 @@ class Profile extends React.Component {
 			registering: false,
 			extra: false,
 			user: {},
+			apikey: '',
 		};
 		this.changeRoute = this.changeRoute.bind(this);
 		this.createUser = this.createUser.bind(this);
@@ -164,6 +165,15 @@ class Profile extends React.Component {
 							newUser: false,
 							user,
 						});
+
+						AsyncStorage.getItem('apikey')
+							.then((res2) => {
+								if (res2 != null) {
+									const apikey = res2;
+									this.setState({ apikey });
+								}
+							})
+							.catch(() => { });
 					}
 				})
 				.catch(() => {});
@@ -296,22 +306,18 @@ class Profile extends React.Component {
 	editProfile() {
 		const newUser = this.createUser();
 		const user = {
-			push_token: this.state.token,
-			districts: this.state.districts,
-			name: `${newUser.name} ${newUser.name}`,
-			email: newUser.email,
-			password: '123segredo$$',
-			password_confirmation: '123segredo$$',
-			phone_number: newUser.phone_number,
+			push_token: this.state.user.push_token,
+			districts: this.state.user.districts,
+			user: newUser,
 		};
 
-		// console.log(user);
-
-		/* if (newUser) {
+		console.log('editando', user);
+		console.log('apikey', `https://dtupa.eokoe.com/me?api_key=${this.state.apikey}`)
+		if (newUser) {
 			user.user = newUser;
 			axios({
 				method: 'PUT',
-				url: 'https://dtupa.eokoe.com/me',
+				url: `https://dtupa.eokoe.com/me?api_key=${this.state.apikey}`,
 				headers: { 'Content-Type': 'application/json' },
 				data: user,
 			}).then(
@@ -326,7 +332,7 @@ class Profile extends React.Component {
 					this.showError('Ops! Ocorreu um erro ao atualizar o seu cadastro, tente novamente!');
 				},
 			);
-		} */
+		}
 	}
 
 	scrollToEnd() {
