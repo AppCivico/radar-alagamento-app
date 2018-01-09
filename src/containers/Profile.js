@@ -257,13 +257,12 @@ class Profile extends React.Component {
 
 		const { user } = this.props;
 		registerForPushNotificationsAsync().then((res) => {
-			user.token = { value: res };
+			user.push_token = res;
 
 			const newUser = this.createUser();
 
 			if (newUser) {
 				user.user = newUser;
-				// console.log(this.props.user);
 				axios({
 					method: 'POST',
 					url: 'https://dtupa.eokoe.com/signup',
@@ -285,7 +284,6 @@ class Profile extends React.Component {
 					},
 					(err) => {
 						this.showError('Ops! Ocorreu um erro no seu cadastro, tente novamente!');
-						// console.log(err.message);
 						this.toggleButton();
 					},
 				);
