@@ -129,7 +129,7 @@ class Notifications extends React.Component {
 			isLoaded: true,
 			notifications: [],
 			activeMenu: true,
-			apikey: '830ff945-5447-49c7-8a67-26eed2da8c62',
+			apikey: '',
 			notificationMessage: {},
 			warning: {
 				message: 'Você não está seguindo nenhum distrito =(',
