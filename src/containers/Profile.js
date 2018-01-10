@@ -311,8 +311,6 @@ class Profile extends React.Component {
 			user: newUser,
 		};
 
-		console.log('editando', user);
-		console.log('apikey', `https://dtupa.eokoe.com/me?api_key=${this.state.apikey}`)
 		if (newUser) {
 			user.user = newUser;
 			axios({
