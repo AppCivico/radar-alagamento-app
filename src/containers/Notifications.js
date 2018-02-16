@@ -159,23 +159,27 @@ class Notifications extends React.Component {
 
 	getNotifications(type) {
 		const url = type === 'city' ? 'all' : '';
-		fetch(`https://dtupa.eokoe.com/alert/${url}?api_key=${this.state.apikey}`)
-			.then(response => response.json())
-			.then((data) => {
-				const notifications = data.results;
-				const isLoaded = true;
-				const warning = {};
+		if (this.state.apikey) {
+			fetch(`https://dtupa.eokoe.com/alert/${url}?api_key=${this.state.apikey}`)
+				.then(response => response.json())
+				.then((data) => {
+					const notifications = data.results;
+					const isLoaded = true;
+					const warning = {};
 
-				if (notifications.length < 1) {
-					warning.message = 'Tudo tranquilo, sem alertas nos distritos seguidos =)';
-					warning.image = wink;
-				}
+					if (notifications.length < 1) {
+						warning.message = 'Tudo tranquilo, sem alertas nos distritos seguidos =)';
+						warning.image = wink;
+					}
 
-				this.setState({ warning, notifications, isLoaded });
-			})
-			.catch(() => {
-				this.showError('Ocorreu um erro ao carregar os alertas, tente novamente!');
-			});
+					this.setState({ warning, notifications, isLoaded });
+				})
+				.catch(() => {
+					this.showError('Ocorreu um erro ao carregar os alertas, tente novamente!');
+				});
+		} else {
+			this.showError('Você deve se cadastrar para visualizar os alertas :)');
+		}
 	}
 
 	handleNotification = (notificationMessage) => {
