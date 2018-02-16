@@ -144,7 +144,7 @@ class Zone extends React.Component {
 			this.setState({ allDistricts });
 		}
 
-		// this.props.updateSeletedDistricts(item.id, this.state.checked[i].state);
+		this.props.updateSeletedDistricts(item.id, this.state.checked[i].state);
 		this.setState({ checked });
 	}
 
