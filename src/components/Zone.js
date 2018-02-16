@@ -6,7 +6,6 @@ import {
 	StyleSheet,
 	Image,
 	TouchableOpacity,
-	ScrollView,
 	TouchableWithoutFeedback,
 } from 'react-native';
 
@@ -145,7 +144,7 @@ class Zone extends React.Component {
 			this.setState({ allDistricts });
 		}
 
-		this.props.updateSeletedDistricts(item.id, this.state.checked[i].state);
+		// this.props.updateSeletedDistricts(item.id, this.state.checked[i].state);
 		this.setState({ checked });
 	}
 
@@ -177,6 +176,13 @@ class Zone extends React.Component {
 	}
 
 	renderDistrict(item, i) {
+		if (this.props.selected) {
+			const isSelected = this.props.selected.findIndex(district => district === item.id);
+
+			if (isSelected >= 0 && this.state.checked[i].state === false) {
+				this.selectDistrict(item, i);
+			}
+		}
 		return (
 			<View style={style.district} key={item.id}>
 				<TouchableOpacity onPress={() => this.selectDistrict(item, i)}>
@@ -312,6 +318,7 @@ Zone.propTypes = {
 	id: PropTypes.string.isRequired,
 	districts: PropTypes.arrayOf(PropTypes.object).isRequired,
 	updateSeletedDistricts: PropTypes.func.isRequired,
+	selected: PropTypes.arrayOf(PropTypes.number).isRequired,
 };
 
 export default Zone;

@@ -82,6 +82,7 @@ class Districts extends React.Component {
 			isLoaded: false,
 			selectedDistricts: [],
 			zones: [],
+			user: {},
 		};
 		this.changeRoute = this.changeRoute.bind(this);
 		this.updateSeletedDistricts = this.updateSeletedDistricts.bind(this);
@@ -99,6 +100,19 @@ class Districts extends React.Component {
 						this.setState({ zones, isLoaded });
 					} else {
 						this.getDistricts();
+					}
+				})
+				.catch(() => {});
+		} catch (error) {
+			// Error retrieving data
+		}
+
+		try {
+			AsyncStorage.getItem('user')
+				.then((res) => {
+					if (res != null) {
+						const user = JSON.parse(res);
+						this.setState({ user });
 					}
 				})
 				.catch(() => {});
@@ -174,6 +188,7 @@ class Districts extends React.Component {
 									id={item.id}
 									districts={item.districts}
 									updateSeletedDistricts={this.updateSeletedDistricts}
+									selected={this.state.user.districts}
 								/>
 							))}
 						</ScrollView>
