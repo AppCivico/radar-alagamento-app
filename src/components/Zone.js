@@ -8,6 +8,7 @@ import {
 	TouchableOpacity,
 	TouchableWithoutFeedback,
 } from 'react-native';
+import axios from 'axios';
 
 import { colors } from '../styles/variables';
 
@@ -118,6 +119,7 @@ class Zone extends React.Component {
 		this.selectAllDistricts = this.selectAllDistricts.bind(this);
 		this.setChecks = this.setChecks.bind(this);
 		this.toggleDistricts = this.toggleDistricts.bind(this);
+		this.changeDistrictState = this.changeDistrictState.bind(this);
 	}
 
 	componentDidMount() {
@@ -129,6 +131,21 @@ class Zone extends React.Component {
 			state: false,
 			image: checkbox,
 		}));
+		this.setState({ checked });
+	}
+
+	changeInitial(item, i) {
+		const checked = [...this.state.checked];
+		checked[i] = {
+			state: !checked[i].state,
+			image: checked[i].image === checkbox ? checkboxOn : checkbox,
+		};
+
+		if (!checked[i].state) {
+			const allDistricts = !this.state.allDistricts;
+			this.setState({ allDistricts });
+		}
+
 		this.setState({ checked });
 	}
 
@@ -144,8 +161,26 @@ class Zone extends React.Component {
 			this.setState({ allDistricts });
 		}
 
-		this.props.updateSeletedDistricts(item.id, this.state.checked[i].state);
+		if (this.props.registered !== '') {
+			const state = checked[i].state ? 'follow' : 'unfollow';
+			this.changeDistrictState(item.id, state);
+		} else {
+			this.props.updateSeletedDistricts(item.id, this.state.checked[i].state);
+		}
 		this.setState({ checked });
+	}
+
+	changeDistrictState(id, state) {
+		axios({
+			method: 'POST',
+			url: `https://dtupa.eokoe.com/district/${id}/${state}?api_key=${this.props.registered}`,
+			headers: { 'Content-Type': 'application/json' },
+		})
+			.then(() => {
+			})
+			.catch(() => {
+				this.showError('Ops! Ocorreu um erro ao atualizar o distrito, tente novamente!');
+			});
 	}
 
 	selectAllDistricts() {
@@ -180,7 +215,7 @@ class Zone extends React.Component {
 			const isSelected = this.props.selected.findIndex(district => district === item.id);
 
 			if (isSelected >= 0 && this.state.checked[i].state === false) {
-				this.selectDistrict(item, i);
+				this.changeInitial(item, i);
 			}
 		}
 		return (
@@ -319,6 +354,7 @@ Zone.propTypes = {
 	districts: PropTypes.arrayOf(PropTypes.object).isRequired,
 	updateSeletedDistricts: PropTypes.func.isRequired,
 	selected: PropTypes.arrayOf(PropTypes.number).isRequired,
+	registered: PropTypes.bool.isRequired,
 };
 
 export default Zone;

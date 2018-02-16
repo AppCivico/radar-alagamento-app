@@ -83,6 +83,7 @@ class Districts extends React.Component {
 			selectedDistricts: [],
 			zones: [],
 			user: {},
+			apikey: '',
 		};
 		this.changeRoute = this.changeRoute.bind(this);
 		this.updateSeletedDistricts = this.updateSeletedDistricts.bind(this);
@@ -113,6 +114,15 @@ class Districts extends React.Component {
 					if (res != null) {
 						const user = JSON.parse(res);
 						this.setState({ user });
+
+						AsyncStorage.getItem('apikey')
+							.then((res2) => {
+								if (res2 != null) {
+									const apikey = res2;
+									this.setState({ apikey });
+								}
+							})
+							.catch(() => { });
 					}
 				})
 				.catch(() => {});
@@ -189,6 +199,8 @@ class Districts extends React.Component {
 									districts={item.districts}
 									updateSeletedDistricts={this.updateSeletedDistricts}
 									selected={this.state.user.districts}
+									// eslint-disable-next-line
+									registered={this.state.apikey}
 								/>
 							))}
 						</ScrollView>
@@ -201,9 +213,11 @@ class Districts extends React.Component {
 						</View>
 					</View>
 				)}
-				<TouchableWithoutFeedback onPress={() => this.editDistricts()}>
-					<Image source={done} style={style.nextPageButton} />
-				</TouchableWithoutFeedback>
+				{!this.state.user.districts && (
+					<TouchableWithoutFeedback onPress={() => this.editDistricts()}>
+						<Image source={done} style={style.nextPageButton} />
+					</TouchableWithoutFeedback>
+				)}
 			</View>
 		);
 	}
