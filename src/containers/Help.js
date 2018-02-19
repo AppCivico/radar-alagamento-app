@@ -11,9 +11,9 @@ import {
 	Alert,
 	Modal,
 	TextInput,
-	Button,
 	BackHandler,
 } from 'react-native';
+import axios from 'axios';
 
 import Header from '../components/Header';
 
@@ -73,11 +73,17 @@ const style = StyleSheet.create({
 	},
 	modal: {
 		backgroundColor: '#fff',
-		height: 300,
+		height: 200,
 		width: '90%',
 		borderRadius: 10,
 		borderWidth: 1,
 		borderColor: '#fff',
+		padding: 20,
+	},
+	modalTitle: {
+		fontSize: 20,
+		fontFamily: 'raleway',
+		color: colors.gray,
 	},
 	backIcon: {
 		position: 'absolute',
@@ -86,6 +92,32 @@ const style = StyleSheet.create({
 		width: 20,
 		height: 20,
 		resizeMode: 'contain',
+	},
+	modalInput: {
+		marginTop: 50,
+		marginBottom: 20,
+		height: 40,
+		fontSize: 14,
+		fontFamily: 'raleway',
+		color: colors.gray,
+		borderBottomColor: colors.gray,
+		borderBottomWidth: 1,
+	},
+	modalButtons: {
+		flex: 1,
+		flexDirection: 'row',
+	},
+	modalButtonRight: {
+		flex: 2,
+	},
+	modalButtonLeft: {
+		flex: 1,
+	},
+	modalButtonText: {
+		fontSize: 16,
+		fontFamily: 'raleway',
+		color: colors.blueDark,
+		textAlign: 'right',
 	},
 });
 
@@ -132,7 +164,7 @@ class Help extends React.Component {
 				},
 			],
 			selected: '',
-			reportInput: 'Descrever problema',
+			reportInput: 'Descreva o problema',
 			modalVisible: false,
 		};
 
@@ -170,9 +202,34 @@ class Help extends React.Component {
 		}
 	}
 
-	toggleModal() {
+	toggleModal(action) {
 		const modalVisible = !this.state.modalVisible;
-		this.setState({ modalVisible });
+
+		if (!action) {
+			const reportInput = 'Descreva o problema';
+			this.setState({ modalVisible, reportInput });
+		} else {
+			const message = this.state.reportInput;
+			if (message !== 'Descreva o problema') {
+				const data = {
+					status: 'error',
+					payload: message,
+				};
+
+				axios({
+					method: 'POST',
+					url: 'https://dtupa.eokoe.com/app-report',
+					headers: { 'Content-Type': 'application/json' },
+					data,
+				})
+					.then((res) => {
+						console.log(res);
+					})
+					.catch(() => {
+						this.showError('Ops! Ocorreu um erro ao enviar sua mensagem, tente novamente!');
+					});
+			}
+		}
 	}
 
 	goBack() {
@@ -268,9 +325,7 @@ class Help extends React.Component {
 
 				<Modal
 					visible={this.state.modalVisible}
-					onRequestClose={() => {
-						console.log('Modal has been closed.');
-					}}
+					onRequestClose={() => this.toggleModal(false)}
 					presentationStyle="overFullScreen"
 					animationType="fade"
 					animated
@@ -278,25 +333,27 @@ class Help extends React.Component {
 				>
 					<View style={style.modalWrapper}>
 						<View	style={style.modal}>
-							<Text>Reportar problema</Text>
+							<Text style={style.modalTitle}>Reportar problema</Text>
 							<TextInput
-								style={style.input}
+								style={style.modalInput}
 								onChangeText={reportInput => this.setState({ reportInput })}
 								placeholder={this.state.reportInput}
 								placeholderTextColor={colors.gray}
 							/>
-							<Button
-								onPress={() => this.toggleModal()}
-								title="CANCELAR"
-								color={colors.blueDark}
-								accessibilityLabel="CANCELAR"
-							/>
-							<Button
-								onPress={() => this.toggleModal()}
-								title="Cancelar"
-								color={colors.blueDark}
-								accessibilityLabel="OK"
-							/>
+							<View style={style.modalButtons}>
+								<TouchableOpacity
+									onPress={() => this.toggleModal(false)}
+									style={style.modalButtonRight}
+								>
+									<Text style={style.modalButtonText}>CANCELAR</Text>
+								</TouchableOpacity>
+								<TouchableOpacity
+									onPress={() => this.toggleModal(true)}
+									style={style.modalButtonLeft}
+								>
+									<Text style={style.modalButtonText}>OK</Text>
+								</TouchableOpacity>
+							</View>
 						</View>
 					</View>
 				</Modal>
