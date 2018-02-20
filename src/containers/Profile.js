@@ -125,7 +125,7 @@ class Profile extends React.Component {
 			name: 'Nome',
 			surname: 'Sobrenome',
 			email: 'E-mail',
-			phone: '(11) 9.9999-8888',
+			phone: '',
 			newUser: true,
 			registering: false,
 			extra: false,
@@ -161,7 +161,7 @@ class Profile extends React.Component {
 							name: name.split(' ')[0],
 							surname,
 							email,
-							phone: phone_number.replace('+55', ''),
+							phone: this.maskPhone(phone_number.replace('+55', '')),
 							newUser: false,
 							user,
 						});
@@ -176,7 +176,7 @@ class Profile extends React.Component {
 							.catch(() => { });
 					}
 				})
-				.catch(() => {});
+				.catch(() => { console.log('no user found'); });
 		} catch (error) {
 			// Error retrieving data
 		}
@@ -292,7 +292,7 @@ class Profile extends React.Component {
 							})
 							.catch(() => {});
 					},
-					(err) => {
+					() => {
 						this.showError('Ops! Ocorreu um erro no seu cadastro, tente novamente!');
 						this.toggleButton();
 					},
@@ -335,6 +335,13 @@ class Profile extends React.Component {
 
 	scrollToEnd() {
 		this.scrollView.scrollToEnd();
+	}
+
+	maskPhone(phone) {
+		const currentPhone = phone.phone.replace(/\D/g, '').match(/(\d{0,2})(\d{0,5})(\d{0,4})/);
+		// eslint-disable-next-line
+		const newPhone = !currentPhone[2] ? currentPhone[1] : '(' + currentPhone[1] + ') ' + currentPhone[2] + (currentPhone[3] ? '-' + currentPhone[3] : '');
+		this.setState({ phone: newPhone });
 	}
 
 	render() {
@@ -404,8 +411,9 @@ class Profile extends React.Component {
 								<View style={style.formInput}>
 									<TextInput
 										style={style.input}
-										onChangeText={phone => this.setState({ phone })}
-										placeholder={this.state.phone}
+										onChangeText={phone => this.maskPhone({ phone })}
+										value={this.state.phone}
+										placeholder="(11) 9.9999-8888"
 										placeholderTextColor={colors.gray}
 										keyboardType="phone-pad"
 									/>
