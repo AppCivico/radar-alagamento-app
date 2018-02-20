@@ -393,6 +393,7 @@ class Profile extends React.Component {
 										placeholder={this.state.email}
 										placeholderTextColor={colors.gray}
 										keyboardType="email-address"
+										autoCapitalize="none"
 									/>
 								</View>
 							</View>
