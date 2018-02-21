@@ -131,7 +131,6 @@ class Notifications extends React.Component {
 			notifications: [],
 			activeMenu: true,
 			apikey: '',
-			notificationMessage: {},
 			warning: {
 				message: 'Você não está seguindo nenhum distrito =(',
 				image: confused,
@@ -201,9 +200,9 @@ class Notifications extends React.Component {
 		}
 	}
 
-	handleNotification = (notificationMessage) => {
-		this.setState({ notificationMessage });
-	};
+	handleNotification() {
+		this.getNotifications('');
+	}
 
 	showError(msg = 'Campo obrigatório') {
 		Alert.alert('Atenção', msg, [{ text: 'OK' }], { cancelable: false });
@@ -235,12 +234,6 @@ class Notifications extends React.Component {
 				style={style.containerNotifications}
 				contentContainerStyle={{ paddingBottom: 30 }}
 			>
-				{this.state.notificationMessage.origin && (
-					<Notification
-						key={this.state.notificationMessage.data.id}
-						item={this.state.notificationMessage.data}
-					/>
-				)}
 				{this.state.notifications.map(item => <Notification key={item.id} item={item} />)}
 			</ScrollView>
 		);
