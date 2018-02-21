@@ -7,7 +7,6 @@ import {
 	Text,
 	Image,
 	TextInput,
-	TouchableWithoutFeedback,
 	Button,
 	StyleSheet,
 	Alert,
@@ -29,7 +28,6 @@ import background from '../assets/images/elements_bg.png';
 import iconProfile from '../assets/images/person.png';
 import iconEmail from '../assets/images/email.png';
 import iconPhone from '../assets/images/call.png';
-import edit from '../assets/images/edit.png';
 import menuIcon from '../assets/images/icon-perfil.png';
 
 const style = StyleSheet.create({
@@ -291,11 +289,9 @@ class Profile extends React.Component {
 						this.props.apikey = apikey;
 						AsyncStorage.setItem('apikey', apikey)
 							.then(() => {
-								console.log('registrando user', this.props.user);
 								AsyncStorage.setItem('user', JSON.stringify(this.props.user))
 									.then(() => {
 										this.changeRoute('Notifications');
-										console.log('salvou');
 										this.proccessUser(this.props.user);
 									})
 									.catch((err) => { console.log('nao salvou', err); });
@@ -325,9 +321,6 @@ class Profile extends React.Component {
 
 		if (newUser) {
 			user.user = newUser;
-
-			console.log('user', user);
-
 			axios({
 				method: 'PUT',
 				url: `https://dtupa.eokoe.com/me?api_key=${this.state.apikey}`,
@@ -338,6 +331,8 @@ class Profile extends React.Component {
 					AsyncStorage.setItem('user', JSON.stringify(user))
 						.then(() => {
 							this.proccessUser(user);
+							Alert.alert('Sucesso', 'Seu cadastro foi atualizado.', [{ text: 'OK' }], { cancelable: false });
+							this.toggleButton();
 						})
 						.catch(() => {});
 				},
