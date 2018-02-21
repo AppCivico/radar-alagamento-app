@@ -7,6 +7,7 @@ import {
 	Image,
 	TouchableOpacity,
 	TouchableWithoutFeedback,
+	AsyncStorage,
 } from 'react-native';
 import axios from 'axios';
 
@@ -177,6 +178,33 @@ class Zone extends React.Component {
 			headers: { 'Content-Type': 'application/json' },
 		})
 			.then(() => {
+				try {
+					AsyncStorage.getItem('user')
+						.then((res) => {
+							if (res != null) {
+								const user = JSON.parse(res);
+								const { districts } = user;
+								if (state === 'unfollow') {
+									const index = districts.indexOf(id);
+									if (index > -1) {
+										districts.splice(index, 1);
+									}
+								} else {
+									districts.push(id);
+								}
+
+								user.districts = districts;
+
+								AsyncStorage.setItem('user', JSON.stringify(user))
+									.then(() => {
+									})
+									.catch((err) => { console.log('nao salvou', err); });
+							}
+						})
+						.catch(() => { console.log('no user found'); });
+				} catch (error) {
+					// Error retrieving data
+				}
 			})
 			.catch(() => {
 				this.showError('Ops! Ocorreu um erro ao atualizar o distrito, tente novamente!');
