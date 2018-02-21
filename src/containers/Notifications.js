@@ -167,9 +167,12 @@ class Notifications extends React.Component {
 						this.setState({ apikey: res });
 						this.getNotifications('user');
 						this.notificationSubscription = PushNotifications.addListener(this.handleNotification);
+					} else {
+						this.setState({ isLoaded: true });
 					}
 				})
-				.catch(() => {});
+				.catch(() => {
+				});
 		} catch (error) {
 			// Error retrieving data
 		}
