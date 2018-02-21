@@ -100,8 +100,6 @@ const style = StyleSheet.create({
 		fontSize: 14,
 		fontFamily: 'raleway',
 		color: colors.gray,
-		borderBottomColor: colors.gray,
-		borderBottomWidth: 1,
 	},
 	modalButtons: {
 		flex: 1,
@@ -203,16 +201,12 @@ class Help extends React.Component {
 	}
 
 	toggleModal(action) {
-		const modalVisible = !this.state.modalVisible;
-
 		if (!action) {
-			const reportInput = 'Descreva o problema';
-			this.setState({ modalVisible, reportInput });
+			this.closeModal();
 		} else {
 			const message = this.state.reportInput;
 			if (message !== 'Descreva o problema') {
 				const data = {
-					status: 'error',
 					payload: message,
 				};
 
@@ -222,14 +216,24 @@ class Help extends React.Component {
 					headers: { 'Content-Type': 'application/json' },
 					data,
 				})
-					.then((res) => {
-						console.log(res);
+					.then(() => {
+						Alert.alert('Obrigado', 'Mensagem enviada com sucesso', [{ text: 'OK', onPress: () => this.closeModal() }], {
+							cancelable: false,
+						});
 					})
 					.catch(() => {
-						this.showError('Ops! Ocorreu um erro ao enviar sua mensagem, tente novamente!');
+						Alert.alert('Ops!', 'Ocorreu um erro ao enviar sua mensagem, tente novamente!', [{ text: 'OK' }], {
+							cancelable: false,
+						});
 					});
 			}
 		}
+	}
+
+	closeModal() {
+		const modalVisible = !this.state.modalVisible;
+		const reportInput = 'Descreva o problema';
+		this.setState({ modalVisible, reportInput });
 	}
 
 	goBack() {
