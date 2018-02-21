@@ -14,6 +14,7 @@ import {
 	Dimensions,
 	ScrollView,
 	Keyboard,
+	DeviceEventEmitter,
 } from 'react-native';
 
 import { mapStateToProps, mapDispatchToProps } from '../store';
@@ -291,8 +292,9 @@ class Profile extends React.Component {
 							.then(() => {
 								AsyncStorage.setItem('user', JSON.stringify(this.props.user))
 									.then(() => {
-										this.changeRoute('Notifications');
 										this.proccessUser(this.props.user);
+										DeviceEventEmitter.emit('TAB_CHANGE', { previousScene: { routeName: 'Profile' } });
+										this.changeRoute('Notifications');
 									})
 									.catch((err) => { console.log('nao salvou', err); });
 							})
