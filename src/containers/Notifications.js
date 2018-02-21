@@ -126,7 +126,7 @@ class Notifications extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			isLoaded: true,
+			isLoaded: false,
 			notifications: [],
 			activeMenu: true,
 			apikey: '',

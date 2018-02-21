@@ -52,15 +52,16 @@ const style = StyleSheet.create({
 	cardDados: {
 		paddingTop: 20,
 	},
-	district: {
+	cardDadosTitle: {
 		fontSize: 12,
 		color: colors.gray,
 	},
-	address: {
+	cardDadosText: {
 		fontSize: 12,
 		color: colors.grayLight,
+		paddingLeft: 10,
 	},
-	date: {
+	cardDadosDate: {
 		fontFamily: 'raleway',
 		fontSize: 14,
 		color: colors.grayLight,
@@ -77,6 +78,12 @@ class Notification extends React.Component {
 				overflow: '#f6dc35',
 				emergency: '#f54f4f',
 				toggle: false,
+			},
+			levels: {
+				attention: 'Atenção',
+				alert: 'Alerta',
+				emergency: 'Emergência',
+				overflow: 'Enchente',
 			},
 		};
 	}
@@ -123,7 +130,7 @@ class Notification extends React.Component {
 		const color = this.state.colors[item.level] ? this.state.colors[item.level] : '#f1a225';
 		return (
 			<View key={`notification-${item.id}`} style={style.notification}>
-				<Text style={style.date}>{this.formatDate(item.created_at)}</Text>
+				<Text style={style.cardDadosDate}>{this.formatDate(item.created_at)}</Text>
 				<TouchableOpacity onPress={() => this.toggleCard()}>
 					<View style={style.card}>
 						<View style={[style.cardIcon, { backgroundColor: color }]}>
@@ -132,10 +139,15 @@ class Notification extends React.Component {
 						<View style={style.cardText}>
 							<Text style={style.cardDescription}>{item.description}</Text>
 							<View style={[style.cardDados, { display: this.state.toggle ? 'flex' : 'none' }]}>
-								{item.sensor_sample.sensor.districts.map(district => (
-									<Text style={style.district} key={district.id}>{district.name}</Text>
+								<Text style={style.cardDadosTitle}>
+									Nível do alerta: {this.state.levels[item.level]}
+								</Text>
+								<Text style={style.cardDadosTitle}>Distritos alertados:</Text>
+								{item.alert_districts.map(district => (
+									<Text style={style.cardDadosText} key={district.district_id}>
+										{district.district.name}
+									</Text>
 								))}
-								<Text style={style.address}>{item.sensor_sample.sensor.description}</Text>
 							</View>
 						</View>
 					</View>
