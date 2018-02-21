@@ -2,7 +2,7 @@ import React from 'react';
 import { StackNavigator, TabNavigator } from 'react-navigation';
 import { AppLoading, Font } from 'expo';
 import { Provider } from 'react-redux';
-import { AsyncStorage, StyleSheet, Platform } from 'react-native';
+import { AsyncStorage, StyleSheet, Platform, DeviceEventEmitter } from 'react-native';
 
 import { store } from './src/store';
 
@@ -66,6 +66,12 @@ const Navigation = TabNavigator(
 		animationEnabled: true,
 		tabBarOptions,
 		showIcon: true,
+		navigationOptions: {
+			tabBarOnPress: ({ previousScene, scene, jumpToIndex }) => {
+				DeviceEventEmitter.emit('TAB_CHANGE', { previousScene, scene });
+				jumpToIndex(scene.index);
+			},
+		},
 	},
 );
 
@@ -77,6 +83,15 @@ const TutorialScreen = StackNavigator(
 	{
 		initialRouteName: 'Tutorial',
 		headerMode: 'none',
+		navigationOptions: {
+			// eslint-disable-next-line
+			tabBarOnPress: ({ previousScene, scene, jumpToIndex }) => {
+				// Inject event
+				DeviceEventEmitter.emit('SOME_EVENT_NAME', { oi: 'oi' });
+				// Keep original behaviour
+				jumpToIndex(scene.index);
+			},
+		},
 	},
 );
 
@@ -156,7 +171,7 @@ class App extends React.Component {
 		if (this.state.apikey) {
 			return (
 				<Provider store={store}>
-					<NavigationRegistered />
+					<NavigationRegistered screenProps={{ navigationEvents: { oi: 'oi' } }} />
 				</Provider>
 			);
 		}

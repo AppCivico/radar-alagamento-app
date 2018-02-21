@@ -9,6 +9,7 @@ import {
 	Alert,
 	AsyncStorage,
 	TouchableOpacity,
+	DeviceEventEmitter,
 } from 'react-native';
 import { Notifications as PushNotifications } from 'expo';
 
@@ -139,9 +140,27 @@ class Notifications extends React.Component {
 		this.changeRoute = this.changeRoute.bind(this);
 		this.getNotifications = this.getNotifications.bind(this);
 		this.changeAlerts = this.changeAlerts.bind(this);
+		this.getUser = this.getUser.bind(this);
+	}
+
+	componentWillMount() {
+		DeviceEventEmitter.addListener('TAB_CHANGE', ({ ...args }) => {
+			const { previousScene } = args;
+			if (previousScene.routeName === 'Profile') {
+				this.getUser();
+			}
+		});
 	}
 
 	componentDidMount() {
+		this.getUser();
+	}
+
+	componentWillUnmount() {
+		this.listeners.map((listeners) => { listeners.remove(); });
+	}
+
+	getUser() {
 		try {
 			AsyncStorage.getItem('apikey')
 				.then((res) => {
