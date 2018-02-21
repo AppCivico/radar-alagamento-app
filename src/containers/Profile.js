@@ -134,8 +134,9 @@ class Profile extends React.Component {
 		};
 		this.changeRoute = this.changeRoute.bind(this);
 		this.createUser = this.createUser.bind(this);
+		this.proccessUser = this.proccessUser.bind(this);
 		this.registerUser = this.registerUser.bind(this);
-		this.editProfile = this.editProfile.bind(this);
+		this.editUser = this.editUser.bind(this);
 		this.keyboardShow = this.keyboardShow.bind(this);
 		this.keyboardHide = this.keyboardHide.bind(this);
 	}
@@ -152,19 +153,7 @@ class Profile extends React.Component {
 				.then((res) => {
 					if (res != null) {
 						const user = JSON.parse(res);
-						const { name, email, phone_number } = user.user;
-						const surname = name
-							.split(' ')
-							.slice(1)
-							.join(' ');
-						this.setState({
-							name: name.split(' ')[0],
-							surname,
-							email,
-							phone: this.maskPhone(phone_number.replace('+55', '')),
-							newUser: false,
-							user,
-						});
+						this.proccessUser(user);
 
 						AsyncStorage.getItem('apikey')
 							.then((res2) => {
@@ -185,6 +174,24 @@ class Profile extends React.Component {
 	componentWillUnmount() {
 		this.keyboardDidShowListener.remove();
 		this.keyboardDidHideListener.remove();
+	}
+
+	proccessUser(user) {
+		const { name, email, phone_number } = user.user;
+		const surname = name
+			.split(' ')
+			.slice(1)
+			.join(' ');
+
+		this.maskPhone({ phone: phone_number.replace('+55', '') });
+
+		this.setState({
+			name: name.split(' ')[0],
+			surname,
+			email,
+			newUser: false,
+			user,
+		});
 	}
 
 	keyboardShow() {
@@ -284,11 +291,14 @@ class Profile extends React.Component {
 						this.props.apikey = apikey;
 						AsyncStorage.setItem('apikey', apikey)
 							.then(() => {
+								console.log('registrando user', this.props.user);
 								AsyncStorage.setItem('user', JSON.stringify(this.props.user))
 									.then(() => {
 										this.changeRoute('Notifications');
+										console.log('salvou');
+										this.proccessUser(this.props.user);
 									})
-									.catch(() => {});
+									.catch((err) => { console.log('nao salvou', err); });
 							})
 							.catch(() => {});
 					},
@@ -303,7 +313,9 @@ class Profile extends React.Component {
 		});
 	}
 
-	editProfile() {
+	editUser() {
+		this.toggleButton();
+
 		const newUser = this.createUser();
 		const user = {
 			push_token: this.state.user.push_token,
@@ -313,6 +325,9 @@ class Profile extends React.Component {
 
 		if (newUser) {
 			user.user = newUser;
+
+			console.log('user', user);
+
 			axios({
 				method: 'PUT',
 				url: `https://dtupa.eokoe.com/me?api_key=${this.state.apikey}`,
@@ -322,12 +337,13 @@ class Profile extends React.Component {
 				() => {
 					AsyncStorage.setItem('user', JSON.stringify(user))
 						.then(() => {
-							this.showError('Perfil atualizado!');
+							this.proccessUser(user);
 						})
 						.catch(() => {});
 				},
 				() => {
 					this.showError('Ops! Ocorreu um erro ao atualizar o seu cadastro, tente novamente!');
+					this.toggleButton();
 				},
 			);
 		}
@@ -428,13 +444,17 @@ class Profile extends React.Component {
 									disabled={this.state.registering}
 								/>
 							)}
+							{!this.state.newUser && (
+								<Button
+									onPress={() => this.editUser()}
+									title="Editar"
+									color={colors.blueDark}
+									accessibilityLabel="Editar"
+									disabled={this.state.registering}
+								/>
+							)}
 						</View>
 					</View>
-					{!this.state.newUser && (
-						<TouchableWithoutFeedback onPress={() => this.editProfile()}>
-							<Image source={edit} style={style.nextPageButton} />
-						</TouchableWithoutFeedback>
-					)}
 				</View>
 				{this.state.extra && <View style={{ height: 200 }} />}
 			</ScrollView>
