@@ -277,6 +277,11 @@ class Notifications extends React.Component {
 						</View>
 					</View>
 				)}
+				<View>
+					<Text onPress={() => this.changeRoute('NewAlert')}>
+						Criar um alerta
+					</Text>
+				</View>
 				{this.state.isLoaded && this.preRenderNotifications()}
 				{!this.state.isLoaded && (
 					<View style={[style.container, { alignItems: 'center', justifyContent: 'center' }]}>
