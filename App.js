@@ -15,6 +15,7 @@ import Districts from './src/containers/Districts';
 import Notifications from './src/containers/Notifications';
 import Profile from './src/containers/Profile';
 import Help from './src/containers/Help';
+import NewAlert from './src/containers/NewAlert';
 
 import { colors } from './src/styles/variables';
 
@@ -36,6 +37,7 @@ const nav = {
 	Notifications: { screen: Notifications },
 	Districts: { screen: Districts },
 	Help: { screen: Help },
+	NewAlert: { screen: NewAlert },
 };
 
 const tabBarOptions = Platform.OS === 'ios' ?
@@ -72,6 +74,17 @@ const Navigation = TabNavigator(
 				jumpToIndex(scene.index);
 			},
 		},
+		tabBarComponent: ({ navigation, ...rest }) => (
+			<TabView.TabBarTop
+				{...rest}
+				navigation={{
+					...navigation,
+					state: {
+						...navigation.state, routes: navigation.state.routes.filter(r => r.name !== 'NewAlert'),
+					},
+				}}
+			/>
+		),
 	},
 );
 
@@ -108,6 +121,17 @@ const NavigationRegistered = TabNavigator(
 			tabStyle: style.tabStyle,
 		},
 		showIcon: true,
+		tabBarComponent: ({ navigation, ...rest }) => (
+			<TabView.TabBarTop
+				{...rest}
+				navigation={{
+					...navigation,
+					state: {
+						...navigation.state, routes: navigation.state.routes.filter(r => r.name !== 'NewAlert'),
+					},
+				}}
+			/>
+		),
 	},
 );
 
