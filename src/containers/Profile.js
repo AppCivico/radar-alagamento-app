@@ -307,6 +307,7 @@ class Profile extends React.Component {
 				);
 			}
 		}).catch(() => {
+			this.showError('É necessário autorizar as notificações para se cadastrar');
 			this.toggleButton();
 		});
 	}
